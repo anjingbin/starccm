@@ -1,0 +1,27 @@
+#include <ComponentsClient.idl>
+
+#ifndef __OpenAccountComp_IDL_
+#define __OpenAccountComp_IDL_
+
+module Bank
+{
+	//
+	//component Manager
+	//
+	
+	interface OpenAccountOp
+	{
+		void openAccount(in string id, in string password);
+	};
+
+	component OpenAccountComp
+	{
+		provides OpenAccountOp open_account_op;
+	};
+
+	home OpenAccountCompHome manages OpenAccountComp
+	{		
+	};	
+};
+
+#endif

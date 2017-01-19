@@ -1,0 +1,18 @@
+spawn telnet.exe 172.26.13.94
+expect -ex "login:"
+send "ccm\r"
+expect -ex "Password:"
+send "ccm613\r"
+expect -ex "\$"
+send "psql -p 5678 pss\r"
+expect -ex "pss=>"
+send "drop table __p_s_d_l___pet_store_record___order_home_impl__1__0;\r"
+expect -ex "pss=>"
+send "drop table __p_s_d_l___pet_store_record___order_item_home_impl__1__0;\r"
+expect -ex "pss=>"
+send "drop table __p_s_d_l___pet_store_record___product_home_impl__1__0;\r"
+expect -ex "pss=>"
+send "\q \r"
+expect -ex "\$"
+send "exit"
+exit

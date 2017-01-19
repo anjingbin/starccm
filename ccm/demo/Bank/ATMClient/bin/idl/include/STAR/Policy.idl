@@ -1,0 +1,86 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POLICY_IDL
+#define POLICY_IDL
+
+#pragma prefix "omg.org"
+
+module CORBA
+{
+
+typedef unsigned long PolicyType;
+typedef sequence<PolicyType> PolicyTypeSeq;
+
+
+local interface Policy
+{
+    readonly attribute PolicyType policy_type;
+    Policy copy();
+    void destroy();
+};
+typedef sequence<Policy> PolicyList;
+
+typedef short PolicyErrorCode;
+
+const PolicyErrorCode BAD_POLICY = 0;
+const PolicyErrorCode UNSUPPORTED_POLICY = 1;
+const PolicyErrorCode BAD_POLICY_TYPE = 2;
+const PolicyErrorCode BAD_POLICY_VALUE = 3;
+const PolicyErrorCode UNSUPPORTED_POLICY_VALUE = 4;
+
+exception PolicyError
+{
+    PolicyErrorCode reason;
+};
+
+local interface PolicyManager
+{
+    exception InvalidPolicies
+    {
+        sequence<unsigned short> indices;
+    };
+    
+    Policy get_policy_override(in PolicyType t);
+    PolicyList get_specific_policy_overrides(in PolicyTypeSeq ts);
+    PolicyList get_all_policy_overrides();
+    
+    void add_policy_overrides(in PolicyList policies)
+        raises (InvalidPolicies);
+    void remove_policy_overrides(in PolicyTypeSeq ts);
+    void replace_all_policy_overrides(in PolicyList policies)
+        raises(InvalidPolicies);
+};
+
+#if !defined(STAR_CPLUSPLUS) && !defined(STARE)
+
+interface InterfaceDef;
+
+local interface DomainManager
+{
+    Policy get_domain_policy(in PolicyType policy_type);
+};
+
+const PolicyType SecConstruction = 11;
+
+local interface ConstructionPolicy : Policy
+{
+    void make_domain_manager(
+	in CORBA::InterfaceDef object_type,
+	in boolean constr_policy);
+};
+
+typedef sequence<DomainManager> DomainManagersList;
+
+#endif
+
+}; // End module CORBA
+
+#endif

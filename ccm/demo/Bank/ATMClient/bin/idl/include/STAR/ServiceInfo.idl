@@ -1,0 +1,39 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef SERVICE_INFO_IDL
+#define SERVICE_INFO_IDL
+
+#pragma prefix "omg.org"
+
+module CORBA
+{
+
+typedef unsigned short ServiceType;
+typedef unsigned long ServiceOption;
+typedef unsigned long ServiceDetailType;
+
+const ServiceType Security = 1;
+
+struct ServiceDetail
+{
+    ServiceDetailType service_detail_type;
+    sequence< octet > service_detail;
+};
+
+struct ServiceInformation
+{
+    sequence< ServiceOption > service_options;
+    sequence< ServiceDetail > service_details;
+};
+
+}; // End module CORBA
+
+#endif

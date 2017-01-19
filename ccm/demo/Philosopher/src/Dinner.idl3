@@ -1,0 +1,86 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#include <Components.idl>
+
+module Dinner 
+{
+    component Philosopher; 
+
+    enum PhilosopherStatus
+    {
+        EATING,THINKING,SLEEPING,HUNGRY,DEAD
+    };
+
+    exception ForkNotAvailable {};
+    exception NotTheEater {};
+
+    eventtype PhilosopherState
+    {
+        public PhilosopherStatus status;
+		public string name;
+        public Philosopher phi;
+        factory create(in PhilosopherStatus status,
+		       in string name,
+		       in Philosopher phi);
+    };
+
+    interface Fork 
+    {
+       	Components::Cookie obtain_fork()
+			raises (ForkNotAvailable);
+		void release_fork(in Components::Cookie ck) 
+			raises (NotTheEater);
+    };
+
+    interface Named 
+    {
+        attribute string name;
+    };
+
+    component Philosopher supports Named
+    {
+		attribute unsigned long thinking_seconds;
+        attribute unsigned long eating_seconds;
+        attribute unsigned long sleeping_seconds;
+    
+		uses Fork left_hand;
+		uses Fork right_hand;
+
+        publishes PhilosopherState philosopher_state;
+    };
+
+    component Cutlery
+    {
+        provides Fork the_fork;
+    };
+
+    component Observer
+    {
+		consumes PhilosopherState philosopher_state;
+    };
+
+    home PhilosopherHome manages  Philosopher
+    {
+    };
+
+    home CutleryHome manages  Cutlery
+    {
+    };
+
+    home ObserverHome manages Observer
+    {
+    };
+};
+

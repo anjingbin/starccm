@@ -1,0 +1,11 @@
+#ifndef __CCMComponent_idl__
+#define __CCMComponent_idl__
+
+#include <ComponentsClient.idl>
+#include <UserTransaction.idl>
+#include <Configurator.idl>
+#include <Deployment.idl>
+#include <EnterpriseComponent.idl>
+#include <EJBean.idl>
+
+#endif

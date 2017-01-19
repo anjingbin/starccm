@@ -1,0 +1,50 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_IMR_STATE_IDL
+#define STAR_IMR_STATE_IDL
+
+#include <STAR/OHDProcessEndpoint.idl>
+#include <STAR/IMRTypes.idl>
+#include <STAR/PIORT.idl>
+
+#pragma prefix "nis.net"
+
+module IMR
+{
+
+interface ActiveState
+{  
+    void set_status(in string id, in ServerStatus status);
+
+    PortableInterceptor::ObjectReferenceTemplate
+    poa_create(in POAStatus state, 
+	       in PortableInterceptor::ObjectReferenceTemplate poa_tmpl)
+	raises(NoSuchPOA);
+
+    void poa_status_update(in POANameSeq poas, in POAStatus state);
+};
+
+interface Domain
+{
+    void registerServer(in string name, in string exec, in string host)
+        raises(ServerAlreadyRegistered);
+
+    ActiveState
+    startup(in string serverId,
+            in string instance,
+    	    in PortableInterceptor::ObjectReferenceTemplate root_tmpl,
+	    out OHD::ProcessEndpointManager endpoint)
+	raises(NoSuchServer, NoSuchOHD, OHDNotRunning);
+};
+
+}; // End module IMR
+
+#endif // STAR_IMR_IDL

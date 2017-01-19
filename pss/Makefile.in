@@ -1,0 +1,38 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+include $(top_srcdir)/config/Make.rules
+
+#modified by Baixiaobo 2004.03.09
+
+SUBDIRS		= src idl include bin
+MINSUBDIRS	= src
+
+all min install install_min:: lib bin
+
+clean::
+	rm -f config.cache config.log
+
+test::
+	$(SHELL) runtest
+
+$(EVERYTHING)::
+	@for subdir in $(SUBDIRS); \
+	do \
+	    echo "making $@ in $$subdir"; \
+	    ( cd $$subdir && $(MAKE) $@ ) || exit 1; \
+	done
+

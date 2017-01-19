@@ -1,0 +1,13 @@
+#include <QueryComp.idl3>
+
+module Bank
+{	
+	composition service QueryCompComposition
+	{		
+		home executor CCM_QueryCompHome_Impl
+		{
+			implements QueryCompHome;
+			manages CCM_QueryComp_Impl;
+		};
+	};
+};	

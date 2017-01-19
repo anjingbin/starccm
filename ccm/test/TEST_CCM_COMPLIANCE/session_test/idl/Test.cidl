@@ -1,0 +1,14 @@
+#include <test.idl3>
+#include <test.psdl>
+
+module Test
+{
+	composition session PersonImpl
+	{
+		home executor CCM_PersonHome_impl
+		{
+			implements PersonHome;
+			manages CCM_Person_impl;	
+		};
+	};
+};

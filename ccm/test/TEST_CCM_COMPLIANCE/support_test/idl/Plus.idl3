@@ -1,0 +1,16 @@
+#include <ComponentsClient.idl>
+
+module Example 
+{
+    interface Calculate
+    {
+        long Add(in  long a,in  long b);
+    };
+    component Plus supports Calculate
+    {	
+    };   
+    home PlusHome manages  Plus
+    {
+    };  
+};
+

@@ -1,0 +1,13 @@
+#include <DelAccountComp.idl3>
+
+module Bank
+{	
+	composition service DelAccountCompComposition
+	{		
+		home executor CCM_DelAccountCompHome_Impl
+		{
+			implements DelAccountCompHome;
+			manages CCM_DelAccountComp_Impl;
+		};
+	};
+};	

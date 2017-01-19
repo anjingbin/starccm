@@ -1,0 +1,90 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __CCMUserTransaction_idl__
+#define __CCMUserTransaction_idl__
+
+#pragma prefix "omg.org"
+
+module Components
+{
+	// From Chapter 62: The Container Programming Model
+
+	module Transaction
+	{
+		typedef sequence<octet> TranToken;
+
+		exception NoTransaction { };
+
+		exception NotSupported { };
+
+		exception SystemError { };
+
+		exception RollbackError { };
+
+		exception HeuristicMixed { };
+
+		exception HeuristicRollback { };
+
+		exception Security { };
+
+		exception InvalidToken { };
+
+		enum Status
+		{
+			ACTIVE,
+			MARKED_ROLLBACK,
+			PREPARED,
+			COMMITTED,
+			ROLLED_BACK,
+			NO_TRANSACTION,
+			PREPARING,
+			COMMITTING,
+			ROLLING_BACK
+		};
+
+		local interface UserTransaction
+		{
+			void begin () 
+				raises (NotSupported, SystemError);
+
+			void commit () 
+				raises (RollbackError, NoTransaction,
+					HeuristicMixed, HeuristicRollback,
+					Security, SystemError);
+
+			void rollback () 
+				raises (NoTransaction, Security, SystemError);
+
+			void set_rollback_only () 
+				raises (NoTransaction, SystemError);
+
+			Status get_status() 
+				raises (SystemError);
+
+			void set_timeout (in long to) 
+				raises (SystemError);
+
+			TranToken suspend () 
+				raises (NoTransaction, SystemError);
+
+			void resume (in TranToken txtoken)
+				raises (InvalidToken, SystemError);
+		};
+	};
+};
+
+#endif

@@ -1,0 +1,74 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef CODEC_IDL
+#define CODEC_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/TypeCode.idl>
+#include <STAR/Types.idl>
+
+module IOP
+{
+
+local interface Codec
+{
+
+    exception InvalidTypeForEncoding
+    {
+    };
+    
+    exception FormatMismatch
+    {
+    };
+    
+    exception TypeMismatch
+    {
+    };
+
+    CORBA::OctetSeq encode (in any data)
+        raises (InvalidTypeForEncoding);
+    
+    any decode (in CORBA::OctetSeq data)
+        raises (FormatMismatch);
+    
+    CORBA::OctetSeq encode_value (in any data)
+        raises (InvalidTypeForEncoding);
+    
+    any decode_value(in CORBA::OctetSeq data,
+                     in CORBA::TypeCode tc)
+        raises (FormatMismatch, TypeMismatch);
+};
+
+typedef short EncodingFormat;
+
+const EncodingFormat ENCODING_CDR_ENCAPS = 0;
+
+struct Encoding
+{
+    EncodingFormat format;
+    octet major_version;
+    octet minor_version;
+};
+
+local interface CodecFactory
+{
+    exception UnknownEncoding
+    {
+    };
+    
+    Codec create_codec (in Encoding enc)
+        raises (UnknownEncoding);
+};
+
+}; // End module IOP
+
+#endif

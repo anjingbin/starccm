@@ -1,0 +1,16 @@
+spawn ./telnet.exe 172.26.13.94
+expect -ex "login:"
+send "ccm\r"
+expect -ex "Password:"
+send "ccm613\r"
+expect -ex "\$"
+send "su -\r"
+expect -ex "Password:"
+send "dbtest1\r"
+expect -ex "#"
+send "cd /usr/local/pgsql/bin\r"
+expect -ex "#"
+send "killall postmaster\r"
+expect -ex "#"
+send "exit"
+exit

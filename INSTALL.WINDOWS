@@ -1,0 +1,69 @@
+The following instructions are for Windows NT and Windows 2000 based
+operating systems. UNIX platforms are not supported yet.
+
+To compile any of the programs contained in this distribution, you
+need Visual C++ 6.0. Other versions and other compilers might also work,
+but have not been tested.
+
+For configuration, edit the file "config\Make.rules.mak","config\ob.mak". Follow the
+instructions in the comments in this file and make the appropriate
+changes. If your xerces-c distribution is other directory,you can change the configuration
+in the file "config\ccm.mak" to specify new directory.
+
+YOU MUST ENSURE that the set of compiler flags in "config\Make.rules.mak"
+are exactly the same as the set of flags that you use to compile your
+applications. For example, if /MDd (compile multi-threaded debug DLL
+runtime library) is used in "config\Make.rules.mak", you must also use
+this flag for compiling your applications. If you are working under VC++
+Studio, make sure that your project settings (Project -> Settings -> C/C++
+-> Category: Code Generation -> Use run-time library) are correct. The
+default setting in "config\Make.rules.mak" is /MD (multi-threaded DLL
+runtime library).
+
+To start the compilation process under Windows NT or Windows 2000,
+just type:
+
+nmake /f Makefile.mak
+
+This will compile all packages available in this distribution. The compiler-created
+executable binary target will in subdirectory "bin" and library target in subdirectory
+"lib".
+
+If you get a message like "The LIB/INCLUDE environment variable needs
+to be set", or if you have problems with system include files not
+being found, you probably have not set up your Visual C++ environment
+correctly. To fix this, look in the Visual C++ bin directory for a
+batch file called vcvars32. If you are using Visual C++ 6.0 then run:
+
+vcvars32
+
+Notes: 
+
+1. STL Bugs
+The Standard Template Library(STL) shipped with Microsoft Visual C++ 6.0
+have bugs which will lead to StarCCM run-time failure. Before you try to 
+compile the StarCCM using VC++ 6.0,you should replace original STL's file "XTREE"
+with the bug-fixed one under subdirectory /ccm/vcfix.
+
+2. Compilation of ORBacus
+To run the demo program,you need a copy of ORBacus 4.1.0 and compile it
+with followling configuration(edit the Make.rules.mak file which is under
+the directory 'config' of source installation's home):
+
+  1)change line
+    
+    #DEBUG=yes
+to
+    DEBUG=yes
+    
+  2)change line
+  
+    DLL=yes
+to 
+    #DLL=yes
+
+3. Bug Reports
+If you have any problems while compiling any of our programs, do
+not hesitate to ask us for assistance. Just send an e-mail to
+"star_support@sina.com".
+

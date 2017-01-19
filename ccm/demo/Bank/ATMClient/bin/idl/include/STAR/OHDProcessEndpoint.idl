@@ -1,0 +1,43 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_OHD_PROCESS_ENDPOINT_IDL
+#define STAR_OHD_PROCESS_ENDPOINT_IDL
+
+#pragma prefix "nis.net"
+
+#include <STAR/IMRTypes.idl>
+
+module OHD
+{
+
+interface ProcessEndpoint;
+
+exception AlreadyLinked
+{
+};
+
+interface ProcessEndpointManager
+{
+    void establish_link(in string server, in string id, in IMR::ProcessID pid,
+			in ProcessEndpoint endpoint)
+    raises(AlreadyLinked);
+};
+
+
+interface ProcessEndpoint
+{
+    oneway void reestablish_link(in ProcessEndpointManager endpoint);
+    void stop();
+};
+
+}; // End module OHD
+
+#endif

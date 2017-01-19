@@ -1,0 +1,27 @@
+#include <ComponentsClient.idl>
+
+#ifndef __DelAccountComp_IDL_
+#define __DelAccountComp_IDL_
+
+module Bank
+{
+	//
+	//component Manager
+	//
+	
+	interface DelAccountOp
+	{
+		void DelAccount(in string id);
+	};
+
+	component DelAccountComp
+	{
+		provides DelAccountOp del_account_op;
+	};
+
+	home DelAccountCompHome manages DelAccountComp
+	{		
+	};	
+};
+
+#endif

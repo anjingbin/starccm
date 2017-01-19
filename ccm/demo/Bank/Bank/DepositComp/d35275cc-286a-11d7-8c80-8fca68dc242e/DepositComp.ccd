@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE corbacomponent PUBLIC "" "corbacomponent.dtd">
+<corbacomponent>
+	<corbaversion>3.0</corbaversion>
+	<componentrepid repid="IDL:Bank/DepositComp:1.0"/>
+	<homerepid repid="IDL:Bank/DepositCompHome:1.0"/>
+	<componentkind>
+		<service/>
+	</componentkind>
+	<transaction use="supports"/>
+	<threading policy="serialize "/>
+	<configurationcomplete set="true"/>
+	<homefeatures name="DepositCompHome" repid="IDL:Bank/DepositCompHome:1.0"/>
+	<componentfeatures name="DepositComp" repid="IDL:Bank/DepositComp:1.0">
+		<ports>
+			<uses usesname="the_account" repid="IDL:Bank/AccountOp:1.0"/>
+			<provides providesname="deposit_op" repid="IDL:Bank/DepositOp:1.0">
+				<operationpolicies>
+					<operation name="*">
+						<transaction use="supports"/>
+					</operation>
+				</operationpolicies>
+			</provides>
+		</ports>
+	</componentfeatures>
+	<interface name="DepositOp" repid="IDL:Bank/DepositOp:1.0"/>
+</corbacomponent>

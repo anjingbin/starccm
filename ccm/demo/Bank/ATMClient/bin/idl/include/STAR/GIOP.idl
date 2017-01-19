@@ -1,0 +1,192 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef GIOP_IDL
+#define GIOP_IDL
+
+#include <STAR/IOP.idl>
+
+#pragma Principal
+#pragma prefix "omg.org"
+
+module GIOP
+{
+
+struct Version
+{ 
+    octet major;
+    octet minor;
+};
+
+enum MsgType_1_1
+{
+    Request,
+    Reply,
+    CancelRequest,
+    LocateRequest,
+    LocateReply,
+    CloseConnection,
+    MessageError,
+    Fragment // Added in GIOP 1.1
+};
+
+struct MessageHeader_1_0
+{
+    char magic[4];
+    Version GIOP_version;
+    boolean byte_order;
+    octet message_type;
+    unsigned long message_size;
+}; 
+
+struct MessageHeader_1_1
+{
+    char magic[4];
+    Version GIOP_version;
+    octet flags;
+    octet message_type;
+    unsigned long message_size;
+};
+
+typedef MessageHeader_1_1 MessageHeader_1_2;
+
+struct RequestHeader_1_0
+{
+    IOP::ServiceContextList service_context;
+    unsigned long request_id;
+    boolean response_expected;
+    sequence<octet> object_key;
+    string operation;
+    CORBA::Principal requesting_principal;
+};
+
+struct RequestHeader_1_1
+{
+    IOP::ServiceContextList service_context;
+    unsigned long request_id;
+    boolean response_expected;
+    octet reserved[3];
+    sequence<octet> object_key;
+    string operation;
+    CORBA::Principal requesting_principal;
+};
+
+typedef short AddressingDisposition;
+const short KeyAddr = 0;
+const short ProfileAddr = 1;
+const short ReferenceAddr = 2;
+
+struct IORAddressingInfo
+{
+    unsigned long selected_profile_index;
+    IOP::IOR ior;
+};
+
+union TargetAddress switch(AddressingDisposition)
+{
+    case KeyAddr: sequence <octet> object_key;
+    case ProfileAddr: IOP::TaggedProfile profile;
+    case ReferenceAddr: IORAddressingInfo ior;
+};
+
+struct RequestHeader_1_2
+{
+    unsigned long request_id;
+    octet response_flags;
+    octet reserved[3];
+    TargetAddress target;
+    string operation;
+    IOP::ServiceContextList service_context;
+};
+
+enum ReplyStatusType_1_2
+{
+    NO_EXCEPTION,
+    USER_EXCEPTION,
+    SYSTEM_EXCEPTION,
+    LOCATION_FORWARD,
+    LOCATION_FORWARD_PERM, // Added in GIOP 1.2
+    NEEDS_ADDRESSING_MODE  // Added in GIOP 1.2
+};
+
+struct ReplyHeader_1_0
+{
+    IOP::ServiceContextList service_context;
+    unsigned long request_id;
+    ReplyStatusType_1_2 reply_status;
+};
+
+typedef ReplyHeader_1_0 ReplyHeader_1_1;
+
+struct ReplyHeader_1_2
+{
+    unsigned long request_id;
+    ReplyStatusType_1_2 reply_status;
+    IOP::ServiceContextList service_context;
+};
+
+struct SystemExceptionReplyBody
+{
+    string exception_id;
+    unsigned long minor_code_value;
+    unsigned long completion_status;
+};
+
+struct CancelRequestHeader
+{
+    unsigned long request_id;
+};
+
+struct LocateRequestHeader_1_0
+{
+    unsigned long request_id;
+    sequence<octet> object_key;
+};
+
+typedef LocateRequestHeader_1_0 LocateRequestHeader_1_1;
+
+struct LocateRequestHeader_1_2
+{
+    unsigned long request_id;
+    TargetAddress target;
+};
+
+enum LocateStatusType_1_2
+{
+    UNKNOWN_OBJECT,
+    OBJECT_HERE,
+    OBJECT_FORWARD,
+    OBJECT_FORWARD_PERM,
+    LOC_SYSTEM_EXCEPTION,
+    LOC_NEEDS_ADDRESSING_MODE
+};
+
+struct LocateReplyHeader_1_0
+{
+    unsigned long request_id;
+    LocateStatusType_1_2 locate_status;
+};
+
+typedef LocateReplyHeader_1_0 LocateReplyHeader_1_1;
+
+struct LocateReplyHeader_1_2
+{
+    unsigned long request_id;
+    LocateStatusType_1_2 locate_status;
+};
+
+struct FragmentHeader_1_2
+{
+    unsigned long request_id;
+};
+
+}; // End module GIOP
+
+#endif

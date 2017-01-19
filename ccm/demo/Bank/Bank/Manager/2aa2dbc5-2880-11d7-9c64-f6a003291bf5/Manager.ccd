@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE corbacomponent PUBLIC "" "corbacomponent.dtd">
+<corbacomponent>
+	<corbaversion>3.0</corbaversion>
+	<componentrepid repid="IDL:Bank/Manager:1.0"/>
+	<homerepid repid="IDL:Bank/ManagerHome:1.0"/>
+	<componentkind>
+		<service/>
+	</componentkind>
+	<transaction use="supports"/>
+	<threading policy="serialize "/>
+	<configurationcomplete set="true"/>
+	<homefeatures name="ManagerHome" repid="IDL:Bank/ManagerHome:1.0"/>
+	<componentfeatures name="Manager" repid="IDL:Bank/Manager:1.0">
+		<ports>
+			<uses usesname="deposit" repid="IDL:Bank/DepositOp:1.0"/>
+			<uses usesname="withdraw" repid="IDL:Bank/WithdrawOp:1.0"/>
+			<uses usesname="query" repid="IDL:Bank/QueryOp:1.0"/>
+			<uses usesname="authenticator" repid="IDL:Bank/AuthenticationOp:1.0"/>
+			<uses usesname="openAccount" repid="IDL:Bank/OpenAccountOp:1.0"/>
+			<uses usesname="DelAccount" repid="IDL:Bank/DelAccountOp:1.0"/>
+			<provides providesname="manager_op" repid="IDL:Bank/ManagerOp:1.0">
+				<operationpolicies>
+					<operation name="*">
+						<transaction use="supports"/>
+					</operation>
+				</operationpolicies>
+			</provides>
+		</ports>
+	</componentfeatures>
+	<interface name="ManagerOp" repid="IDL:Bank/ManagerOp:1.0"/>
+</corbacomponent>

@@ -1,0 +1,56 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_BINDING_LISTENER_IDL
+#define STAR_BINDING_LISTENER_IDL
+
+#include <STAR/CosNaming.idl>
+
+#pragma prefix "nis.net"
+
+module CosNaming
+{
+
+interface BindingMonitor
+{
+   
+    oneway void added_context(in NamingContext parent_ctx,
+			      in NamingContext child_ctx,
+			      in NameComponent name);
+
+   
+    oneway void removed_context(in NamingContext parent_ctx,
+				in NameComponent name);
+
+    
+    oneway void modified_context(in NamingContext parent_ctx,
+				in NamingContext child_ctx,
+				in NameComponent old_name,
+				in NameComponent new_name);
+
+    
+    oneway void added_object(in NamingContext parent_ctx,
+			     in Object child_obj,
+			     in NameComponent name);
+
+    
+    oneway void removed_object(in NamingContext parent_ctx,
+			       in NameComponent name);
+
+    
+    oneway void modified_object(in NamingContext parent_ctx,
+			       in Object child,
+			       in NameComponent old_name,
+			       in NameComponent new_name);
+}; 
+
+}; // End module CosNaming
+
+#endif

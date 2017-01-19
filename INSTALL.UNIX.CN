@@ -1,0 +1,51 @@
+1、如何在类unix平台上编译StarCCM？
+    在unix上编译StarCCM，需要如下的命令：unzip、zip、perl和GNU make。
+在编译StarCCM之前，首先需要手工的编译源代码目录中的postgresql。
+我们用$(STARCCM_ROOT)代表StarCCM的顶层目录：
+
+[ccm@linux1 ccm]$ cd $(STARCCM_ROOT)
+[ccm@linux1 StarCCM]$ cd postgresql
+[ccm@linux1 postgresql]$ ./configure
+[ccm@linux1 postgresql]$ cd src/interfaces/libpq
+[ccm@linux1 libpq]$ make
+
+以上的命令会编译postgresql的客户端，生成libpq.a库。
+接下来可以编译StarCCM了。
+进入到StarCCM的顶层目录，运行runconfig：
+
+[ccm@linux1 ccm]cd $(STARCCM_ROOT)
+[ccm@linux1 StarCCM]$ ./runconfig
+
+runconfig脚本会要求用户回答一些与编译环境相关的问题。
+runconfig运行完毕后，如果是在solaris平台，这是需要用
+vi打开$(STARCCM_ROOT)目录中的config.env文件，察看其中
+是否有中文。如果有，把“是”改成“yes”，“否”改成“no”。
+如果没有，按照runconfig的提示输入命令。
+如果是linux平台：
+
+[ccm@linux1 StarCCM]$ . ./go
+
+如果是solaris平台，则输入：
+
+sun3% source ./go
+
+接下来就可以编译了。
+
+linux平台：
+[ccm@linux1 StarCCM]$ make
+
+solaris平台（在solaris平台上一定要有GNU make）：
+sun3% gmake。
+
+2、如何在类unix平台上运行StarCCM？
+    StarCCM附带的例程可以用$(STARCCM_ROOT)/ccm/bin/目录中的
+start_server_unix.pl启动，stop_server.pl停止。运行perl脚本之前，
+首先确定perl安装的位置：
+
+[ccm@linux1 StarCCM]$ which perl
+/usr/bin/perl
+
+将这两个perl脚本中第一行的#!/bin/perl作对应的改动，以使得perl
+脚本可以正确运行。
+
+请参考相关文档，修改starccm.properties。

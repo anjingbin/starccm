@@ -1,0 +1,163 @@
+#ifndef __CCMManager_idl__
+#define __CCMManager_idl__
+
+#include<DeployDomainMgr.idl>
+#include<CCMCommon.idl>
+#include<Deployment.idl>
+
+#pragma prefix "omg.org"
+
+module ManagerDomain
+{
+    
+    
+    //Data definition
+   
+    enum ServantLifetimePolicy
+    {
+        METHOD,
+        TRANSACTION,
+        COMPONENTTYPE,
+        CONTAINER        
+    };
+    enum TransactionPolicies
+    {
+        NOT_SUPPORTED,
+        REQUIRED,
+        SUPPORT,
+        REQUIRES_NEW,
+        MANDATORY,
+        NEVER
+    };
+    enum ComponentTypes
+    {
+        SERVICE,
+        SESSION,
+        PROCESS,
+        ENTITY
+    };
+    enum ComponentStates
+    {
+        ACTIVATION,
+        PASSIVATION
+    };
+    exception configResourcePoolError{};
+    exception NotsetCCMhome{};
+    exception GetTransactionError{};
+   
+    
+    typedef string ObjId;   
+ 
+    struct ComponentInfor
+    {
+    	ObjId ComponentID;
+    	ObjId ComponentName;    	
+    	Components::CCMObject componentRef;
+    	ObjId homeUuid;
+    	ObjId homeRepId;
+    	ComponentStates ComponentSta;
+    	//ComponentTypes ComponentType;    	
+	//ServantLifetimePolicy ServantPolicy;    	
+    };
+    //container information
+    
+    //typedef sequence<ObjId> ComponentInfors;    
+    typedef sequence<ComponentInfor> ComponentInfors;    
+    
+    struct ContainerInfor
+    {
+	ObjId ContainerID;
+	ComponentInfors ComponentInforseq;	
+	short ConnectResourceCount;
+	ObjId ComponentServerID;
+	ObjId AssemblyID;	
+	
+     };
+     //server performance infromation
+     
+     struct ProcessInfor
+     {
+        ObjId ProcessName;
+        unsigned long ProcessMemory;
+      };
+     typedef sequence<ProcessInfor>ProcessInfors;
+     struct PerformanceInfor
+     {            
+            unsigned long FreeMemory;
+            unsigned long TotalMemory;
+            unsigned long Throughput;
+            ProcessInfors ProcessInformation;            
+            
+     };
+    
+   //tansaction information
+    struct TransactionInfor
+    {
+            TransactionPolicies TransactionPolicy;
+            unsigned long TotalTransactions;
+            unsigned long TotalCommitted;
+            unsigned long TotalRolledBack;
+    }; 
+    struct ThreadPoolInfor
+    {
+    	ObjId homeRepId;
+    	ObjId homeUUID;
+    	ObjId threadPoolName;    	
+	unsigned long currentThreadPoolNumbers;
+	unsigned long threadPoolcurrentNumber;  
+	unsigned long threadLifeSpan;
+	unsigned long requestNumbers;
+    	unsigned long MaximumpoolSize;
+    	unsigned long MinimumpoolSize;
+    	
+    	
+    };       
+    typedef sequence<ThreadPoolInfor>ThreadPoolInforseq; 
+    struct ThreaPoolNumbers
+    {
+    	ObjId containerUUID;
+    	unsigned long threadNum;
+    };
+    //04/06/11
+    struct ResourcePoolInfor
+    {
+        ObjId ContainerUUid;
+        ObjId homeRepId; 
+        unsigned long initialcon;
+        unsigned long maxcon;
+        unsigned long currentcon;
+        unsigned long incon;
+        
+    };
+    typedef sequence<ResourcePoolInfor>ResourcePoolInforseq;
+   
+    interface ComponentManager
+    {        
+        boolean RegisterComponent(in ObjId homeRepId,in ObjId componentinstantiationref, in Components::CCMObject componentRef);
+        boolean GetComponentRef(out ComponentInfors componentInforSeq);
+        ComponentInfor GetComponentInfor();
+        ThreadPoolInforseq GetThreadInfor(in ObjId id);
+        ThreaPoolNumbers GetThreadPoolNumbers(in ObjId containerUUID);
+        unsigned long GetContainerNumbers();
+        boolean SetThreadPoolInfor(in ObjId id,in ObjId threadPoolName,in ThreadPoolInfor threadInfor);  
+        //04/06/11
+        ResourcePoolInforseq getConnectionInfor(in ObjId ContainerUUid);
+        void setResourcePool(in ResourcePoolInfor recourcePool)                              
+           raises(configResourcePoolError);
+        string getServerhome()
+           raises(NotsetCCMhome);
+    };
+    interface PerformanceManager
+    {
+    	PerformanceInfor GetPerformanceInfor();
+    };
+    interface TransactionManager
+    {
+    	TransactionInfor GetTransactionInfor()
+    	  raises (GetTransactionError);
+    };
+   
+  
+};
+
+#endif

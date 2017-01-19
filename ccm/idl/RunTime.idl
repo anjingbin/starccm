@@ -1,0 +1,45 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __RunTime_idl__
+#define __RunTime_idl__
+
+#include <CCMObject.idl>
+
+module ContainerPSS
+{   
+	typedef sequence<string> UuidSequence;
+
+	struct Uuids
+	{
+		UuidSequence u;
+	};
+
+	struct ObjectMap
+	{
+		string id;
+		string compositionId;
+	};
+
+	typedef sequence<ObjectMap> ActiveObjectMap;
+
+	struct ComponentPool
+	{
+		ActiveObjectMap map;
+	};
+};
+
+#endif

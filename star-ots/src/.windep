@@ -1,0 +1,25 @@
+Resource_skel.obj: Resource_skel.cpp Resource_skel.h Resource.h PostgreSQLResource.h CosTransactionsOTS.h PostgreSQLResource_skel.h CosTransactionsOTS_skel.h
+OTSClientInterceptor_impl.obj: OTSClientInterceptor_impl.cpp CosTSInteroperation.h CosTransactionsPolicyType.h CosTransactionsOTS.h OTSClientInterceptor_impl.h CosTransactionsPolicy.h
+CosTransactionsOTS_impl.obj: CosTransactionsOTS_impl.cpp CosTransactionsOTS_impl.h CosTransactionsOTS_skel.h CosTransactionsOTS.h CosTransactionsUser_skel.h CosTransactionsUser.h ..\include\OTSHeader.h Resource_impl.h Resource_skel.h Resource.h PostgreSQLResource.h PostgreSQLResource_skel.h PostgreSQLResource_impl.h ..\include\OTSPostgreSQL.h
+CosTransactionsCurrent.obj: CosTransactionsCurrent.cpp CosTransactionsCurrent.h CosTransactionsOTS.h CosTransactionsPolicy.h CosTransactionsPolicyType.h
+PostgreSQLResource.obj: PostgreSQLResource.cpp PostgreSQLResource_skel.h PostgreSQLResource.h CosTransactionsOTS.h CosTransactionsOTS_skel.h
+OTSPolicyFactory_impl.obj: OTSPolicyFactory_impl.cpp OTSPolicyFactory_impl.h CosTransactionsPolicy.h CosTransactionsPolicyType.h
+CosTransactionsOTS_skel.obj: CosTransactionsOTS_skel.cpp CosTransactionsOTS_skel.h CosTransactionsOTS.h
+PostgreSQLResource_impl.obj: PostgreSQLResource_impl.cpp PostgreSQLResource_impl.h PostgreSQLResource_skel.h PostgreSQLResource.h CosTransactionsOTS.h CosTransactionsOTS_skel.h ..\include\OTSPostgreSQL.h CosTransactionsOTS_impl.h CosTransactionsUser_skel.h CosTransactionsUser.h ..\include\OTSHeader.h
+CosTransactionsUser.obj: CosTransactionsUser.cpp CosTransactionsUser.h CosTransactionsOTS.h
+CosTransactionsOTS.obj: CosTransactionsOTS.cpp CosTransactionsOTS_skel.h CosTransactionsOTS.h
+PostgreSQLResource_skel.obj: PostgreSQLResource_skel.cpp PostgreSQLResource_skel.h PostgreSQLResource.h CosTransactionsOTS.h CosTransactionsOTS_skel.h
+CosTransactionsPolicy.obj: CosTransactionsPolicy.cpp CosTransactionsPolicy.h CosTransactionsPolicyType.h
+OTSServerInterceptor_impl.obj: OTSServerInterceptor_impl.cpp CosTransactionsOTS.h OTSServerInterceptor_impl.h CosTransactionsPolicy.h CosTransactionsPolicyType.h
+CosTSInteroperation.obj: CosTSInteroperation.cpp CosTSInteroperation.h CosTransactionsPolicyType.h
+CosTransactions_skel.obj: CosTransactions_skel.cpp CosTransactions_skel.h CosTransactions.h CosTransactionsOTS.h CosTransactionsCurrent.h CosTransactionsPolicy.h CosTransactionsPolicyType.h PostgreSQLResource.h CosTransactionsUser.h CosTransactionsOTS_skel.h CosTransactionsCurrent_skel.h CosTransactionsPolicy_skel.h PostgreSQLResource_skel.h CosTransactionsUser_skel.h
+CosTransactionsUser_skel.obj: CosTransactionsUser_skel.cpp CosTransactionsUser_skel.h CosTransactionsUser.h CosTransactionsOTS.h CosTransactionsOTS_skel.h
+CosTransactionsPolicyType.obj: CosTransactionsPolicyType.cpp CosTransactionsPolicyType.h
+ImplicitOTSInterceptor.obj: ImplicitOTSInterceptor.cpp ..\include\ImplicitOTSInterceptor.h ..\include\CosTransactions.h CosTransactionsOTS.h CosTransactionsCurrent.h CosTransactionsPolicy.h CosTransactionsPolicyType.h PostgreSQLResource.h CosTransactionsUser.h OTSServerInterceptor_impl.h OTSClientInterceptor_impl.h OTSIORInterceptor_impl.h OTSPolicyFactory_impl.h CosTransactionsCurrent_impl.h
+TransactionFactoryServer.obj: TransactionFactoryServer.cpp OTSIORInterceptor_impl.h OTSPolicyFactory_impl.h CosTransactionsPolicy.h CosTransactionsPolicyType.h CosTransactionsOTS_impl.h CosTransactionsOTS_skel.h CosTransactionsOTS.h CosTransactionsUser_skel.h CosTransactionsUser.h ..\include\OTSHeader.h
+ResourceFactoryServer.obj: ResourceFactoryServer.cpp CosTransactionsOTS.h Resource_impl.h Resource_skel.h Resource.h PostgreSQLResource.h PostgreSQLResource_skel.h CosTransactionsOTS_skel.h CosTransactionsOTS_impl.h CosTransactionsUser_skel.h CosTransactionsUser.h ..\include\OTSHeader.h PostgreSQLResource_impl.h ..\include\OTSPostgreSQL.h
+CosTransactions.obj: CosTransactions.cpp CosTransactions.h CosTransactionsOTS.h CosTransactionsCurrent.h CosTransactionsPolicy.h CosTransactionsPolicyType.h PostgreSQLResource.h CosTransactionsUser.h
+Resource_impl.obj: Resource_impl.cpp Resource_impl.h Resource_skel.h Resource.h PostgreSQLResource.h CosTransactionsOTS.h PostgreSQLResource_skel.h CosTransactionsOTS_skel.h CosTransactionsOTS_impl.h CosTransactionsUser_skel.h CosTransactionsUser.h ..\include\OTSHeader.h PostgreSQLResource_impl.h ..\include\OTSPostgreSQL.h
+CosTransactionsCurrent_impl.obj: CosTransactionsCurrent_impl.cpp CosTransactionsCurrent_impl.h CosTransactionsOTS.h CosTransactionsCurrent.h CosTransactionsPolicy.h CosTransactionsPolicyType.h
+OTSIORInterceptor_impl.obj: OTSIORInterceptor_impl.cpp CosTransactionsPolicy.h CosTransactionsPolicyType.h CosTSInteroperation.h OTSIORInterceptor_impl.h
+Resource.obj: Resource.cpp Resource_skel.h Resource.h PostgreSQLResource.h CosTransactionsOTS.h PostgreSQLResource_skel.h CosTransactionsOTS_skel.h

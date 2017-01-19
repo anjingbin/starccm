@@ -1,0 +1,51 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_IIOP_IDL
+#define ATF_IIOP_IDL
+
+#ifndef STARE
+#  include <STAR/ATF.idl>
+#  include <STAR/ATFClient_IIOP.idl>
+#else // STARE
+#  include <STARE/ATF.idl>
+#  include <STARE/ATFClient_IIOP.idl>
+#endif // STARE
+
+#pragma prefix "nis.net"
+
+#ifndef STARE
+
+module ATF
+{
+
+module IIOP
+{
+
+local interface AcceptorInfo : ATF::AcceptorInfo
+{
+    readonly attribute CORBA::StringSeq hosts;
+    
+    readonly attribute InetAddr addr;
+    
+    readonly attribute unsigned short port;
+};
+
+local interface AccFactoryInfo : ATF::AccFactoryInfo
+{
+};
+
+}; // End module ATF::IIOP
+
+}; // End module ATF
+
+#endif // STARE
+
+#endif

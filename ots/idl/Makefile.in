@@ -1,0 +1,38 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2004
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#  author: BaiXiaoBo        bxbgfkd@tom.com                         
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA    = @INSTALL_DATA@
+
+install::
+	@if test ! -d $(idldir)/ots ; \
+	then \
+	    echo "Creating $(idldir)/ots..." ; \
+	    mkdir $(idldir)/ots ; \
+	    chmod a+rx $(idldir)/ots ; \
+	fi
+
+	@for i in *.idl ; \
+	do \
+	    echo "Installing $$i" ; \
+	    $(INSTALL_DATA) $$i $(idldir)/ots/$$i ; \
+	done
+
+install_min:: install

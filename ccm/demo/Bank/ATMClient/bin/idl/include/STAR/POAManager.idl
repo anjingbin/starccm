@@ -1,0 +1,51 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POA_MANAGER_IDL
+#define POA_MANAGER_IDL
+
+#pragma prefix "omg.org"
+
+module PortableServer
+{
+#pragma version PortableServer 2.3
+
+local interface POAManager
+{
+#pragma version POAManager 2.3
+
+    exception AdapterInactive
+    {
+    };
+
+    enum State
+    {
+	HOLDING, ACTIVE, DISCARDING, INACTIVE
+    };
+
+    void activate()
+	raises(AdapterInactive);
+
+    void hold_requests(in boolean wait_for_completion)
+	raises(AdapterInactive);
+
+    void discard_requests(in boolean wait_for_completion)
+	raises(AdapterInactive);
+
+    void deactivate(in boolean etherealize_objects,
+		    in boolean wait_for_completion)
+	raises(AdapterInactive);
+
+    State get_state();
+};
+
+}; // End module PortableServer
+
+#endif

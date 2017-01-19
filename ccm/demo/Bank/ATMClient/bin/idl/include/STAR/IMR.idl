@@ -1,0 +1,153 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_IMR_IDL
+#define STAR_IMR_IDL
+
+#include <STAR/IMRState.idl>
+
+#pragma prefix "nis.net"
+
+module IMR
+{
+
+struct POAInfo
+{
+    POAName poa; 
+    POAStatus state; 
+};
+ 
+typedef sequence< POAInfo > POAInfoSeq;
+
+exception OHDAlreadyExists
+{
+    string name;
+};
+
+exception OHDRunning
+{
+    string name;
+};
+
+exception ServerRunning
+{
+    string name;
+};
+
+exception ServerNotRunning
+{
+    string name;
+};
+
+exception POAAlreadyRegistered
+{
+    string name;
+    POAName poa;
+};
+
+interface Server
+{   
+    readonly attribute ServerID id;
+    
+    readonly attribute ServerStatus status;
+       
+    readonly attribute boolean manual;
+   
+    readonly attribute long updateTime;
+   
+    readonly attribute short timesForked;
+   
+    attribute string name;
+  
+    attribute string host;
+  
+    attribute string exec;
+  
+    attribute ArgList args;
+  
+    attribute string directory;
+ 
+    attribute ServerActivationMode mode;
+
+    attribute long updateTimeout;
+
+    attribute long failureTimeout;
+
+    attribute short maxForks;
+
+    attribute boolean activatePOAs;
+
+    void create_poa_record(in POAName poa)
+	raises(POAAlreadyRegistered);
+
+    void remove_poa_record(in POAName poa)
+	raises(NoSuchPOA);
+
+    POAInfo get_poa_info(in POAName poa)
+	raises(NoSuchPOA);
+
+    POAInfoSeq list_poas();
+
+    void clear_error_state();
+
+    void start()
+        raises(ServerRunning);
+    
+    void stop()
+        raises(OHDNotRunning, ServerNotRunning);
+    
+    void destroy()
+        raises(ServerRunning);
+};
+
+typedef sequence< Server > ServerSeq;
+
+interface ServerFactory
+{ 
+    Server get_server(in string server)
+        raises(NoSuchServer);
+
+    Server create_server_record(in string server)
+	raises(ServerAlreadyRegistered);
+
+    ServerSeq list_servers();
+
+    ServerSeq list_servers_by_host(in string host);
+
+    ServerSeq list_orphaned_servers();
+};
+
+struct OHDInfo
+{
+    string host;    
+    boolean up;
+};
+
+typedef sequence< OHDInfo > OHDInfoSeq;
+
+interface ServerDomain : Domain
+{
+    ServerFactory get_server_factory();
+ 
+    void create_ohd_record(in string host)
+        raises(OHDAlreadyExists);
+    
+    void remove_ohd_record(in string host)
+        raises(NoSuchOHD, OHDRunning);
+    
+    OHDInfo get_ohd_record(in string host)
+        raises(NoSuchOHD);
+    
+    OHDInfoSeq list_ohds();
+};
+
+}; // End module IMR
+
+#endif // STAR_IMR_IDL

@@ -1,0 +1,173 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POA_INTERFACE_IDL
+#define POA_INTERFACE_IDL
+
+#include <STAR/POAPolicies.idl>
+#include <STAR/POAManager.idl>
+#include <STAR/POAAdapterActivator.idl>
+#include <STAR/POAServantManager.idl>
+#include <STAR/POACommon.idl>
+#include <STAR/Dispatch.idl>
+#include <STAR/Types.idl> 
+
+#pragma prefix "omg.org"
+
+module PortableServer
+{
+#pragma version PortableServer 2.3
+
+
+local interface POA;
+typedef sequence<POA> POAList;
+
+local interface POA
+{
+#pragma version POA 2.3
+
+    exception AdapterAlreadyExists
+    {
+    };
+
+    exception AdapterNonExistent
+    {
+    };
+
+    exception InvalidPolicy
+    {
+	unsigned short index;
+    };
+
+    exception NoServant
+    {
+    };
+
+    exception ObjectAlreadyActive
+    {
+    };
+
+    exception ObjectNotActive
+    {
+    };
+
+    exception ServantAlreadyActive
+    {
+    };
+
+    exception ServantNotActive
+    {
+    };
+
+    exception WrongAdapter
+    {
+    };
+
+    exception WrongPolicy
+    {
+    };
+
+    
+    POA create_POA(in string adapter_name, in POAManager a_POAManager,
+		   in CORBA::PolicyList policies)
+	raises(AdapterAlreadyExists, InvalidPolicy);
+
+    POA find_POA(in string adapter_name, in boolean activate_it)
+	raises (AdapterNonExistent);
+
+    void destroy(in boolean etherealize_objects,
+		 in boolean wait_for_completion);
+
+    
+    ThreadPolicy create_thread_policy(in ThreadPolicyValue value);
+
+    LifespanPolicy create_lifespan_policy(in LifespanPolicyValue value);
+
+    IdUniquenessPolicy create_id_uniqueness_policy(
+	in IdUniquenessPolicyValue value);
+
+    IdAssignmentPolicy create_id_assignment_policy(
+	in IdAssignmentPolicyValue value);
+
+    ImplicitActivationPolicy create_implicit_activation_policy(
+	in ImplicitActivationPolicyValue value);
+
+    ServantRetentionPolicy create_servant_retention_policy(
+	in ServantRetentionPolicyValue value);
+
+    RequestProcessingPolicy create_request_processing_policy(
+	in RequestProcessingPolicyValue value);
+
+    
+    readonly attribute string the_name;
+
+    readonly attribute POA the_parent;
+
+    readonly attribute POAList the_children;
+
+    readonly attribute POAManager the_POAManager;
+
+    attribute AdapterActivator the_activator;
+
+    
+    ServantManager get_servant_manager()
+	raises(WrongPolicy);
+
+    void set_servant_manager(in ServantManager imgr)
+	raises (WrongPolicy);
+
+    
+    Servant get_servant()
+	raises(NoServant, WrongPolicy);
+
+    void set_servant(in Servant p_servant)
+	raises (WrongPolicy);
+
+    
+    ObjectId activate_object(in Servant p_servant)
+	raises(ServantAlreadyActive, WrongPolicy);
+
+    void activate_object_with_id(in ObjectId id, in Servant p_servant)
+	raises(ServantAlreadyActive, ObjectAlreadyActive, WrongPolicy);
+
+    void deactivate_object(in ObjectId oid)
+	raises(ObjectNotActive, WrongPolicy);
+
+    
+    
+    Object create_reference(in CORBA::RepositoryId intf)
+	raises(WrongPolicy);
+
+    Object create_reference_with_id(in ObjectId oid,
+				    in CORBA::RepositoryId intf);
+
+    
+    ObjectId servant_to_id(in Servant p_servant)
+	raises(ServantNotActive, WrongPolicy);
+
+    Object servant_to_reference(in Servant p_servant)
+	raises(ServantNotActive, WrongPolicy);
+
+    Servant reference_to_servant(in Object reference)
+	raises(ObjectNotActive, WrongAdapter, WrongPolicy);
+
+    ObjectId reference_to_id(in Object reference)
+	raises(WrongAdapter, WrongPolicy);
+
+    Servant id_to_servant(in ObjectId oid)
+	raises (ObjectNotActive, WrongPolicy);
+
+    Object id_to_reference(in ObjectId oid)
+	raises (ObjectNotActive, WrongPolicy);
+};
+
+}; // End module PortableServer
+
+#endif

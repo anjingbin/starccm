@@ -1,0 +1,69 @@
+// **********************************************************************
+//
+// Copyright (c) 2000
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_POA_POLICY_TYPE_IDL
+#define STAR_POA_POLICY_TYPE_IDL
+
+#include <STAR/Policy.idl>
+
+#pragma prefix "nis.net"
+
+//
+// StarBusextensions
+//
+
+module STARPortableServer
+{
+
+/**
+ * 
+ * This policy type identifies the synchronization policy.
+ *
+ **/
+const CORBA::PolicyType POA_SYNCH_POLICY_ID = (256 + 1) | 0xfffe0000;
+
+/**
+ *
+ * This enumeration details the synchronization strategies for method
+ * dispatch.
+ *
+ * @member NO_SYNCHRONIZATION No direct synchronization is applied
+ * @member SYNCHRONIZE_ON_POA Method calls are synchronized on a POA
+ * @member SYNCHRONIZE_ON_ORB Method calls are synchronized on the ORB
+ *
+ * @see POASynchPolicy
+ *
+ **/
+
+/*local*/
+enum POASynchPolicyValue
+{
+    NO_SYNCHRONIZATION,
+    SYNCHRONIZE_ON_POA,
+    SYNCHRONIZE_ON_ORB
+};
+
+/**
+ * 
+ * This policy type identifies the dispatch strategy policy.
+ *
+ **/
+const CORBA::PolicyType POA_REQUEST_LEVEL_DISPATCH_POLICY_ID = (256 + 2) | 0xfffe0000;
+
+/**
+ * 
+ * This policy type identifies the interceptor call policy.
+ *
+ **/
+const CORBA::PolicyType POA_CALL_INTERCEPTOR_POLICY_ID = (256 + 3) | 0xfffe0000;
+
+}; // End module STARPortableServer
+
+#endif

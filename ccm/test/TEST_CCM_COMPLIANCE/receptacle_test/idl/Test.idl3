@@ -1,0 +1,27 @@
+#include <ComponentsClient.idl>
+
+module Test 
+{       
+   interface Hello
+   {     
+      string sayHello();      
+   };  
+    
+   component Talk
+   {
+       provides Hello the_hello;       
+   };   
+   component Person
+   {
+       uses Hello the_mouth;       
+   };
+
+   home TalkHome manages  Talk
+   {
+   };
+   home PersonHome manages  Person
+   {
+   };
+
+};
+

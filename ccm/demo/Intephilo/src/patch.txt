@@ -1,0 +1,20 @@
+改动的文件：
+
+CCM_Dinner.h：
+为CCM_Philosopher_Context添加方法
+	virtual Components::ComponentServentBase* getServant() = 0;
+		
+	virtual CORBA::ORB_ptr getORB() = 0;
+
+CCM_Dinner_Context_impl.h CCM_Dinner_Context_impl.cpp：
+为CCM_Philosopher_Context_impl添加方法实现
+	virtual Components::ComponentServentBase* getServant() = 0;
+		
+	virtual CORBA::ORB_ptr getORB() = 0;
+
+Dinner_impl.h Dinner_impl.cpp：
+为Philospher_impl添加方法以及实现：
+        //add by wsf
+        Container::CIFHook_ptr getCIFHook();
+        //end of adding by wsf
+

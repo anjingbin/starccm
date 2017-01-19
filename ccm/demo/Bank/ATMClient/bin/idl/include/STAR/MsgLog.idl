@@ -1,0 +1,32 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_MSLOG_IDL
+#define STAR_MSLOG_IDL
+
+#pragma prefix "nis.net"
+
+module STAR
+{
+
+local interface MsgLog
+{
+    void info(in string msg);
+   
+    void error(in string msg);
+
+    void warning(in string msg);
+
+    void trace(in string category, in string msg);
+};
+
+}; // End module STAR
+
+#endif

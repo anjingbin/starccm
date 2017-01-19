@@ -1,0 +1,33 @@
+#include <ComponentsClient.idl>
+
+#include <Account.idl3>
+
+#ifndef __DepositComp_IDL_
+#define __DepositComp_IDL_
+
+module Bank
+{	
+
+	//
+	//component DepositComp
+	//
+	
+	interface DepositOp
+	{
+		void deposit(in string id, in unsigned long amount);
+	};
+
+	component DepositComp
+	{
+		provides DepositOp deposit_op;
+		
+		uses AccountOp the_account;
+	};
+
+	home DepositCompHome manages DepositComp
+	{		
+	};		
+
+};
+
+#endif

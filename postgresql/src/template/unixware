@@ -1,0 +1,5 @@
+if test "$GCC" = yes; then
+  CFLAGS=-O2
+else
+  CFLAGS='-O -K inline'
+fi

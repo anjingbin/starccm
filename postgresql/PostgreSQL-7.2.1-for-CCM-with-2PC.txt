@@ -1,0 +1,20 @@
+Source files--
+   xact.c
+   functions.c
+   spi.c
+   gram1.c
+   keywords.c
+   parse1.h
+   postgres.c
+   utility.c
+   xact.h
+   utility.h
+   fe-auth.h
+   fe-exec.c
+   libpq-fe.h
+   sql3types.h
+are modified by Ren Yi to provide 2PC interfaces (Dec,2002)
+
+.\src\interfaces\libpq\libpq-fe.h
+.\src\interfaces\libpq\fe-exec.c
+modified by An Jingbin 2003-09-06

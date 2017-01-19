@@ -1,0 +1,238 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2003 
+// StarMiddleware.net
+//
+// www.StarMiddleware.net
+// All Rights Reserved
+//
+// Author: An JingBin anjb@sina.com
+// **********************************************************************
+// Version: 1.0.0
+
+// -----------------------------------------------------------------------------
+// CosPersistentState.idl
+//
+// OMG PersistentState Service Specification ptc/2001-11-02	 
+// -----------------------------------------------------------------------------
+
+
+#ifndef _CosPersistentState_idl_
+#define _CosPersistentState_idl_
+
+#ifdef ORBacus
+#include <OB/orb.idl>
+#endif
+
+#ifdef StarBus
+#include <STAR/orb.idl>
+#endif
+
+#include <CosTransactions.idl>
+
+#pragma prefix "omg.org"
+
+module CosPersistentState 
+{	
+	local interface CatalogBase;
+	local interface Connector;
+	local interface EndOfAssociationCallback;
+	local interface Session;
+	local interface SessionPool;
+	local interface StorageHomeBase;
+	local interface TransactionalSession;
+
+	//native StorageObjectBase;
+	//native StorageObjectFactory;
+	//native StorageHomeFactory;
+	//native SessionFactory;
+	//native SessionPoolFactory;
+	
+	local interface StorageObjectBase;
+	local interface StorageObjectFactory;
+	local interface StorageHomeFactory;
+	
+	typedef string TypeId;
+	typedef CORBA::OctetSeq Pid;
+	typedef CORBA::OctetSeq ShortPid;	
+	
+
+	exception NotFound {};
+			
+	local interface ConnectorRegistry
+	{
+		Connector find_connector( in string implementation_id ) 
+			raises( NotFound );
+
+		void register_connector( in Connector c, in string implementation_id );
+
+		void unregister_connector( in string implementation_id )
+			raises( NotFound );
+	};
+
+	enum YieldRef { YIELD_REF };
+
+	enum ForUpdate { FOR_UPDATE };
+
+	typedef short IsolationLevel;
+
+	const IsolationLevel READ_UNCOMMITTED = 0;
+	const IsolationLevel READ_COMMITTED = 1;
+	const IsolationLevel REPEATABLE_READ = 2;
+	const IsolationLevel SERIALIZABLE = 3;
+
+	typedef short TransactionPolicy;
+	
+	const TransactionPolicy NON_TRANSACTIONAL = 0;
+	const TransactionPolicy TRANSACTIONAL = 1;
+	
+	typedef short AccessMode;
+	
+	const AccessMode READ_ONLY = 0;
+	const AccessMode READ_WRITE = 1;
+
+	struct Parameter 
+	{
+		string name;
+		any val;
+	};
+
+	typedef sequence<Parameter> ParameterList;
+	typedef sequence<TransactionalSession> TransactionalSessionList;
+
+	//-------------------------------------------------------------
+	// Connector
+	//-------------------------------------------------------------
+
+	local interface Connector 
+	{
+		readonly attribute string implementation_id;
+		
+		Pid get_pid(in StorageObjectBase obj);
+
+		ShortPid get_short_pid(in StorageObjectBase obj);
+
+		Session create_basic_session(in AccessMode access_mode,
+					     in ParameterList additional_parameters );
+		
+		TransactionalSession create_transactional_session(
+					     in AccessMode access_mode,
+					     in IsolationLevel default_isolation_level,
+					     in EndOfAssociationCallback callback,
+					     in ParameterList additional_parameters );
+
+		SessionPool create_session_pool(
+					     in AccessMode access_mode,
+					     in TransactionPolicy tx_policy,
+					     in ParameterList additional_parameters );
+
+		TransactionalSession current_session();
+
+		TransactionalSessionList sessions(in CosTransactions::Coordinator transaction);
+
+		StorageObjectFactory register_storage_object_factory(
+						  in TypeId storage_type_name,
+						  in StorageObjectFactory _factory );
+
+		StorageHomeFactory register_storage_home_factory(
+						  in TypeId storage_home_type_name,
+						  in StorageHomeFactory _factory );
+
+	};
+		
+	//-------------------------------------------------------------
+	// CatalogBase
+	//-------------------------------------------------------------
+
+	local interface CatalogBase 
+	{
+		readonly attribute AccessMode access_mode;
+
+		StorageHomeBase find_storage_home(in string storage_home_id)
+			raises (NotFound);
+
+		StorageObjectBase find_by_pid(in Pid the_pid) 
+			raises (NotFound);
+
+		void flush();
+
+		void refresh();
+
+		void free_all();
+
+		void close();
+	};
+	
+	//-------------------------------------------------------------
+	// StorageHomeBase
+	//-------------------------------------------------------------
+
+	typedef sequence< ShortPid > ShortPidSeq;
+
+	local interface StorageHomeBase 
+	{
+		StorageObjectBase find_by_short_pid(in ShortPid short_pid)
+			raises (NotFound);
+
+		
+		ShortPidSeq	find_all();
+
+		CatalogBase get_catalog();
+	};
+	
+	//-------------------------------------------------------------
+	// Session
+	//-------------------------------------------------------------
+
+	local interface Session : CatalogBase 
+	{};
+
+	//-------------------------------------------------------------
+	// TransactionalSession
+	//-------------------------------------------------------------
+
+	local interface TransactionalSession : Session 
+	{
+		readonly attribute IsolationLevel default_isolation_level;
+
+		typedef short AssociationStatus;
+
+		const AssociationStatus NO_ASSOCIATION = 0;
+		const AssociationStatus ACTIVE = 1;
+		const AssociationStatus SUSPENDED = 2;
+		const AssociationStatus ENDING = 3;
+
+		void start(in CosTransactions::Coordinator transaction);
+
+		void suspend(in CosTransactions::Coordinator transaction);
+
+		void end( in CosTransactions::Coordinator transaction,
+			  in boolean success );
+
+		AssociationStatus get_association_status();
+
+		CosTransactions::Coordinator transaction();
+	};
+	
+	local interface EndOfAssociationCallback 
+	{
+		void released(in TransactionalSession tsession );
+	};
+
+	//-------------------------------------------------------------
+	// SessionPool
+	//-------------------------------------------------------------
+
+	typedef sequence<Pid> PidList;
+
+	local interface SessionPool : CatalogBase 
+	{
+		void flush_by_pids(in PidList pids);
+
+		void refresh_by_pids(in PidList pids);
+
+		readonly attribute TransactionPolicy transaction_policy;
+	};
+};
+
+#endif  // _CosPersistentState_idl_

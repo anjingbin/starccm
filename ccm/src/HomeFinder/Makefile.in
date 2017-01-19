@@ -1,0 +1,101 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+IDLDIR		= $(top_srcdir)/idl
+HDIR		= $(top_srcdir)/include
+
+HF_NAME	= $(top_srcdir)/bin/HomeFinder
+
+TARGETS		= $(HF_NAME)
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA    = @INSTALL_DATA@
+
+SUBDIRS		= 
+
+GENERATED 	= HomeFinder_skel.cpp \
+		HomeFinder_skel.h \
+		HomeFinder_skel_tie.h \
+		HomeRegistration_skel.cpp \
+		HomeRegistration_skel.h \
+		HomeRegistration_skel_tie.h \
+		HomeFinder.cpp \
+		HomeFinder.h \
+		HomeRegistration.cpp \
+		HomeRegistration.h
+
+HF_OBJS	= HomeFinder_impl_tie.o \
+	HomeFinder_skel.o \
+	HomeRegistration_skel.o \
+	Server.o
+
+
+SRCS		= $(HF_OBJS:.o=.cpp)
+
+ALL_CXXFLAGS	= $(CXXFLAGS)
+ALL_CPPFLAGS	= -I. $(CCM_CPPFLAGS) $(OB_CPPFLAGS) $(CPPFLAGS) \
+	$(PSS_CPPFLAGS) $(OTS_CPPFLAGS) $(XERCESC_CPPFLAGS) -DWITH_OTS
+ALL_LDFLAGS	= $(OB_LDFLAGS) $(LDFLAGS) $(CCM_LDFLAGS) $(XERCESC_LDFLAGS) $(OTS_LDFLAGS) $(PSS_LDFLAGS) $(PSQL_LDFLAGS)
+
+ALL_LIBS	= -lIDL $(OB_LIBS) $(LIBS) $(CCM_LIBS) $(XERCESC_LIBS) $(OTS_LIBS) $(PSS_LIBS) $(PSQL_LIBS) -ldl -lcrypt
+
+
+ALL_IDLFLAGS    = -I. $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS) -I../idl/
+
+HomeFinder_skel.cpp HomeFinder_skel.h HomeFinder_skel_tie.h: \
+		$(IDLDIR)/HomeFinder.idl
+	if test -x $(IDL); \
+	then \
+		rm -f HomeFinder_skel.cpp ; \
+		rm -f HomeFinder_skel.h ; \
+		rm -f HomeFinder_skel_tie.h ; \
+		$(IDL) $(ALL_IDLFLAGS) --tie $(IDLDIR)/HomeFinder.idl ;\
+	fi
+
+
+HomeRegistration_skel.cpp HomeRegistration_skel.h HomeRegistration_skel_tie.h: \
+		$(IDLDIR)/HomeFinder.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f HomeRegistration_skel.cpp ; \
+		rm -f HomeRegistration_skel.h ; \
+		rm -f HomeRegistration_skel_tie.h ; \
+		$(IDL) $(ALL_IDLFLAGS) --tie $(IDLDIR)/HomeRegistration.idl ;\
+	fi
+
+$(HF_NAME): $(HF_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(HF_OBJS) $(ALL_LIBS)
+
+
+
+install:: all
+	$(INSTALL_PROGRAM) $(HF_OBJS) $(bindir)
+
+
+min:: all
+
+install_min:: install
+
+clean::
+
+include .depend

@@ -1,0 +1,10 @@
+#ifndef __CCMComponentsClient_idl__
+#define __CCMComponentsClient_idl__
+
+#include <CCMCommon.idl>
+#include <CCMHome.idl>
+#include <CCMObject.idl>
+#include <HomeFinder.idl>
+#include <Configurator.idl>
+
+#endif

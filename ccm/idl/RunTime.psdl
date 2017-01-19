@@ -1,0 +1,69 @@
+#ifndef __RunTime_psdl__
+#define __RunTime_psdl__
+
+#include <RunTime.idl>
+
+module ContainerPSS
+{
+	abstract storagetype AbstractRunTime
+	{
+		state string uuid;
+
+		state string homeRepositoryId;
+		state string componentRepositoryId;
+		state string homePoaId;
+		state string componentPoaId;
+
+		state string containerUuid;
+
+		state string poolUuid;
+		state string homeCompositionUuid;
+	};
+    
+	abstract storagehome AbstractRunTimeHome of AbstractRunTime
+	{
+		key uuid;
+		factory create(uuid);
+	};
+
+	abstract storagetype AbstractPool
+	{
+		state string uuid;
+	};
+    
+	abstract storagehome AbstractPoolHome of AbstractPool
+	{
+		key uuid;
+		factory create(uuid);
+	};
+
+	abstract storagetype AbstractExecutor
+	{
+		state string uuid;
+	};
+
+	abstract storagehome AbstractExecutorHome of AbstractExecutor
+	{
+		key uuid;
+		factory create(uuid);
+	};
+
+	storagetype RunTime implements AbstractRunTime
+	{
+	};
+
+	storagehome RunTimeHome of RunTime implements AbstractRunTimeHome
+	{
+	};
+
+	storagetype Pool implements AbstractPool
+	{
+	};
+
+	storagehome PoolHome of Pool implements AbstractPoolHome
+	{
+	};
+
+};
+
+#endif

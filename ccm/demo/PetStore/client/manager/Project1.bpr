@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="Project1.exe"/>
+    <OBJFILES value="Project1.obj Unit1.obj login.obj Unit2.obj Unit4.obj"/>
+    <RESFILES value="Project1.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) Unit1.dfm login.dfm Unit2.dfm Unit4.dfm"/>
+    <LIBFILES value="..\PetStore-client\include\ccmlib.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="vcl.lib rtl.lib dbrtl.lib vcldb.lib bdertl.lib vclx.lib qrpt.lib tee.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
+      vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi teeui.bpi 
+      teedb.bpi tee.bpi dss.bpi teeqr.bpi visualclx.bpi visualdbclx.bpi 
+      dsnapcrba.bpi dsnapcon.bpi bcbsmp.bpi vclie.bpi xmlrtl.bpi inet.bpi 
+      inetdbbde.bpi inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi 
+      bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi dbexpress.bpi dbxcds.bpi 
+      indy.bpi bcb2kaxserver.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="WIN32;_USE_OLD_RW_STL;_DEBUG"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="Project1.cpp"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;&quot;D:\Program Files\CBuilder6\Inprise\vbroker\include&quot;;&quot;D:\Program Files\CBuilder6\Inprise\vbroker\include\stubs&quot;;E:\PetStore\client\PetStore-client\include"/>
+    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib;E:\PetStore\client\PetStore-client\include;&quot;D:\Program Files\CBuilder6\Inprise\vbroker\lib&quot;"/>
+    <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl 
+      -I&quot;D:\Program Files\CBuilder6\Inprise\vbroker\include&quot; 
+      -I&quot;D:\Program Files\CBuilder6\Inprise\vbroker\include\stubs&quot; 
+      -IE:\PetStore\client\PetStore-client\include -src_suffix cpp -DWIN32 
+      -D_USE_OLD_RW_STL -D_DEBUG -boa"/>
+    <CFLAG1 value="-vGc -vGt -vGd -Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k 
+      -y -v -vi- -c -tW -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -$A8 -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="cg32.lib $(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="Project1.res" FORMNAME="" UNITNAME="Project1.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Project1.cpp" FORMNAME="" UNITNAME="Project1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit1.cpp" FORMNAME="Form1" UNITNAME="Unit1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="login.cpp" FORMNAME="PasswordDlg" UNITNAME="login" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit2.cpp" FORMNAME="Form2" UNITNAME="Unit2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit4.cpp" FORMNAME="Form4" UNITNAME="Unit4" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\PetStore-client\include\ccmlib.lib" FORMNAME="" UNITNAME="ccmlib.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=2052
+CodePage=936
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=23
+Item0=$(BCB)\include;$(BCB)\include\vcl;D:\Program Files\CBuilder6\Inprise\vbroker\include;D:\Program Files\CBuilder6\Inprise\vbroker\include\stubs;E:\PetStore\client\PetStore-client\include
+Item1=$(BCB)\include;$(BCB)\include\vcl;D:\Program Files\CBuilder6\Inprise\vbroker\include;D:\Program Files\CBuilder6\Inprise\vbroker\include\stubs;E:\StarCCM_NEW\OB-CCM-1.0\ccm\demo\PetStore\client\PetStore-client\include
+Item2=D:\Program Files\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;D:\Program Files\CBuilder6\Inprise\vbroker\include;D:\Program Files\CBuilder6\Inprise\vbroker\include\stubs;E:\StarCCM_NEW\OB-CCM-1.0\ccm\demo\PetStore\client\manager
+Item3=D:\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;D:\Program Files\CBuilder6\Inprise\vbroker\include;D:\Program Files\CBuilder6\Inprise\vbroker\include\stubs;E:\StarCCM_NEW\OB-CCM-1.0\ccm\demo\PetStore\client\manager
+Item4=D:\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;D:\CBuilder6\Inprise\vbroker\include;D:\CBuilder6\Inprise\vbroker\include\stubs;D:\terminal_version\StarCCM1.0\StarCCM\example\PetStore\client\manager
+Item5=D:\Program Files\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Inprise\vbroker\include\stubs;E:\source\ccm\example\PetStore\client\manager
+Item6=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Inprise\vbroker\include\stubs;E:\source\ccm\example\PetStore\client\manager
+Item7=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Inprise\vbroker\include\stubs;E:\source\ccm\example\PetStore\client\manager;E:\source\ccm\example\PetStore\client\PetStore-client\DLL
+Item8=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Program Files\Borland\CBuilder6\Projects;D:\Inprise\vbroker\include\stubs
+Item9=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Program Files\Borland\CBuilder6\Projects;E:\source\PSS\include
+Item10=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Program Files\Borland\CBuilder6\Projects;E:\source\PSS\include\ob
+Item11=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Program Files\Borland\CBuilder6\Projects;E:\ob\OB-4.1.0\ob\include;E:\source\ccm\include
+Item12=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Program Files\Borland\CBuilder6\Projects;E:\source\ccm\include
+Item13=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\Program Files\Borland\CBuilder6\Projects
+Item14=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;E:\source\ccm\include
+Item15=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include
+Item16=$(BCB)\include;$(BCB)\include\vcl;D:\ORBacus4.1.0\include;D:\Inprise\vbroker\include;E:\source\ccm\include;E:\source\PSS\include
+Item17=$(BCB)\include;$(BCB)\include\vcl;D:\Inprise\vbroker\include;D:\ORBacus4.1.0\include;E:\source\ccm\include;E:\source\PSS\include
+Item18=$(BCB)\include;$(BCB)\include\vcl;D:\ORBacus4.1.0\include;E:\source\ccm\include;E:\source\PSS\include;D:\Inprise\vbroker\include
+Item19=$(BCB)\include;$(BCB)\include\vcl;D:\ORBacus4.1.0\include;E:\source\ccm\include;E:\source\PSS\include
+Item20=$(BCB)\include;$(BCB)\include\vcl;E:\source\ccm\include;E:\source\PSS\include;D:\ORBacus4.1.0\include
+Item21=$(BCB)\include;$(BCB)\include\vcl;E:\source\ccm\include
+Item22=$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=12
+Item0=$(BCB)\lib\obj;$(BCB)\lib;E:\PetStore\client\PetStore-client\include;D:\Program Files\CBuilder6\Inprise\vbroker\lib
+Item1=$(BCB)\lib\obj;$(BCB)\lib;E:\StarCCM_NEW\OB-CCM-1.0\ccm\demo\PetStore\client\PetStore-client\include\ccmlib.lib;D:\Program Files\CBuilder6\Inprise\vbroker\lib
+Item2=$(BCB)\lib\obj;$(BCB)\lib;E:\StarCCM_NEW\OB-CCM-1.0\ccm\demo\PetStore\client\PetStore-client\include;D:\Program Files\CBuilder6\Inprise\vbroker\lib
+Item3=D:\Program Files\CBuilder6\Projects;$(BCB)\lib\obj;$(BCB)\lib;E:\StarCCM_NEW\OB-CCM-1.0\ccm\demo\PetStore\client\manager;D:\Program Files\CBuilder6\Inprise\vbroker\lib
+Item4=D:\CBuilder6\Projects;$(BCB)\lib\obj;$(BCB)\lib;E:\StarCCM_NEW\OB-CCM-1.0\ccm\demo\PetStore\client\manager;D:\Program Files\CBuilder6\Inprise\vbroker\lib
+Item5=D:\CBuilder6\Projects;$(BCB)\lib\obj;$(BCB)\lib;D:\terminal_version\StarCCM1.0\StarCCM\example\PetStore\client\manager;D:\CBuilder6\Inprise\vbroker\lib
+Item6=D:\Program Files\Borland\CBuilder6\Projects;$(BCB)\lib\obj;$(BCB)\lib;D:\Inprise\vbroker\lib;E:\source\ccm\example\PetStore\client\manager
+Item7=$(BCB)\lib\obj;$(BCB)\lib;D:\Inprise\vbroker\lib;E:\source\ccm\example\PetStore\client\manager
+Item8=$(BCB)\lib\obj;$(BCB)\lib;D:\Inprise\vbroker\lib;E:\source\ccm\lib;E:\source\ccm\example\PetStore\client\manager;E:\source\ccm\example\PetStore\client\PetStore-client\DLL
+Item9=$(BCB)\lib\obj;$(BCB)\lib;D:\Inprise\vbroker\lib;E:\source\ccm\lib
+Item10=$(BCB)\lib\obj;$(BCB)\lib;D:\Inprise\vbroker\lib
+Item11=$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=2
+Item0=WIN32;_USE_OLD_RW_STL;_DEBUG
+Item1=_DEBUG
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=1
+LinkCGLIB=1
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

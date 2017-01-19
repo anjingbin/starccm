@@ -1,0 +1,46 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POA_SERVANT_LOCATOR_IDL
+#define POA_SERVANT_LOCATOR_IDL
+
+#include <STAR/POAServantManager.idl>
+#include <STAR/POACommon.idl>
+
+#pragma prefix "omg.org"
+
+module PortableServer
+{
+#pragma version PortableServer 2.3
+
+local interface POA;
+
+local interface ServantLocator : ServantManager
+{
+#pragma version ServantLocator 2.3
+
+    native Cookie;
+
+    
+    Servant preinvoke(in ObjectId oid, in POA adapter,
+		      in  string operation,
+		      out Cookie the_cookie)
+	raises(ForwardRequest);
+
+    
+    void postinvoke(in ObjectId oid, in POA adapter,
+		    in  string operation,
+		    in Cookie the_cookie,
+		    in Servant the_servant);
+};
+
+}; // End module PortableServer
+
+#endif

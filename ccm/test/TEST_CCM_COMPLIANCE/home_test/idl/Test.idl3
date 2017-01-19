@@ -1,0 +1,22 @@
+#include <ComponentsClient.idl>
+
+module Test
+{	
+	//
+	//component product
+	//
+	
+	valuetype KeyID:Components::PrimaryKeyBase
+	{
+		public string id;
+	};    
+	component Product
+	{
+		readonly attribute Test::KeyID product_id;
+		attribute string product_name;			
+	};	
+
+	home ProductHome manages Product primarykey KeyID
+	{
+	};    
+};

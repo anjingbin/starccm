@@ -1,0 +1,150 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_BALANCER_TYPES_IDL
+#define STAR_BALANCER_TYPES_IDL
+
+#include <STAR/IOP.idl>
+#include <STAR/PICommon.idl>
+
+#pragma prefix "nis.net"
+
+/**
+ *
+ * The definitions in this module provide the interface of the InterBus
+ * Balancer.
+ *
+ **/
+module LoadBalancing
+{
+
+/** A load balanced group ID. */
+typedef string GroupId;
+
+/** A sequence of load balanced group IDs. */
+typedef sequence<GroupId> GroupIdSeq;
+
+/** A member ID. */
+typedef string MemberId;
+
+/** A sequence of member IDs. */
+typedef sequence<MemberId> MemberIdSeq;
+
+/** An object ID. */
+typedef PortableInterceptor::ObjectId ObjectId;
+
+/** A load balancing strategy configuration property name. */
+typedef string PropertyName;
+
+/** A load balancing strategy configuration property value. */
+typedef any PropertyValue;
+
+/**
+ *
+ * This enumeration contains the various load balancing strategy
+ * configuration property error codes.
+ *
+ **/
+enum PropertyErrorCode
+{
+    BAD_PROPERTY,
+    BAD_VALUE
+};
+
+/**
+ *
+ * A load balancing strategy configuration property.
+ *
+ **/
+struct Property
+{
+    PropertyName name;
+    PropertyValue value;
+};
+
+/** A sequence of load balancing strategy configuration properties. */
+typedef sequence<Property> PropertySeq;
+
+/**
+ *
+ * A load balancing strategy configuration property error.
+ *
+ **/
+struct PropertyError
+{
+    PropertyName name;
+    PropertyErrorCode code;
+};
+
+/** A sequence of load balancing strategy configuration property errors. */
+typedef sequence<PropertyError> PropertyErrorSeq;
+
+/**
+ *
+ * A MemberExists exception indicates that a member with the specified
+ * id is already exists in the load balanced group.
+ *
+ **/
+exception MemberExists {};
+
+/**
+ *
+ * A MemberNotFound exception indicates that the specified member does
+ * not exist in the load balanced group.
+ *
+ **/
+exception MemberNotFound {};
+
+/**
+ *
+ * A GroupExists exception indicates that a load balanced group with the
+ * specified id already exists.
+ *
+ **/
+exception GroupExists {};
+
+/**
+ *
+ * A GroupNotFound exception indicates that the specified load balanced
+ * group does not exist.
+ *
+ **/
+exception GroupNotFound {};
+
+/**
+ *
+ * A StrategyNotFound exception indicates that the specified strategy
+ * is not supported by the Balancer.
+ *
+ **/
+exception StrategyNotFound {};
+
+/**
+ *
+ * A StrategyNotAdaptive exception indicates that the strategy is not
+ * an adaptive strategy and does not require load updates.
+ *
+ **/
+exception StrategyNotAdaptive {};
+
+/**
+ *
+ * An InvalidProperties exception indicates that specified properties
+ * were not valid and could not be used to create the strategy.
+ *
+ **/
+exception InvalidProperties
+{
+    PropertyErrorSeq error;
+};
+
+}; // End module LoadBalancing
+
+#endif

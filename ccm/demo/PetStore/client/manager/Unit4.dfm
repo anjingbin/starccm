@@ -1,0 +1,139 @@
+object Form4: TForm4
+  Left = 296
+  Top = 202
+  Width = 627
+  Height = 489
+  BorderIcons = []
+  Caption = #32467#24080
+  Color = clSkyBlue
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Scaled = False
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Chart1: TChart
+    Left = 64
+    Top = 32
+    Width = 467
+    Height = 297
+    AllowPanning = pmNone
+    AllowZoom = False
+    BackWall.Brush.Color = clWhite
+    BackWall.Brush.Style = bsClear
+    BackWall.Pen.Visible = False
+    Gradient.Visible = True
+    LeftWall.Size = 1
+    Title.Color = 16777088
+    Title.Font.Charset = GB2312_CHARSET
+    Title.Font.Color = clBlue
+    Title.Font.Height = -20
+    Title.Font.Name = #38582#20070
+    Title.Font.Style = []
+    Title.Frame.Color = 16384
+    Title.Text.Strings = (
+      #35746#36135#24418#21183#20998#26512#22270
+      '')
+    AxisVisible = False
+    ClipPoints = False
+    Frame.Visible = False
+    View3DOptions.Elevation = 315
+    View3DOptions.Orthogonal = False
+    View3DOptions.Perspective = 0
+    View3DOptions.Rotation = 360
+    View3DWalls = False
+    TabOrder = 0
+    object Series1: TBarSeries
+      ColorEachPoint = True
+      Marks.ArrowLength = 8
+      Marks.Visible = True
+      SeriesColor = clRed
+      XValues.DateTime = False
+      XValues.Name = 'X'
+      XValues.Multiplier = 1
+      XValues.Order = loAscending
+      YValues.DateTime = False
+      YValues.Name = 'Bar'
+      YValues.Multiplier = 1
+      YValues.Order = loNone
+    end
+    object Series2: TPieSeries
+      Marks.ArrowLength = 8
+      Marks.Visible = True
+      SeriesColor = clGreen
+      OtherSlice.Text = 'Other'
+      PieValues.DateTime = False
+      PieValues.Name = 'Pie'
+      PieValues.Multiplier = 1
+      PieValues.Order = loNone
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 200
+    Top = 392
+    Width = 80
+    Height = 28
+    Caption = #35746#21333#20998#26512
+    TabOrder = 1
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 280
+    Top = 392
+    Width = 77
+    Height = 28
+    Caption = #20998#31867#26500#25104
+    TabOrder = 2
+    OnClick = BitBtn2Click
+  end
+  object BitBtn3: TBitBtn
+    Left = 357
+    Top = 392
+    Width = 79
+    Height = 28
+    Caption = #36820#22238
+    TabOrder = 3
+    OnClick = BitBtn3Click
+  end
+  object Panel1: TPanel
+    Left = 200
+    Top = 344
+    Width = 234
+    Height = 41
+    Color = clBackground
+    TabOrder = 4
+    object StaticText1: TStaticText
+      Left = 8
+      Top = 8
+      Width = 99
+      Height = 25
+      Caption = #35746#21333#24635#37329#39069
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clYellow
+      Font.Height = -19
+      Font.Name = #21326#25991#20013#23435
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+    end
+    object LabeledEdit1: TLabeledEdit
+      Left = 112
+      Top = 8
+      Width = 113
+      Height = 21
+      Color = clMoneyGreen
+      EditLabel.Width = 3
+      EditLabel.Height = 13
+      EditLabel.Caption = 'LabeledEdit1'
+      Enabled = False
+      LabelPosition = lpAbove
+      LabelSpacing = 3
+      TabOrder = 1
+    end
+  end
+end

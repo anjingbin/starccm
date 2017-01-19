@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties PUBLIC "" "properties.dtd">
+<properties>
+	<simple name="thinking_seconds" type="ulong">
+		<value>2</value>
+	</simple>
+	<simple name="eating_seconds" type="ulong">
+		<value>3</value>
+	</simple>
+	<simple name="sleeping_seconds" type="ulong">
+		<value>4</value>
+	</simple>
+	<simple name="name" type="string">
+		<value>wkb</value>
+	</simple>
+</properties>

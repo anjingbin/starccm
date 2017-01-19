@@ -1,0 +1,20 @@
+#ifndef __ResourcePool_idl__
+#define __ResourcePool_idl__
+
+#include <Resource.idl>
+
+module NUDTCCM
+{	
+	exception NoResource{ };
+	exception RemoveResFailed{ };
+	local interface ResourcePool
+	{
+		Resource getResource()
+			raises ( NoResource );
+			
+		boolean removeResource( in Resource res)
+			raises ( RemoveResFailed );
+	};
+};
+
+#endif

@@ -1,0 +1,70 @@
+#ifndef __CCMConfigurator_idl__
+#define __CCMConfigurator_idl__
+
+#include <CCMCommon.idl>
+#include <CCMHome.idl>
+
+#pragma prefix "omg.org"
+
+module Components
+{
+	//extended the specification to support dynamic configurator
+	enum ConnectType
+	{
+		PROVIDES,
+		COMPONENTSUPPORTEDINTERFACE,
+		HOMEINTERFACE,
+		EMITS,
+		PUBLISHES
+	};
+	
+	struct DynamicConnectInfo
+	{
+		string portIdentifier; //maybe consumes port or uses port
+		ConnectType connectPortType;
+		Object  connectToRef; //maybe CCMObject used by the event
+		string eventSourcePortIdentifier;
+	};
+	
+	typedef sequence<DynamicConnectInfo> DynamicConnectInfos;	
+	
+	// Explicitly defined in Chapter 61
+	interface CCMObject;
+
+	interface Configurator
+	{
+		void configure (in CCMObject comp)
+				raises (WrongComponentType);
+	};
+
+	valuetype ConfigValue
+	{
+		public FeatureName name;
+		public any value;
+	};
+	typedef sequence<ConfigValue> ConfigValues;
+
+	interface StandardConfigurator : Configurator
+	{
+		void set_configuration (in ConfigValues descr);
+	};
+
+	//extended the specification to support dynamic configurator	
+	interface DynamicConnectConfigurator : Configurator
+	{
+		void set_connect_configuration (in DynamicConnectInfos descr);
+	};	
+
+	interface HomeConfiguration : CCMHome
+	{
+		void set_configurator (in Configurator cfg);
+
+		void set_configuration_values (in ConfigValues config);
+
+		void complete_component_configuration (in boolean b);
+
+		void disable_home_configuration();
+	};
+};
+
+#endif

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+FILES="acconfig.h basic.m4 ccm.m4 config.guess	config.sub cplusplus.m4	current        defaults	gcc-check gcc-version-flag install-sh jtc.m4 macros.m4 Make.rules.in       motif.m4 network.m4 ob.m4 obnotify.m4 ots.m4 postgresql.m4 pss.m4 threads.m4 x11.m4 xercesc.m4"
+
+input=
+echo "reach here"
+read input
+
+for i in $FILES 
+do 
+   if test ! -f ./$i
+   then echo "wrong ,there is no file $i"
+   fi
+   tr -d '\r'<./$i>/usr/$i
+   mv -f /usr/config/$i ./$i
+done
+	

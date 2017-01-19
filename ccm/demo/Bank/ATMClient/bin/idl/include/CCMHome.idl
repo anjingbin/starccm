@@ -1,0 +1,39 @@
+#ifndef __CCMHome_idl__
+#define __CCMHome_idl__
+
+#include <CCMCommon.idl>
+
+#pragma prefix "omg.org"
+
+module Components
+{
+	interface CCMObject;
+
+	exception CreateFailure
+	{
+		FailureReason reason;
+	};
+
+	exception RemoveFailure
+	{
+		FailureReason reason;
+	};
+
+	interface CCMHome
+	{
+		CORBA::IRObject get_component_def();
+
+		CORBA::IRObject get_home_def ();
+
+		void remove_component (in CCMObject comp)
+			raises (RemoveFailure);
+	};
+
+	interface KeylessCCMHome
+	{
+		CCMObject create_component() 
+			raises (CreateFailure);
+	};
+};
+
+#endif

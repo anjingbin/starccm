@@ -1,0 +1,173 @@
+<!-- DTD for softpkg. Used to describe CORBA Component
+     implementations. The root element is <softpkg>.     
+  -->
+
+<!ELEMENT softpkg
+    (( title     
+     | author
+     | description?
+     | license          
+     | dependency     
+     )*
+     , ccdskelfile
+     , homecpfskelfile?
+     , componentcpfskelfile?
+     , idl3file
+     , idl2file
+     , cidlfile
+     , localinterfacefile
+     , psdlfile?    
+     , implementation+    
+     , descriptor? 
+     )>
+<!ATTLIST softpkg
+     name    ID    #REQUIRED
+     version CDATA #IMPLIED >
+
+
+<!ELEMENT title ( #PCDATA ) >
+
+
+<!ELEMENT author
+     ( name
+     | company
+     | webpage
+     )* >
+
+<!ELEMENT name ( #PCDATA ) >
+
+<!ELEMENT company ( #PCDATA ) >
+
+<!ENTITY % simple-link-attributes "
+     xml:link      CDATA               #FIXED 'SIMPLE'
+     href          CDATA               #REQUIRED">     
+
+<!ELEMENT webpage ( #PCDATA ) >
+<!ATTLIST webpage
+     %simple-link-attributes; >
+
+<!ELEMENT description ( #PCDATA ) >
+
+
+<!ELEMENT license ( #PCDATA ) >
+<!ATTLIST license
+     %simple-link-attributes; >
+
+<!ELEMENT dependency (valuetypefactory) >
+<!ATTLIST dependency
+     type   CDATA   "dll"
+     action CDATA   #FIXED "assert" >
+
+     
+<!ELEMENT valuetypefactory ( fileinarchive ) >
+<!ATTLIST valuetypefactory
+     repid             CDATA #REQUIRED
+     valueentrypoint   CDATA #REQUIRED
+     factoryentrypoint CDATA #REQUIRED >
+
+<!ELEMENT fileinarchive EMPTY >
+<!ATTLIST fileinarchive
+     name CDATA "CORBA Component" >
+
+
+<!ELEMENT descriptor ( fileinarchive ) >
+<!ATTLIST descriptor
+     type CDATA "CORBA Component" >
+
+<!ELEMENT ccdskelfile ( fileinarchive ) >
+
+<!ELEMENT homecpfskelfile ( fileinarchive ) >
+
+<!ELEMENT componentcpfskelfile ( fileinarchive ) >
+
+<!ELEMENT idl3file ( fileinarchive ) >
+
+<!ELEMENT idl2file ( fileinarchive ) >
+
+<!ELEMENT cidlfile ( fileinarchive ) >
+
+<!ELEMENT localinterfacefile ( fileinarchive ) >
+
+<!ELEMENT psdlfile ( fileinarchive ) >
+     
+
+<!ELEMENT implementation
+    (( description
+     | compiler
+     | dependency         
+     | humanlanguage
+     | os          
+     | processor     
+     )*
+     , orb
+     , code
+     , programminglanguage?
+     , servantcode?     
+     , psscode?
+     , descriptor?
+     )>
+<!ATTLIST implementation
+     id        CDATA    #IMPLIED>     
+
+<!ELEMENT code
+     ( fileinarchive           
+       , entrypoint?       
+     ) >
+<!ATTLIST code
+     type CDATA "dll" >
+
+<!ELEMENT entrypoint ( #PCDATA) >
+
+
+<!ELEMENT servantcode 
+     ( fileinarchive
+     , servantentrypoint
+     , contextentrypoint) >
+<!ATTLIST servantcode
+	type CDATA "dll" >
+
+<!ELEMENT servantentrypoint ( #PCDATA) >
+
+<!ELEMENT contextentrypoint ( #PCDATA) >
+
+
+<!ELEMENT psscode 
+	( fileinarchive
+	, entrypoint) >
+<!ATTLIST psscode
+	type CDATA "dll" >
+
+<!ELEMENT compiler EMPTY >
+<!ATTLIST compiler
+     name    CDATA #REQUIRED
+     version CDATA #IMPLIED >
+     
+<!ELEMENT programminglanguage EMPTY >
+<!ATTLIST programminglanguage
+     name    CDATA #REQUIRED
+     version CDATA #IMPLIED >
+     
+
+<!ELEMENT humanlanguage EMPTY >
+<!ATTLIST humanlanguage
+     name CDATA #REQUIRED >
+
+
+<!ELEMENT os EMPTY >
+<!ATTLIST os
+     name    CDATA #REQUIRED
+     version CDATA #IMPLIED >  
+
+
+<!ELEMENT processor EMPTY >
+<!ATTLIST processor
+     name CDATA #REQUIRED >
+
+<!ELEMENT orb EMPTY >
+<!ATTLIST orb
+     name    CDATA #REQUIRED
+     version CDATA #IMPLIED > 
+
+
+
+

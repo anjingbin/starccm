@@ -1,0 +1,18 @@
+idl CosTransactions.idl
+
+idl CosTransactionsOTS.idl
+
+idl PostgreSQLResource.idl
+
+idl Resource.idl
+
+idl --no-type-codes --no-skeletons CosTransactionsCurrent.idl  
+
+idl --no-skeletons CosTransactionsPolicyType.idl
+
+idl --no-skeletons CosTransactionsPolicy.idl
+
+idl CosTransactionsUser.idl
+
+idl --no-skeletons CosTSInteroperation.idl
+

@@ -1,0 +1,25 @@
+#include <ComponentsClient.idl>
+
+module Bank
+{
+	
+	//
+	//component InterestComputer
+	//
+	
+	
+	interface ComputeOp
+	{
+		unsigned long getInterest(in string id, in unsigned long amount);
+	}; 
+
+	component InterestComputer
+	{
+		provides ComputeOp compute_op;
+	};
+
+	home InterestComputerHome manages InterestComputer
+	{
+	};		
+
+};

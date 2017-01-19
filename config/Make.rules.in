@@ -1,0 +1,111 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+# **********************************************************************
+
+srcdir		= @srcdir@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+libdir		= @libdir@
+includedir	= @includedir@
+idldir		= $(prefix)/idl
+mandir		= @mandir@
+
+CC		= @CC@
+CXX		= @CXX@
+CXXFLAGS	= @CXXFLAGS@
+CXXCPP		= @CXXCPP@
+CFLAGS	        = @CFLAGS@
+CPPFLAGS	= @CPPFLAGS@
+LDFLAGS		= @LDFLAGS@
+LIBS		= @LIBS@
+AR		= @AR@
+ARFLAGS		= @ARFLAGS@
+LIBEXT		= @LIBEXT@
+RANLIB		= @RANLIB@
+YACC		= @YACC@
+LEX		= @LEX@
+LEXLIB		= @LEXLIB@
+LN_S		= @LN_S@
+SYMLNK_SHLIB    = @SYMLNK_SHLIB@
+RMLNK_SHLIB	= @RMLNK_SHLIB@
+PORTNAME	= @PORTNAME@
+ORB_NAME	= @ORB_NAME@
+
+OS_TYPE =
+
+ifeq ($(PORTNAME), linux)
+OS_TYPE = Linux
+endif
+ifeq ($(PORTNAME), solaris)
+OS_TYPE = SOLARIS
+endif
+
+EVERYTHING	= all install min install_min test depend clean distclean
+
+.SUFFIXES:
+.SUFFIXES:	.c .cc .cpp .o
+
+.cpp.o:
+	$(CXX) -c -D$(OS_TYPE) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $<
+
+.cc.o:
+	$(CXX) -c -D$(OS_TYPE) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $<
+
+.c.o:
+	$(CC) -c -D$(OS_TYPE) $(ALL_CFLAGS) $<
+
+all:: Makefile $(SRCS) $(TARGETS)
+
+install::
+
+min::
+
+install_min::
+
+test::
+
+depend:: $(SRCS)
+	if test -n "$(SRCS)" ; then \
+	$(CXX) -DMAKEDEPEND -M $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(SRCS) | \
+	perl $(top_srcdir)/../config/writedep.pl $(top_srcdir) ; \
+	fi
+
+clean::
+	-rm -f $(TARGETS)
+	if test -d "$(TMPL_REPOS_DIR)" ; then \
+	    rm -rf $(TMPL_REPOS_DIR) ; \
+	fi
+	-rm -f core so_locations *.o *.bak *.flc sta*
+
+distclean:: clean
+	rm -f $(GENERATED)
+
+Makefile:: Makefile.in
+	cd $(top_srcdir); ./config.status
+
+Makefile:: $(top_srcdir)/config/Make.rules
+
+$(top_srcdir)/config/Make.rules: $(top_srcdir)/config/Make.rules.in \
+				 $(top_srcdir)/../config/Make.rules.in
+	cd $(top_srcdir); ./config.status
+
+$(top_srcdir)/config.status: $(top_srcdir)/configure
+	cd $(top_srcdir); ./config.status --recheck
+
+# $(top_srcdir)/configure: $(top_srcdir)/configure.in \
+# 			 $(top_srcdir)/../config/acconfig.h
+# 	cd $(top_srcdir); autoconf; autoheader -l ../config
+
+lib:
+	mkdir $@
+
+bin:
+	mkdir $@
+

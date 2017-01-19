@@ -1,0 +1,25 @@
+1. inlcude/.. 
+	JTC头文件改为StarBus的
+	OB头文件换成StarBus的
+	OTS头文件改为StarBus版本
+	CosTransactions.h，CosPersistentState.h : 重新用StarBus IDL编译器生成。
+	检查其他头文件是否有OB相关的内容。	
+2.bin/..
+	idl.exe: 换成StarBus的
+
+3. config/..
+	Make.rules.mak: 修订或者用StarBus的Make.rules.mak替换后再修订.需要修订的可能包括:包含"OB"字样的宏；
+内核库的名字；编译时的预定义宏；目录结构等。
+
+4. idl/..
+	OB/ 替换为StarBus的。
+	CosPersistentState.idl 如果不能用StarBus IDL编译器编译通过则需修订。
+	Makefile.mak 路径名需修改。
+
+5. lib/..
+	idld.lib,idld.pdb,jtcd.lib,jtcd.pdb,obd.lib,obd.pdb:需要更换成相应的StarBus版本。
+
+6. src/..
+
+7. test/..
+

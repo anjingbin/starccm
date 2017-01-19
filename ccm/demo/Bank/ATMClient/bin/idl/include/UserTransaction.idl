@@ -1,0 +1,85 @@
+#ifndef __CCMUserTransaction_idl__
+#define __CCMUserTransaction_idl__
+
+#pragma prefix "omg.org"
+
+//SuLiang add . 2003.6.19
+#include <CosTransactions.idl>
+#include <Resource.idl>
+//SuLiang add . 2003.6.19
+
+module Components
+{
+	// From Chapter 62: The Container Programming Model
+
+	module Transaction
+	{
+		typedef sequence<octet> TranToken;
+
+		exception NoTransaction { };
+
+		exception NotSupported { };
+
+		exception SystemError { };
+
+		exception RollbackError { };
+
+		exception HeuristicMixed { };
+
+		exception HeuristicRollback { };
+
+		exception Security { };
+
+		exception InvalidToken { };
+
+		enum Status
+		{
+			ACTIVE,
+			MARKED_ROLLBACK,
+			PREPARED,
+			COMMITTED,
+			ROLLED_BACK,
+			NO_TRANSACTION,
+			PREPARING,
+			COMMITTING,
+			ROLLING_BACK
+		};
+
+		local interface UserTransaction
+		{
+			void begin () 
+				raises (NotSupported, SystemError);
+
+			void commit () 
+				raises (RollbackError, NoTransaction,
+					HeuristicMixed, HeuristicRollback,
+					Security, SystemError);
+
+			void rollback () 
+				raises (NoTransaction, Security, SystemError);
+
+			void set_rollback_only () 
+				raises (NoTransaction, SystemError);
+
+			Status get_status() 
+				raises (SystemError);
+
+			void set_timeout (in long to) 
+				raises (SystemError);
+
+			TranToken suspend () 
+				raises (NoTransaction, SystemError);
+
+			void resume (in TranToken txtoken)
+				raises (InvalidToken, SystemError);
+				
+			//SuLiang add . 2003.6.19
+			CosTransactions::RecoveryCoordinator register_resource( in Resource res)
+				raises (NoTransaction, SystemError);
+			//SuLiang add . 2003.6.19	
+				
+		};
+	};
+};
+
+#endif

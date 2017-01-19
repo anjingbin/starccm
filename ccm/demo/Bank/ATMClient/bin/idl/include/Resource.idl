@@ -1,0 +1,108 @@
+#include "PostgreSQLResource.idl"
+
+//
+// Interfaces forward.
+//
+interface PG_Resource;
+
+interface ResourceFactory;
+interface Resource;
+
+
+interface ResourceFactory {
+
+	Resource create(in short dbtype)
+		raises(
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+	
+};
+
+
+interface Resource : PG_Resource {
+	
+	CosTransactions::Vote prepare()
+		raises(
+		    	CosTransactions::HeuristicMixed,
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void rollback()
+		raises(
+               		CosTransactions::HeuristicCommit,
+               		CosTransactions::HeuristicMixed,
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void commit()
+		raises(
+               		CosTransactions::NotPrepared,
+	               	CosTransactions::HeuristicRollback,
+        		CosTransactions::HeuristicMixed,
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void commit_one_phase()
+		raises(
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void forget()
+		raises(
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+
+	
+	// Added to free space of this SY_Resource object.
+	void release ();
+
+	// Added to begin transaction in Coordinator::register_resource.
+	boolean BeginTrans ();
+
+
+	//
+	// Added for 2PC
+	//
+	void set_recoverycoordinator (in CosTransactions::RecoveryCoordinator rc)
+		raises(
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void heuristic_decision()	
+		raises(
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+	
+}; // eof 'Resource'

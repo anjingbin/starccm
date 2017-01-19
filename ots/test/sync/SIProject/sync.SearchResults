@@ -1,0 +1,37 @@
+---- resource Matches (45 in 4 files) ----
+Client.cpp (g:\otscvs\test\sync):	cout << "     This program is to test synchronization resource......     " << endl;
+Client.cpp (g:\otscvs\test\sync):	cout << "Synchronization resource test is ok!" << endl;
+Counter_impl.cpp (g:\otscvs\test\sync):#include <Resource_skel.h>
+Counter_impl.cpp (g:\otscvs\test\sync):// The counter resource implementation. Note that this resource does
+Counter_impl.cpp (g:\otscvs\test\sync):// not implement the semantics of a recoverable resource. Most
+Counter_impl.cpp (g:\otscvs\test\sync):// - The resource is not a persistent object-reference.
+Counter_impl.cpp (g:\otscvs\test\sync):// - The resource does not log the prepare VoteCommit decision to
+Counter_impl.cpp (g:\otscvs\test\sync):// - The resource does not implement recovery.
+Counter_impl.cpp (g:\otscvs\test\sync):/*class CounterResource_impl : public POA_Resource,
+Counter_impl.cpp (g:\otscvs\test\sync):    // The resources POA
+Counter_impl.cpp (g:\otscvs\test\sync):    CounterResource_impl(PortableServer::POA_ptr poa, Counter_impl* counter,
+Counter_impl.cpp (g:\otscvs\test\sync):    ~CounterResource_impl()
+Counter_impl.cpp (g:\otscvs\test\sync):	    // Is this resource is already part of a transaction?
+Counter_impl.cpp (g:\otscvs\test\sync):		// that the resource is already involved with then wait
+Counter_impl.cpp (g:\otscvs\test\sync):	// Is this resource joining the transaction for the first time?
+Counter_impl.cpp (g:\otscvs\test\sync):	    // Allocate a new resource
+Counter_impl.cpp (g:\otscvs\test\sync):	    //resource_ = new CounterResource_impl(resourcePOA_, this, count_);
+Counter_impl.cpp (g:\otscvs\test\sync):	    //CosTransactions::Resource_var resource = resource_ -> _this();
+Counter_impl.cpp (g:\otscvs\test\sync):	    //coordinator_ -> register_resource(resource);
+Counter_impl.cpp (g:\otscvs\test\sync):		//printf("	[register resource to coordinator is ok!]\n");
+Counter_impl.cpp (g:\otscvs\test\sync):    resourcePOA_ = PortableServer::POA::_narrow(
+Counter_impl.cpp (g:\otscvs\test\sync):    //return resource_ -> count();
+Counter_impl.cpp (g:\otscvs\test\sync):    //resource_ -> increment();
+Counter_impl.cpp (g:\otscvs\test\sync):    //resource_ -> decrement();
+Counter_impl.cpp (g:\otscvs\test\sync):    // Destroy the resource
+Counter_impl.cpp (g:\otscvs\test\sync):	//resourcePOA_ -> servant_to_id(resource_);
+Counter_impl.cpp (g:\otscvs\test\sync):    //resourcePOA_ -> deactivate_object(oid);
+Counter_impl.cpp (g:\otscvs\test\sync):    //resource_ -> _remove_ref();
+Counter_impl.cpp (g:\otscvs\test\sync):    //resource_ = 0;
+Counter_impl.h (g:\otscvs\test\sync):class CounterResource_impl;
+Counter_impl.h (g:\otscvs\test\sync):    // The Resource POA
+Counter_impl.h (g:\otscvs\test\sync):    PortableServer::POA_var resourcePOA_;
+Counter_impl.h (g:\otscvs\test\sync):    // If the resource is already part of a transaction then this is
+Counter_impl.h (g:\otscvs\test\sync):    // The counter resource
+Counter_impl.h (g:\otscvs\test\sync):    CounterResource_impl* resource_;
+Server.cpp (g:\otscvs\test\sync):	cout << "test synchronzation resource server side program is running..." << endl;

@@ -1,0 +1,238 @@
+<!-- DTD for Dynamic Reconfiguration Descriptor. The root element
+     is <DynReconfig>. 
+  -->
+  
+<!ELEMENT DynReconfig
+     ( description?
+     , componentassembly
+     , (remove
+     	| add
+     	| replacement
+     	| migrate
+     	| link
+     	| unlink
+     	| redirectlink
+     	| changeproperty)
+     ) >     
+
+<!ELEMENT description ( #PCDATA ) >
+
+<!ELEMENT componentassembly 
+	( namingservice?
+    , homeregistration?
+    ) >
+<!ATTLIST componentassembly
+     idref CDATA #REQUIRED >
+
+<!ELEMENT remove
+     ( passivatecomponents
+     , runcomplete*
+     , disconnections?
+     , unregister*
+     , delete+
+     , componentsproperties?
+     , activatecomponents?
+     ) >
+
+<!ELEMENT passivatecomponents
+	( passivatecomponent*
+	| passivateclient*)>
+
+<!ELEMENT passivatecomponent EMPTY >
+<!ATTLIST passivatecomponent
+     idref CDATA #REQUIRED >
+
+<!ELEMENT passivateclient EMPTY >
+<!ATTLIST passivateclient
+     idref CDATA #REQUIRED >  
+
+<!ELEMENT runcomplete EMPTY >
+<!ATTLIST runcomplete
+     idref CDATA #REQUIRED > 
+
+<!ELEMENT disconnections
+     ( connectinterface
+     | connectevent      
+     )* >
+
+<!ELEMENT connectinterface
+     ( usesport
+     , ( providesport
+       | componentsupportedinterface
+       | homeinterface             
+       )
+     ) >
+<!ATTLIST connectinterface
+     id ID #REQUIRED >
+
+<!ELEMENT usesport
+     ( usesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT usesidentifier ( #PCDATA ) >
+
+<!ELEMENT componentinstantiationref EMPTY >
+<!ATTLIST componentinstantiationref
+     idref CDATA #REQUIRED >
+
+<!ELEMENT providesport
+     ( providesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT componentsupportedinterface ( componentinstantiationref ) >
+
+<!ELEMENT connectevent
+     ( consumesport
+     , ( emitsport
+       | publishesport
+       )
+     ) >
+<!ATTLIST connectevent
+     id ID #REQUIRED >
+
+<!ELEMENT consumesport
+     ( consumesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT consumesidentifier ( #PCDATA ) >
+
+<!ELEMENT emitsport
+     ( emitsidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT emitsidentifier ( #PCDATA ) >
+
+<!ELEMENT publishesport
+     ( publishesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT publishesidentifier ( #PCDATA ) >
+
+<!ELEMENT homeinterface  (homeplacementref)>
+
+<!ELEMENT homeplacementref EMPTY >
+<!ATTLIST homeplacementref
+     idref CDATA #REQUIRED >
+
+<!ELEMENT unregister EMPTY >
+<!ATTLIST unregister
+     name CDATA #IMPLIED >     
+
+<!ELEMENT delete EMPTY >
+<!ATTLIST delete
+     idref CDATA #REQUIRED >
+
+<!ELEMENT componentsproperties
+	( componentproperties+ )>
+
+<!ELEMENT componentproperties EMPTY >
+<!ATTLIST componentproperties
+     idref CDATA #REQUIRED 
+     filename CDATA #REQUIRED >
+     
+<!ELEMENT activatecomponents
+	( activatecomponent+
+	, activateclient*
+	)>
+
+<!ELEMENT activatecomponent EMPTY >
+<!ATTLIST activatecomponent
+     idref CDATA #REQUIRED >
+     
+<!ELEMENT activateclient EMPTY >
+<!ATTLIST activateclient
+     idref CDATA #REQUIRED >     
+
+<!ELEMENT add
+     ( passivatecomponents?
+     , create
+     , statetransfer*
+     , componentsproperties?
+     , connections?
+     , configurationcomplete*
+     , activatecomponents?
+     ) >
+
+<!ELEMENT create EMPTY>
+<!ATTLIST create
+     filename CDATA #REQUIRED >
+
+<!ELEMENT statetransfer
+     ( sourcecomponent
+     , destinationcomponent
+     ) >
+
+<!ELEMENT sourcecomponent EMPTY >
+<!ATTLIST sourcecomponent
+     idref CDATA #REQUIRED >  
+
+<!ELEMENT destinationcomponent EMPTY >
+<!ATTLIST destinationcomponent
+     idref CDATA #REQUIRED > 
+
+<!ELEMENT connections
+     ( connectinterface
+     | connectevent      
+     )* >
+
+<!ELEMENT configurationcomplete EMPTY >
+<!ATTLIST configurationcomplete
+     idref CDATA #REQUIRED > 
+
+<!ELEMENT replacement
+     ( passivatecomponents
+     , create
+     , statetransfer*
+     , runcomplete*
+     , disconnections?
+     , unregister*
+     , delete+
+     , connections?
+     , componentsproperties?
+     , redirectrequest*
+     , configurationcomplete*
+     , activatecomponents?
+     ) >
+
+<!ELEMENT redirectrequest
+     ( sourcecomponent
+     , destinationcomponent
+     ) >
+    
+<!ELEMENT migrate
+     ( passivatecomponents
+     , create
+     , statetransfer*
+     , runcomplete*
+     , disconnections?
+     , delete+
+     , connections?
+     , componentsproperties?
+     , configurationcomplete*
+     , activatecomponents?
+     ) >     
+
+<!ELEMENT link
+     ( passivatecomponents
+     , connections
+     , componentsproperties?
+     , activatecomponents
+     ) >
+
+<!ELEMENT unlink
+     ( passivatecomponents
+     , disconnections
+     , componentsproperties?
+     , activatecomponents
+     ) >
+
+<!ELEMENT changeproperty
+     ( passivatecomponents
+     , componentsproperties?
+     , activatecomponents
+     ) >

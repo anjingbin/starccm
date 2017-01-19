@@ -1,0 +1,56 @@
+// **********************************************************************
+//
+// Copyright (c) 2002-2003 
+// StarMiddleware.net	
+// www.StarMiddleware.net
+// 
+// All Rights Reserved
+//
+// Author: Ren Yi	starots@sohu.com	
+// **********************************************************************
+
+// Version: 1.0.0
+
+
+#ifndef STAR_COS_TRANSACTIONS_CURRENT_IDL
+#define STAR_COS_TRANSACTIONS_CURRENT_IDL
+
+#include <OB/Current.idl>
+#include "CosTransactionsOTS.idl"
+#include "CosTransactionsPolicy.idl"
+
+module CosTransactions
+{
+/*local*/
+local interface Current : CORBA::Current 
+{
+    void begin()
+        raises(SubtransactionsUnavailable);
+
+    void commit(in boolean report_heuristics)
+        raises(NoTransaction, HeuristicMixed, HeuristicHazard);
+
+    void rollback()
+        raises(NoTransaction);
+
+    void rollback_only()
+        raises(NoTransaction);
+
+    Status get_status();
+
+    //string get_transaction_name();  //renyi 6 18
+
+    void set_timeout(in unsigned long seconds);
+
+    unsigned long get_timeout();
+
+    Control get_control();
+
+    Control suspend();
+
+    void resume(in Control which)
+        raises(InvalidControl);
+};
+};
+
+#endif

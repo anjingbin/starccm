@@ -1,0 +1,127 @@
+// **********************************************************************
+//
+// Copyright (c) 2002-2003 
+// StarMiddleware.net	
+// www.StarMiddleware.net
+// 
+// All Rights Reserved
+//
+// Author: Ren Yi	starots@sohu.com	
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef STAR_COS_TRANSACTIONS_POLICY_TYPE_IDL
+#define STAR_COS_TRANSACTIONS_POLICY_TYPE_IDL
+
+#include <OB/Policy.idl>
+
+module CosTransactions
+{
+
+//renyi 6 8:removed
+
+/**
+ *
+ * InvocationPolicy values are encoded in the TAG_INV_POLICY component
+ * of the IOR. If an InvocationPolicy is not present in the IOR, it is
+ * interpreted as if the TAG_INV_POLICY was present with a value of
+ * EITHER.
+ *
+ **/
+typedef unsigned short InvocationPolicyValue;
+
+/**
+ *
+ * The behavior of the target is not affected by the mode of client
+ * invocation. Both direct invocations (synchronous) and invocations
+ * using routers (asynchronous) are supported.
+ *
+ **/
+const InvocationPolicyValue EITHER = 0;
+
+/**
+ *
+ * The behavior of the target object requires synchronous invocations.
+ *
+ **/
+const InvocationPolicyValue SHARED = 1;
+
+/**
+ *
+ * The behavior of the target object requires it to be invoked
+ * asynchronously.
+ *
+ **/
+const InvocationPolicyValue UNSHARED = 2;
+
+/**
+ *
+ * OTSPolicy values are encoded in the TAG_OTS_POLICY component of the
+ * IOR. If an OTSPolicy is not present in the IOR, it is interpreted
+ * as if the TAG_OTS_POLICY was present with a value of ALLOWS.
+ *
+ **/
+typedef unsigned short OTSPolicyValue;
+
+/**
+ *
+ * The behaviour of the target object depends on the existence of a
+ * current transaction.
+ *
+ **/
+const OTSPolicyValue REQUIRES = 1;
+
+/**
+ *
+ * The behaviour of the target object depends on the absence of a
+ * current transaction.
+ *
+ **/
+const OTSPolicyValue FORBIDS = 2;
+
+/**
+ *
+ * The behaviour of the target object will be adjusted to take
+ * advantage of a current transaction, if one exists. If not, it will
+ * still exhibit the proper behaviour.
+ *
+ **/
+const OTSPolicyValue ADAPTS = 3;
+
+/**
+ *
+ * This value is reserved for internal use only.
+ *
+ **/
+const OTSPolicyValue INTERNAL = 4;
+
+typedef unsigned short NonTxTargetPolicyValue;
+const NonTxTargetPolicyValue PREVENT = 0;
+const NonTxTargetPolicyValue PERMIT = 1;
+
+/**
+ *
+ * This policy type identifies the invocation policy
+ *
+ **/
+const CORBA::PolicyType INVOCATION_POLICY_TYPE = 55;
+
+/**
+ *
+ * This policy type identifies the OTS policy
+ *
+ **/
+const CORBA::PolicyType OTS_POLICY_TYPE = 56;
+
+/**
+ *
+ * This policy type identifies the NonTxTargetPolicyType
+ *
+ **/
+const CORBA::PolicyType NON_TX_TARGET_POLICY_TYPE = 57;
+
+
+}; // End module CosTransactions
+
+#endif

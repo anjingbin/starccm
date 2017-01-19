@@ -1,0 +1,6 @@
+#codeset for weblogic
+nis.orb.default_wcs=ISO/IEC 10646-1:1993; UTF-16, UCS Transformation Format 16-bit form
+
+#initial service
+nis.orb.service.NameService=corbaloc:iiop:localhost:9991/NameService
+nis.orb.service.JNDI=corbaloc:iiop:localhost:7001/NameService

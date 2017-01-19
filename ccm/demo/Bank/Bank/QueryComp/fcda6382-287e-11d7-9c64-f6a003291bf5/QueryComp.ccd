@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE corbacomponent PUBLIC "" "corbacomponent.dtd">
+<corbacomponent>
+	<corbaversion>3.0</corbaversion>
+	<componentrepid repid="IDL:Bank/QueryComp:1.0"/>
+	<homerepid repid="IDL:Bank/QueryCompHome:1.0"/>
+	<componentkind>
+		<service/>
+	</componentkind>
+	<transaction use="supports"/>
+	<threading policy="serialize "/>
+	<configurationcomplete set="true"/>
+	<homefeatures name="QueryCompHome" repid="IDL:Bank/QueryCompHome:1.0"/>
+	<componentfeatures name="QueryComp" repid="IDL:Bank/QueryComp:1.0">
+		<ports>
+			<uses usesname="the_account" repid="IDL:Bank/AccountOp:1.0"/>
+			<provides providesname="query_op" repid="IDL:Bank/QueryOp:1.0">
+				<operationpolicies>
+					<operation name="*">
+						<transaction use="supports"/>
+					</operation>
+				</operationpolicies>
+			</provides>
+		</ports>
+	</componentfeatures>
+	<interface name="QueryOp" repid="IDL:Bank/QueryOp:1.0"/>
+</corbacomponent>

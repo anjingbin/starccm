@@ -1,0 +1,49 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_PORTABLE_INTERCEPTOR_ORT_IDL
+#define STAR_PORTABLE_INTERCEPTOR_ORT_IDL
+
+#include <STAR/PIORT.idl>
+#include <STAR/IOP.idl>
+
+#pragma prefix "nis.net"
+
+module STARPortableInterceptor
+{
+
+abstract valuetype ObjectReferenceTemplate :
+    PortableInterceptor::ObjectReferenceTemplate
+{
+    Object make_object_for(in string repository_id,
+    		           in PortableInterceptor::ObjectId id,
+		           in PortableInterceptor::AdapterName name);
+};
+
+valuetype TransientORT : ObjectReferenceTemplate
+{
+    private PortableInterceptor::ServerId the_server_id;
+    private PortableInterceptor::ORBId the_orb_id;
+    private PortableInterceptor::AdapterName the_adapter_name;
+    private unsigned long the_create_time;
+    private IOP::IOR the_ior_template;
+};
+
+valuetype PersistentORT : ObjectReferenceTemplate
+{
+    private PortableInterceptor::ServerId the_server_id;
+    private PortableInterceptor::ORBId the_orb_id;
+    private PortableInterceptor::AdapterName the_adapter_name;
+    private IOP::IOR the_ior_template;
+};
+
+}; // End module STARPortableInterceptor
+
+#endif

@@ -1,0 +1,35 @@
+dnl **********************************************************************                      
+dnl                                                                                             
+dnl  Copyright (c) 2001-2003 CCM Group                                                           
+dnl                                                                                              
+dnl  School of Computer Science,NUDT                                                             
+dnl  Changsha,Hunan,China                                                                        
+dnl                                                                                              
+dnl  All Rights Reserved                                                                         
+dnl                                                                                              
+dnl **********************************************************************              
+
+dnl ----------------------------------------------------------------------
+dnl Process this file with autoconf to produce a configure script
+dnl ----------------------------------------------------------------------
+
+AC_INIT(include/OTSHeader.h)
+AC_CONFIG_AUX_DIR(../config)
+
+builtin(include,../config/macros.m4)
+builtin(include,../config/basic.m4)
+builtin(include,../config/threads.m4)
+builtin(include,../config/cplusplus.m4)
+builtin(include,../config/network.m4)
+builtin(include,../config/orb.m4)
+builtin(include,../config/ots.m4)
+builtin(include,../config/postgresql.m4)
+
+dnl ----------------------------------------------------------------------
+dnl Write files
+dnl ----------------------------------------------------------------------
+
+AC_CONFIG_HEADER(include/Config.h)
+AC_OUTPUT(config/Make.rules:config/Make.rules.in:../config/Make.rules.in \
+	  Makefile \
+          src/Makefile)

@@ -1,0 +1,35 @@
+#include <ComponentsClient.idl>
+
+module Test 
+{
+    component Philosopher;     
+    
+    eventtype PhilosopherState
+    {       
+	public string name;       
+    };
+    interface   message
+    {
+       void send_message(in string s);
+    };
+    
+    component Philosopher supports message
+    {           
+        publishes PhilosopherState phi_pub_state;
+        emits    PhilosopherState  phi_emit_state;      
+    };
+
+
+    component Observer
+    {
+	consumes PhilosopherState philosopher_state;
+    };
+
+    home PhilosopherHome manages  Philosopher
+    {
+    };
+    home ObserverHome manages Observer
+    {
+    };
+};
+

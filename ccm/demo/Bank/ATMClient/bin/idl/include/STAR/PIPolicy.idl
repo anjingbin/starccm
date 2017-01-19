@@ -1,0 +1,29 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_POLICY_FACTORY_IDL
+#define PORTABLE_INTERCEPTOR_POLICY_FACTORY_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/Policy.idl>
+
+module PortableInterceptor
+{
+
+local interface PolicyFactory
+{
+    CORBA::Policy create_policy(in CORBA::PolicyType type, in any value)
+        raises (CORBA::PolicyError);
+};
+
+}; // End of module PortableInterceptor
+
+#endif

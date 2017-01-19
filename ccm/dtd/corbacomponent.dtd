@@ -1,0 +1,245 @@
+<!-- DTD for CORBA Component Descriptor. 
+     The root element is  <corbacomponent>. 
+ -->
+
+
+<!ELEMENT corbacomponent
+     ( corbaversion
+     , componentrepid
+     , homerepid
+     , componentkind
+     , transaction?
+     , threading
+     , configurationcomplete
+     , segment?
+     , componentproperties?
+     , homeproperties?
+     , homefeatures+
+     , componentfeatures+
+     , interface*
+     , homedyndeployproperties?
+     , componentdyndeployproperties?
+     ) >
+
+
+<!ELEMENT corbaversion (#PCDATA) >
+
+
+<!ELEMENT homerepid EMPTY >
+<!ATTLIST homerepid
+     repid CDATA #IMPLIED >
+
+
+<!ELEMENT componentrepid EMPTY >
+<!ATTLIST componentrepid
+     repid CDATA #IMPLIED >
+
+
+<!ELEMENT componentkind
+     ( service
+     | session
+     | process
+     | entity
+     ) >
+
+<!ELEMENT service EMPTY >
+
+<!ELEMENT session ( servant ) >
+     
+<!ELEMENT servant EMPTY >
+<!ATTLIST servant
+     lifetime (component|method|transaction|container) #REQUIRED >     
+
+<!ELEMENT process ( servant ) >
+
+<!ELEMENT entity  ( servant ) >
+
+
+<!ELEMENT transaction EMPTY >
+<!ATTLIST transaction
+     use (self-managed|not-supported|required|supports|requires-new|mandatory|never) #REQUIRED >
+
+<!ELEMENT threading EMPTY >
+<!ATTLIST threading
+     policy ( serialize | multithread ) #REQUIRED >
+
+
+<!ELEMENT configurationcomplete
+	( usesports?
+	) >
+<!ATTLIST configurationcomplete
+     set ( true | false ) #REQUIRED > 
+
+<!ELEMENT usesports  (port*) >
+
+<!ELEMENT segment  (containermanagedpersistence) >
+<!ATTLIST segment
+    name       CDATA #REQUIRED
+    segmenttag CDATA #REQUIRED >
+
+<!ELEMENT containermanagedpersistence
+    ( storagehome
+    , accessmode
+    , psstransaction
+    , params?
+    ) >
+
+<!ELEMENT storagehome EMPTY >
+<!ATTLIST storagehome
+    id CDATA #REQUIRED >
+
+<!ELEMENT accessmode EMPTY >
+<!ATTLIST accessmode
+    mode (READ_ONLY|READ_WRITE) #REQUIRED >
+
+<!ELEMENT psstransaction (psstransactionisolationlevel?) >
+<!ATTLIST psstransaction
+    policy (TRANSACTIONAL|NON_TRANSACTIONAL) #REQUIRED >    
+
+<!ELEMENT psstransactionisolationlevel EMPTY >
+<!ATTLIST psstransactionisolationlevel
+    level (READ_UNCOMMITTED|READ_COMMITTED|REPEATABLE_READ|SERIALIZABLE) #REQUIRED >
+    
+<!ELEMENT params (param+) >
+
+<!ELEMENT param EMPTY >
+<!ATTLIST param
+     name  CDATA #REQUIRED
+     value CDATA #REQUIRED >
+
+    
+<!ELEMENT homeproperties ( fileinarchive ) >
+
+<!ELEMENT fileinarchive EMPTY>
+<!ATTLIST fileinarchive
+     name CDATA #REQUIRED >
+
+<!ELEMENT componentproperties ( fileinarchive ) >
+
+<!ELEMENT homefeatures
+    ( inheritshome?
+    , operationpolicies?) >
+    
+<!ATTLIST homefeatures
+    name  CDATA #REQUIRED
+    repid CDATA #REQUIRED >
+
+<!ELEMENT inheritshome EMPTY >
+<!ATTLIST inheritshome
+    repid CDATA #REQUIRED >
+
+<!ELEMENT operationpolicies
+     ( operation+ ) >
+
+<!ELEMENT operation
+     ( transaction?) >
+<!ATTLIST operation
+     name CDATA #REQUIRED >
+<!-- an operation name of "*" specifies all operations in the current scope -->
+
+
+<!ELEMENT componentfeatures
+    ( inheritscomponent?
+    , supportsinterface*
+    , ports 
+    ) >
+<!ATTLIST componentfeatures
+    name  CDATA #REQUIRED
+    repid CDATA #REQUIRED >
+
+<!ELEMENT inheritscomponent EMPTY >
+<!ATTLIST inheritscomponent
+    repid CDATA #REQUIRED >
+
+<!ELEMENT supportsinterface
+     ( operationpolicies?) >
+<!ATTLIST supportsinterface
+     repid CDATA #REQUIRED >
+
+<!ELEMENT ports
+     ( uses
+     | provides
+     | emits
+     | publishes
+     | consumes
+     )* >
+
+<!ELEMENT provides
+     ( operationpolicies? ) >
+<!ATTLIST provides
+     providesname CDATA #REQUIRED
+     repid        CDATA #REQUIRED>
+
+<!ELEMENT uses EMPTY >
+<!ATTLIST uses
+     usesname CDATA #REQUIRED
+     repid    CDATA #REQUIRED >
+
+<!ELEMENT publishes
+     ( eventpolicy) >
+<!ATTLIST publishes
+     publishesname CDATA #REQUIRED
+     eventtype     CDATA #REQUIRED >
+
+<!ELEMENT eventpolicy EMPTY >
+<!ATTLIST eventpolicy
+     policy CDATA "normal" >
+
+<!ELEMENT emits ( eventpolicy) >
+<!ATTLIST emits
+     emitsname CDATA #REQUIRED
+     eventtype CDATA #REQUIRED >
+
+<!ELEMENT consumes ( eventpolicy) >
+<!ATTLIST consumes
+     consumesname CDATA #REQUIRED
+     eventtype    CDATA #REQUIRED >
+
+
+<!ELEMENT interface
+     ( inheritsinterface*
+     , operationpolicies? ) >
+<!ATTLIST interface
+    name  CDATA #REQUIRED
+    repid CDATA #REQUIRED >
+
+<!ELEMENT inheritsinterface EMPTY >
+<!ATTLIST inheritsinterface
+    repid CDATA #REQUIRED >
+
+<!ELEMENT homedyndeployproperties
+	( initiative) >
+
+<!ELEMENT initiative EMPTY >
+<!ATTLIST initiative
+     set ( true | false ) #REQUIRED > 
+         
+<!ELEMENT componentdyndeployproperties
+	( initiative
+	, runcomplete
+	, initialrequestports
+	, crypticconnections) >
+     	
+<!ELEMENT runcomplete 
+	( usesports?
+	) >
+<!ATTLIST runcomplete
+     set ( true | false ) #REQUIRED >
+     
+<!ELEMENT initialrequestports
+     ( port*) >
+     
+<!ELEMENT port EMPTY >
+<!ATTLIST port
+    name CDATA #REQUIRED >
+
+<!ELEMENT crypticconnections
+     ( connection*) >
+
+<!ELEMENT connection 
+	( port
+	, targetports) >
+	
+<!ELEMENT targetports 
+     ( port+) >
+

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE corbacomponent PUBLIC "" "corbacomponent.dtd">
+<corbacomponent>
+	<corbaversion>3.0</corbaversion>
+	<componentrepid repid="IDL:Dinner/Philosopher:1.0"/>
+	<homerepid repid="IDL:Dinner/PhilosopherHome:1.0"/>
+	<componentkind>
+		<session>
+			<servant lifetime="component"/>
+		</session>
+	</componentkind>	
+	<threading policy="serialize "/>
+	<configurationcomplete set="true"/>
+	<componentproperties>
+		<fileinarchive name="Philosopher.cpf"/>
+	</componentproperties>
+	<homefeatures name="PhilosopherHome" repid="IDL:Dinner/PhilosopherHome:1.0"/>
+	<componentfeatures name="Philosopher" repid="IDL:Dinner/Philosopher:1.0">
+		<supportsinterface repid="IDL:Dinner/Named:1.0"/>
+		<ports>
+			<uses usesname="left_hand" repid="IDL:Dinner/Fork:1.0"/>
+			<uses usesname="right_hand" repid="IDL:Dinner/Fork:1.0"/>
+			<uses usesname="observer" repid="IDL:Dinner/Observing:1.0"/>
+		</ports>
+	</componentfeatures>
+	<interface name="Named" repid="IDL:Dinner/Named:1.0"/>
+</corbacomponent>

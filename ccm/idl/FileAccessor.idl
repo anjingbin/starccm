@@ -1,0 +1,58 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __FileAceessor_idl__
+#define __FileAccessor_idl__
+
+module STARCCM 
+{
+	module Deployment
+	{
+    
+		typedef unsigned long long FileOffset;
+		typedef unsigned long long FileCount;
+		typedef sequence<octet> FileOctetSeq;	
+		
+		typedef short ErrorCode;		
+		const ErrorCode ENTRY_PATH_ERROR  = 1; // Entry path component missing or invalid
+		const ErrorCode ENTRY_IO_ERROR    = 2; // error opening, reading, writing, closing file
+		    
+		exception FileSystemError { 
+			ErrorCode error;
+		        string desc;
+		};
+		
+		exception CreateFailure {} ;
+	
+		interface FileAccessor{
+		
+			void locate_file(in string filepath)
+				raises(FileSystemError);			    
+	        
+	        	FileOctetSeq get_octet_seq(in FileOffset from_octet, in FileCount max_octets) 
+	            		raises (FileSystemError); 
+		};
+		
+		interface FileAccessorFactory{
+			
+			FileAccessor createFileAccessor()
+				raises (CreateFailure);		
+		};
+	};
+	
+};
+
+#endif

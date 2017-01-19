@@ -1,0 +1,52 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef IIOP_IDL
+#define IIOP_IDL
+
+#ifndef STARE
+#  include <STAR/GIOP.idl>
+#endif // STARE
+
+#pragma prefix "omg.org"
+
+module IIOP
+{
+
+struct Version
+{
+    octet major;
+    octet minor;
+};
+
+struct ProfileBody_1_0
+{
+    Version iiop_version;
+    string host;
+    unsigned short port;
+    sequence<octet> object_key;
+};
+
+#ifndef STARE
+
+struct ProfileBody_1_1
+{
+    Version iiop_version;
+    string host;
+    unsigned short port;
+    sequence<octet> object_key;
+    sequence<IOP::TaggedComponent> components;
+};
+
+#endif // STARE
+
+}; // End module IIOP
+
+#endif

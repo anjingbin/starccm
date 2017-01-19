@@ -1,0 +1,138 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net
+#  www.StarMiddleware.net
+#
+#  All Rights Reserved
+#
+#  Author: An Jingbin	anjb@sina.com
+# **********************************************************************
+
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+IDLDIR		= $(top_srcdir)/idl
+HDIR		= $(top_srcdir)/include
+
+BASENAME	= HelloWorld
+
+TARGETS		= CCM_HelloWorld.idl \
+		lib$(BASENAME)$(SHLIBEXT) \
+		libStd$(BASENAME)$(SHLIBEXT) \
+		client
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA	= @INSTALL_DATA@
+
+GENERATED 	= HelloWorld.idl \
+		HelloWorld_impl.h \
+		HelloWorld_impl.cpp \
+		HelloWorldDll.cpp \
+		HelloWorld.h \
+		HelloWorld.cpp \
+		HelloWorld_skel.cpp \
+		HelloWorld_skel.h \
+		CCM_HelloWorld_Context_impl.h \
+		CCM_HelloWorld_Context_impl.cpp \
+		CCM_HelloWorld.idl \
+		Person.ccd \
+		CCM_HelloWorld.cpp \
+		CCM_HelloWorld.h \
+		CCM_HelloWorld_skel.cpp \
+		CCM_HelloWorld_skel.h \
+		HelloWorld_psdl.cpp \
+		HelloWorld_psdl.h \
+		HelloWorld_pss.cpp \
+		HelloWorld_pss.h
+
+
+OBJS	= CCM_HelloWorld.o \
+	CCM_HelloWorld_Context_impl.o \
+	HelloWorld.o \
+	HelloWorld_impl.o \
+	HelloWorld_skel.o \
+	HelloWorldDll.o
+
+STDOBJS	=   CCM_HelloWorld.o \
+	CCM_HelloWorld_impl.o \
+	CCM_HelloWorld_skel.o \
+	HelloWorld.o \
+	HelloWorld_ValueType_impl.o \
+	StdHelloWorldDll.o \
+
+CLIENTOBJS = HelloWorld.o \
+	Client.o
+
+SRCS            = $(OBJS:.o=.cpp) \
+		$(STDOBJS:.o=.cpp) \
+		$(CLIENTOBJS:.o=.cpp)
+
+CCMDIR=$(prefix)
+ORBDIR=$(OB_HOME)
+
+ALL_CXXFLAGS	= $(CXXFLAGS)
+ALL_CPPFLAGS	= -I. $(CCM_CPPFLAGS) $(OB_CPPFLAGS) $(CPPFLAGS) \
+	 $(PSS_CPPFLAGS) $(OTS_CPPFLAGS) $(XERCESC_CPPFLAGS) -DWITH_OTS
+
+ALL_LDFLAGS	= $(OB_LDFLAGS) $(LDFLAGS) $(CCM_LDFLAGS) $(XERCESC_LDFLAGS) $(OTS_LDFLAGS) $(PSS_LDFLAGS) $(PSQL_LDFLAGS)
+ALL_LIBS	= -lIDL $(OB_LIBS) $(LIBS) $(CCM_LIBS) $(XERCESC_LIBS) $(OTS_LIBS) $(PSS_LIBS) $(PSQL_LIBS) -ldl -lcrypt
+
+ALL_IDLFLAGS	= -I. $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS) -I../idl/
+
+
+ALL_IDL3FLAGS	= -I. $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS) -I../idl/
+
+ifeq ($(ORB_NAME), STARBUS)
+ALL_IDLFLAGS	= -I. $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS) -I../idl/ --no-localobject-ids
+endif
+
+lib$(BASENAME)$(SHLIBEXT): $(OBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(OBJS) $(ALL_LIBS) -o $@
+
+libStd$(BASENAME)$(SHLIBEXT): $(STDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(STDOBJS) $(ALL_LIBS) -o $@
+
+client: $(CLIENTOBJS)
+	rm -f $@
+	$(CXX) $(ALL_LDFLAGS) -o $@ $(CLIENTOBJS) $(ALL_LIBS)
+
+
+
+install all:: $(TARGETS)
+
+
+CCM_HelloWorld.idl: ../idl/HelloWorld.idl3
+	$(IDL3) $(CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) ../idl/HelloWorld.idl3
+	$(IDL)  $(ALL_IDLFLAGS) HelloWorld.idl
+	$(CIDL) $(CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) ../idl/HelloWorld.cidl
+
+ifeq ($(ORB_NAME), OB)
+	$(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_HelloWorld.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	$(IDL) $(ALL_IDLFLAGS) --no-skel CCM_HelloWorld.idl
+endif
+
+
+install:: all
+#	if exist $(top_srcdir)/bin/HelloWorld.zip \
+#		unzip -o -d temp $(top_srcdir)/bin/HelloWorld.zip
+	cp libHelloWorld.so ../HelloWorld/Person/bb38d965-1e54-11d7-9b85-8a6194305b45/
+	cp libStdHelloWorld.so ../HelloWorld/Person/bb38d965-1e54-11d7-9b85-8a6194305b45/
+	cd ../HelloWorld &&\
+	zip -r HelloWorld.zip * &&\
+	mv HelloWorld.zip $(top_srcdir)/bin/
+#	rm -rf temp
+
+include .depend

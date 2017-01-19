@@ -1,0 +1,31 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POA_COMMON_IDL
+#define POA_COMMON_IDL
+
+#pragma prefix "omg.org"
+
+module PortableServer
+{
+#pragma version PortableServer 2.3
+
+native Servant;
+    
+typedef sequence< octet > ObjectId;
+
+exception ForwardRequest
+{
+    Object forward_reference;
+};
+
+}; // End module PortableServer
+
+#endif

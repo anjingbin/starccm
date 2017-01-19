@@ -1,0 +1,36 @@
+#include <ComponentsClient.idl>
+
+#include <DepositComp.idl3>
+#include <WithdrawComp.idl3>
+#include <QueryComp.idl3>
+#include <Authentication.idl3>
+
+module Bank
+{	
+	//
+	//component ATM
+	//
+	
+	interface ATMOp
+	{
+		unsigned long getBalance(in string id);
+		void deposit(in string id, in unsigned long amount);
+		void withdraw(in string id, in unsigned long amount);
+		void transfer(in string fromId, in string toId, in unsigned long amount);
+		void changePassword(in string id, in string newPassword);		
+	};
+
+	component ATM
+	{
+		provides ATMOp ATM_op;
+		
+		uses DepositOp deposit;
+		uses WithdrawOp withdraw;
+		uses QueryOp query;
+		uses AuthenticationOp authenticator;
+	};
+
+	home ATMHome manages ATM
+	{
+	};
+};

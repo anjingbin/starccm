@@ -1,0 +1,19 @@
+#ifndef __ComponentsPSS_idl__
+#define __ComponentsPSS_idl__
+
+#include <CCMObject.idl>
+
+module ContainerPSS
+{   
+	struct ComponentPSS
+	{
+		Components::FacetDescriptions facets;
+		Components::ReceptacleDescriptions receptacles;
+		Components::ConsumerDescriptions consumers;
+		Components::PublisherDescriptions publishers;
+		Components::EmitterDescriptions emitters;
+		Object componentRef;
+	};
+};
+
+#endif

@@ -1,0 +1,1443 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __OMG_IFR30_idl__
+#define __OMG_IFR30_idl__
+
+
+#include <TypeCode.idl>
+
+// This specification was written by the OMG.
+//
+#pragma prefix "omg.org"
+
+/**
+ *   The CORBA module for the OMG IDL3 Repository.
+ **/
+module CORBA
+// ISSUE: Must choice between IR or CORBA name?
+{
+  //======================================================================
+  //
+  // Forward declarations for all interfaces.
+  //
+  //======================================================================
+
+    interface IRObject;
+    interface IDLType;
+    interface PrimitiveDef;
+    interface StringDef;
+    interface WstringDef;
+    interface FixedDef;
+    interface SequenceDef;
+    interface ArrayDef;
+    interface Contained;
+    interface Container;
+    interface Repository;
+    interface ModuleDef;
+    interface ConstantDef;
+    interface TypedefDef;
+    interface StructDef;
+    interface UnionDef;
+    interface EnumDef;
+    interface AliasDef;
+    interface NativeDef;
+    interface ExceptionDef;
+    interface AttributeDef;
+    interface OperationDef;
+    interface InterfaceDef;
+    interface AbstractInterfaceDef;
+    interface LocalInterfaceDef;
+    interface ValueMemberDef;
+    interface ValueDef;
+    interface ValueBoxDef;
+
+  // FOR CCM
+    interface ComponentDef;
+    interface ProvidesDef;
+    interface UsesDef;
+    interface EventDef;
+    interface EmitsDef;
+    interface PublishesDef;
+    interface ConsumesDef;
+    interface FactoryDef;
+    interface FinderDef;
+
+    // ISSUE: Must be removed because not needed, no OMG IDL construction!
+    // interface PrimaryKeyDef;
+
+    interface HomeDef;
+
+#ifdef __OMG_IDL3__
+    interface TypeCode;
+#endif
+
+  //======================================================================
+  //
+  // Some common data types.
+  //
+  //======================================================================
+
+    typedef string Identifier;
+
+    typedef string ScopedName;
+
+    typedef string RepositoryId;
+
+    typedef sequence<InterfaceDef> InterfaceDefSeq;
+
+    typedef sequence<AbstractInterfaceDef> AbstractInterfaceDefSeq;
+
+    typedef sequence<LocalInterfaceDef> LocalInterfaceDefSeq;
+
+    typedef sequence<ValueDef> ValueDefSeq;
+
+    // ISSUE: Unused in CCM Vol III
+    //  typedef sequence<ComponentDef> ComponentDefSeq;
+    //  typedef sequence<HomeDef> HomeDefSeq;
+
+  //======================================================================
+  //
+  // DefinitionKind enumeration.
+  //
+  //======================================================================
+
+    enum DefinitionKind
+    {
+        dk_none,
+        dk_all,
+        dk_Attribute,
+        dk_Constant,
+        dk_Exception,
+        dk_Interface,
+        dk_Module,
+        dk_Operation,
+        dk_Typedef,
+        dk_Alias,
+        dk_Struct,
+        dk_Union,
+        dk_Enum,
+        dk_Primitive,
+        dk_String,
+        dk_Sequence,
+        dk_Array,
+        dk_Repository,
+        dk_Wstring,
+        dk_Fixed,
+        dk_Value,
+        dk_ValueBox,
+        dk_ValueMember,
+        dk_Native,
+        dk_AbstractInterface,
+        dk_LocalInterface,
+
+      // FOR CCM
+        dk_Component,
+        dk_Home,
+        dk_Factory,
+        dk_Finder,
+
+      // ISSUE: Must be removed because not an OMG IDL construction!
+      //    dk_PrimaryKey,
+
+        dk_Emits,
+        dk_Publishes,
+        dk_Consumes,
+        dk_Provides,
+        dk_Uses
+    };
+
+  //======================================================================
+  //
+  // IRObject interface.
+  //
+  //======================================================================
+
+    interface IRObject
+    {
+        // read interface
+
+        readonly attribute DefinitionKind def_kind;
+
+        // write interface
+
+        void destroy ();
+    };
+
+  //======================================================================
+  //
+  // Contained interface.
+  //
+  //======================================================================
+
+    typedef string VersionSpec;
+
+    interface Contained : IRObject
+    {
+        // read/write interface
+
+        attribute RepositoryId id;
+        attribute Identifier name;
+        attribute VersionSpec version;
+
+        // read interface
+
+        readonly attribute Container defined_in;
+        readonly attribute ScopedName absolute_name;
+        readonly attribute Repository containing_repository;
+
+        struct Description
+        {
+            DefinitionKind  kind;
+            any             value;
+        };
+
+        Description describe ();
+
+        // write interface
+    
+        void move (in Container   new_container,
+                   in Identifier  new_name,
+                   in VersionSpec new_version);
+    };
+
+  //======================================================================
+  //
+  // Container interface
+  //
+  //======================================================================
+
+    typedef sequence<Contained> ContainedSeq;
+
+    struct StructMember
+    {
+        Identifier       name;
+        CORBA::TypeCode  type;
+        IDLType          type_def;
+    };
+
+    typedef sequence<StructMember> StructMemberSeq;
+
+    struct Initializer
+    {
+        StructMemberSeq  members;
+        Identifier       name;
+    };
+
+    typedef sequence <Initializer> InitializerSeq;
+
+    struct UnionMember
+    {
+        Identifier       name;
+        any              label;
+        CORBA::TypeCode  type;
+        IDLType          type_def;
+    };
+
+    typedef sequence<UnionMember> UnionMemberSeq;
+
+    typedef sequence<Identifier> EnumMemberSeq;
+
+    interface Container : IRObject
+    {
+        // read interface
+
+        Contained lookup (in ScopedName search_name);
+
+        ContainedSeq contents (in DefinitionKind limit_type,
+			       in boolean        exclude_inherited);
+
+        ContainedSeq lookup_name (in Identifier     search_name,
+			          in long           levels_to_search,
+			          in DefinitionKind limit_type,
+			          in boolean        exclude_inherited);
+
+        struct Description
+        {
+            Contained       contained_object;
+            DefinitionKind  kind;
+            any             value;
+        };
+
+        typedef sequence<Description> DescriptionSeq;
+
+        DescriptionSeq describe_contents (in DefinitionKind limit_type,
+				          in boolean        exclude_inherited,
+				          in long           max_returned_objs);
+
+        // write interface
+
+        ModuleDef create_module (in RepositoryId id,
+                                 in Identifier   name,
+                                 in VersionSpec  version);
+
+        ConstantDef create_constant (in RepositoryId id,
+                                     in Identifier   name,
+                                     in VersionSpec  version,
+                                     in IDLType      type,
+                                     in any          value);
+
+        StructDef create_struct (in RepositoryId    id,
+                                 in Identifier      name,
+                                 in VersionSpec     version,
+                                 in StructMemberSeq members);
+
+        UnionDef create_union (in RepositoryId   id,
+                               in Identifier     name,
+                               in VersionSpec    version,
+                               in IDLType        discriminator_type,
+                               in UnionMemberSeq members);
+
+        EnumDef create_enum (in RepositoryId  id,
+                             in Identifier    name,
+                             in VersionSpec   version,
+                             in EnumMemberSeq members);
+
+        AliasDef create_alias (in RepositoryId id,
+                               in Identifier   name,
+                               in VersionSpec  version,
+                               in IDLType      original_type);
+
+        InterfaceDef create_interface (in RepositoryId    id,
+                                       in Identifier      name,
+                                       in VersionSpec     version,
+                                       in InterfaceDefSeq base_interfaces);
+
+        ValueDef create_value (in RepositoryId    id,
+                               in Identifier      name,
+                               in VersionSpec     version,
+                               in boolean         is_custom,
+                               in boolean         is_abstract,
+                               in ValueDef        base_value,
+                               in boolean         is_truncatable,
+                               in ValueDefSeq     abstract_base_values,
+                               in InterfaceDefSeq supported_interfaces,
+                               in InitializerSeq  initializers);
+
+        ValueBoxDef create_value_box (in RepositoryId id,
+                                      in Identifier   name,
+                                      in VersionSpec  version,
+                                      in IDLType      original_type_def);
+
+        ExceptionDef create_exception (in RepositoryId    id,
+                                       in Identifier      name,
+                                       in VersionSpec     version,
+                                       in StructMemberSeq members);
+
+        NativeDef create_native (in RepositoryId id,
+                                 in Identifier   name,
+                                 in VersionSpec  version);
+
+        AbstractInterfaceDef
+        create_abstract_interface (in RepositoryId            id,
+                                   in Identifier              name,
+                                   in VersionSpec             version,
+                                   in AbstractInterfaceDefSeq base_interfaces);
+
+        LocalInterfaceDef
+        create_local_interface (in RepositoryId            id,
+                                in Identifier              name,
+                                in VersionSpec             version,
+                                in LocalInterfaceDefSeq    base_interfaces);
+
+    // FOR CCM
+
+        ComponentDef create_component (in RepositoryId     id,
+                                       in Identifier       name,
+                                       in VersionSpec      version,
+                                       in ComponentDef     base_component,
+                                       in InterfaceDefSeq  supports_interfaces);
+
+        HomeDef create_home (in RepositoryId  id,
+                             in Identifier    name,
+                             in VersionSpec   version,
+                             in HomeDef       base_home,
+                             in ComponentDef  managed_component,
+                             in ValueDef      primary_key);
+    };
+
+  //======================================================================
+  //
+  // IDLType interface.
+  //
+  //======================================================================
+
+    interface IDLType : IRObject
+    {
+        // read interface
+
+        readonly attribute CORBA::TypeCode type;
+    };
+
+  //======================================================================
+  //
+  // PrimitiveDef interface.
+  //
+  //======================================================================
+
+    enum PrimitiveKind
+    {
+        pk_null,
+        pk_void,
+        pk_short,
+        pk_long,
+        pk_ushort,
+        pk_ulong,
+        pk_float,
+        pk_double,
+        pk_boolean,
+        pk_char,
+        pk_octet,
+        pk_any,
+        pk_TypeCode,
+        pk_Principal,
+        pk_string,
+        pk_objref,
+        pk_longlong,
+        pk_ulonglong,
+        pk_longdouble,
+        pk_wchar,
+        pk_wstring,
+        pk_value_base
+    };
+
+    interface PrimitiveDef : IDLType
+    {
+        readonly attribute PrimitiveKind kind;
+    };
+
+  //======================================================================
+  //
+  // Repository interface.
+  //
+  //======================================================================
+
+    interface Repository : Container
+    {
+        // read interface
+
+        Contained lookup_id (in RepositoryId search_id);
+
+        CORBA::TypeCode get_canonical_typecode (in CORBA::TypeCode tc);
+
+        PrimitiveDef get_primitive (in PrimitiveKind kind);
+
+        // write interface
+
+        StringDef create_string (in unsigned long bound);
+
+        WstringDef create_wstring (in unsigned long bound);
+
+        SequenceDef create_sequence (in unsigned long bound,
+				     in IDLType  element_type);
+
+        ArrayDef create_array (in unsigned long length,
+                               in IDLType  element_type);
+
+        FixedDef create_fixed (in unsigned short digits,
+			       in short          scale);
+    };
+
+  //======================================================================
+  //
+  // ModuleDef interface.
+  //
+  //======================================================================
+
+    interface ModuleDef : Container, Contained
+    {
+    };
+
+    struct ModuleDescription
+    {
+        Identifier    name;
+        RepositoryId  id;
+        RepositoryId  defined_in;
+        VersionSpec   version;
+     };
+
+  //======================================================================
+  //
+  // ConstantDef interface.
+  //
+  //======================================================================
+
+    interface ConstantDef : Contained
+    {
+        readonly attribute CORBA::TypeCode  type;
+        attribute IDLType                   type_def;
+        attribute any                       value;
+    };
+
+    struct ConstantDescription
+    {
+        Identifier       name;
+        RepositoryId     id;
+        RepositoryId     defined_in;
+        VersionSpec      version;
+        CORBA::TypeCode  type;
+        any              value;
+    };
+
+  //======================================================================
+  //
+  // TypedefDef interface.
+  //
+  //======================================================================
+
+    interface TypedefDef : Contained, IDLType
+    {
+    };
+
+    struct TypeDescription
+    {
+        Identifier       name;
+        RepositoryId     id;
+        RepositoryId     defined_in;
+        VersionSpec      version;
+        CORBA::TypeCode  type;
+    };
+
+  //======================================================================
+  //
+  // StructDef interface.
+  //
+  //======================================================================
+
+    interface StructDef : TypedefDef, Container
+    {
+        attribute StructMemberSeq members;
+    };
+
+  //======================================================================
+  //
+  // UnionDef interface.
+  //
+  //======================================================================
+
+    interface UnionDef : TypedefDef, Container
+    {
+        readonly attribute CORBA::TypeCode  discriminator_type;
+        attribute IDLType                   discriminator_type_def;
+        attribute UnionMemberSeq            members;
+    };
+
+  //======================================================================
+  //
+  // EnumDef interface.
+  //
+  //======================================================================
+
+    interface EnumDef : TypedefDef
+    {
+        attribute EnumMemberSeq members;
+    };
+
+  //======================================================================
+  //
+  // AliasDef interface.
+  //
+  //======================================================================
+
+    interface AliasDef : TypedefDef
+    {
+        attribute IDLType original_type_def;
+    };
+
+  //======================================================================
+  //
+  // StringDef interface.
+  //
+  //======================================================================
+
+    interface StringDef : IDLType
+    {
+        attribute unsigned long bound;
+    };
+
+  //======================================================================
+  //
+  // WstringDef interface.
+  //
+  //======================================================================
+
+    interface WstringDef : IDLType
+    {
+        attribute unsigned long bound;
+    };
+
+  //======================================================================
+  //
+  // FixedDef interface.
+  //
+  //======================================================================
+
+    interface FixedDef : IDLType
+    {
+        attribute unsigned short digits;
+        attribute short          scale;
+    };
+
+  //======================================================================
+  //
+  // SequenceDef interface.
+  //
+  //======================================================================
+
+    interface SequenceDef : IDLType
+    {
+        attribute unsigned long             bound;
+        readonly attribute CORBA::TypeCode  element_type;
+        attribute IDLType                   element_type_def;
+    };
+
+  //======================================================================
+  //
+  // ArrayDef interface.
+  //
+  //======================================================================
+
+    interface ArrayDef : IDLType
+    {
+        attribute unsigned long             length;
+        readonly attribute CORBA::TypeCode  element_type;
+        attribute IDLType                   element_type_def;
+    };
+
+  //======================================================================
+  //
+  // ExceptionDef interface.
+  //
+  //======================================================================
+
+    interface ExceptionDef : Contained, Container
+    {
+        readonly attribute CORBA::TypeCode  type;
+        attribute StructMemberSeq           members;
+    };
+
+    typedef sequence<ExceptionDef> ExceptionDefSeq;
+
+    struct ExceptionDescription
+    {
+        Identifier       name;
+        RepositoryId     id;
+        RepositoryId     defined_in;
+        VersionSpec      version;
+        CORBA::TypeCode  type;
+    };
+
+    typedef sequence<ExceptionDescription> ExcDescriptionSeq;
+
+  //======================================================================
+  //
+  // AttributeDef interface.
+  //
+  //======================================================================
+
+    enum AttributeMode
+    {
+        ATTR_NORMAL,
+        ATTR_READONLY
+    };
+
+    interface AttributeDef : Contained
+    {
+        readonly attribute CORBA::TypeCode  type;
+        attribute IDLType                   type_def;
+        attribute AttributeMode             mode;
+
+      // FOR CCM
+      // Forget get_exceptions and put_exceptions, isn't it?
+        attribute ExceptionDefSeq get_exceptions;
+        attribute ExceptionDefSeq put_exceptions;
+    };
+
+    struct AttributeDescription
+    {
+        Identifier         name;
+        RepositoryId       id;
+        RepositoryId       defined_in;
+        VersionSpec        version;
+        CORBA::TypeCode    type;
+        AttributeMode      mode;
+
+      // FOR CCM
+        ExcDescriptionSeq  get_exceptions;
+        ExcDescriptionSeq  put_exceptions;
+  };
+
+  //======================================================================
+  //
+  // OperationDef interface.
+  //
+  //======================================================================
+
+    enum OperationMode
+    {
+        OP_NORMAL,
+        OP_ONEWAY
+    };
+
+    enum ParameterMode
+    {
+        PARAM_IN,
+        PARAM_OUT,
+        PARAM_INOUT
+    };
+
+    struct ParameterDescription
+    {
+        Identifier       name;
+        CORBA::TypeCode  type;
+        IDLType          type_def;
+        ParameterMode    mode;
+    };
+
+    typedef sequence<ParameterDescription> ParDescriptionSeq;
+
+    typedef Identifier ContextIdentifier;
+
+    typedef sequence<ContextIdentifier> ContextIdSeq;
+
+    interface OperationDef : Contained
+    {
+        readonly attribute CORBA::TypeCode  result;
+        attribute IDLType                   result_def;
+        attribute ParDescriptionSeq         params;
+        attribute OperationMode             mode;
+        attribute ContextIdSeq              contexts;
+        attribute ExceptionDefSeq           exceptions;
+    };
+
+    struct OperationDescription
+    {
+        Identifier         name;
+        RepositoryId       id;
+        RepositoryId       defined_in;
+        VersionSpec        version;
+        CORBA::TypeCode    result;
+        OperationMode      mode;
+        ContextIdSeq       contexts;
+        ParDescriptionSeq  parameters;
+        ExcDescriptionSeq  exceptions;
+    };
+
+  //======================================================================
+  //
+  // InterfaceDef interface.
+  //
+  //======================================================================
+
+    typedef sequence<RepositoryId> RepositoryIdSeq;
+
+    typedef sequence<OperationDescription> OpDescriptionSeq;
+
+    typedef sequence<AttributeDescription> AttrDescriptionSeq;
+
+    interface InterfaceDef : Container, Contained, IDLType
+    {
+        // read/write interface
+
+        attribute InterfaceDefSeq  base_interfaces;
+
+        // read interface
+
+        boolean is_a (in RepositoryId interface_id);
+
+        struct FullInterfaceDescription
+        {
+            Identifier         name;
+            RepositoryId       id;
+            RepositoryId       defined_in;
+            VersionSpec        version;
+            OpDescriptionSeq   operations;
+            AttrDescriptionSeq attributes;
+            RepositoryIdSeq    base_interfaces;
+            CORBA::TypeCode    type;
+        };
+
+        FullInterfaceDescription describe_interface ();
+
+        // write interface
+
+        AttributeDef create_attribute (in RepositoryId     id,
+                                       in Identifier       name,
+                                       in VersionSpec      version,
+                                       in IDLType          type,
+                                       in AttributeMode    mode,
+                                   // FOR CCM
+                                       in ExceptionDefSeq  get_exceptions,
+                                       in ExceptionDefSeq  put_exceptions);
+
+        OperationDef create_operation (in RepositoryId       id,
+                                       in Identifier         name,
+                                       in VersionSpec        version,
+                                       in IDLType            result,
+                                       in OperationMode      mode,
+                                       in ParDescriptionSeq  params,
+                                       in ExceptionDefSeq    exceptions,
+                                       in ContextIdSeq       contexts);
+    };
+
+    struct InterfaceDescription
+    {
+        Identifier          name;
+        RepositoryId        id;
+        RepositoryId        defined_in;
+        VersionSpec         version;
+        RepositoryIdSeq     base_interfaces;
+    };
+
+  //======================================================================
+  //
+  // AbstractInterfaceDef interface.
+  //
+  //======================================================================
+
+    interface AbstractInterfaceDef : InterfaceDef
+    {
+    };
+
+  //======================================================================
+  //
+  // LocalInterfaceDef interface.
+  //
+  //======================================================================
+
+    interface LocalInterfaceDef : InterfaceDef
+    {
+    };
+
+  //======================================================================
+  //
+  // ValueMemberDef interface.
+  //
+  //======================================================================
+
+    typedef short Visibility;
+    const Visibility PRIVATE_MEMBER = 0;
+    const Visibility PUBLIC_MEMBER = 1;
+
+    struct ValueMember
+    {
+        Identifier         name;
+        RepositoryId       id;
+        RepositoryId       defined_in;
+        VersionSpec        version;
+        CORBA::TypeCode    type;
+        IDLType            type_def;
+        Visibility         access;
+    };
+
+    typedef sequence<ValueMember> ValueMemberSeq;
+
+    interface ValueMemberDef : Contained
+    {
+        readonly attribute CORBA::TypeCode  type;
+        attribute IDLType                   type_def;
+        attribute Visibility                access;
+    };
+
+  //======================================================================
+  //
+  // ValueDef interface.
+  //
+  //======================================================================
+
+    interface ValueDef : Container, Contained, IDLType
+    {
+        // read/write interface
+
+        attribute InterfaceDefSeq  supported_interfaces;
+        attribute InitializerSeq   initializers;
+        attribute ValueDef         base_value;
+        attribute ValueDefSeq      abstract_base_values;
+        attribute boolean          is_abstract;
+        attribute boolean          is_custom;
+        attribute boolean          is_truncatable;
+
+        // read interface
+
+        boolean is_a (in RepositoryId id);
+
+        struct FullValueDescription
+        {
+            Identifier          name;
+            RepositoryId        id;
+            boolean             is_abstract;
+            boolean             is_custom;
+            RepositoryId        defined_in;
+            VersionSpec         version;
+            OpDescriptionSeq    operations;
+            AttrDescriptionSeq  attributes;
+            ValueMemberSeq      members;
+            InitializerSeq      initializers;
+            RepositoryIdSeq     supported_interfaces;
+            RepositoryIdSeq     abstract_base_values;
+            boolean             is_truncatable;
+            RepositoryId        base_value;
+            TypeCode            type;
+        };
+
+        FullValueDescription describe_value ();
+
+        // write interface
+
+        ValueMemberDef create_value_member (in RepositoryId       id,
+                                            in Identifier         name,
+                                            in VersionSpec        version,
+                                            in IDLType            type,
+                                            in Visibility         access);
+
+        AttributeDef create_attribute (in RepositoryId     id,
+                                       in Identifier       name,
+                                       in VersionSpec      version,
+                                       in IDLType          type,
+                                       in AttributeMode    mode,
+                                   // FOR CCM
+                                       in ExceptionDefSeq  get_exceptions,
+                                       in ExceptionDefSeq  put_exceptions);
+
+        OperationDef create_operation (in RepositoryId       id,
+                                       in Identifier         name,
+                                       in VersionSpec        version,
+                                       in IDLType            result,
+                                       in OperationMode      mode,
+                                       in ParDescriptionSeq  params,
+                                       in ExceptionDefSeq    exceptions,
+                                       in ContextIdSeq       contexts);
+    };
+
+    struct ValueDescription
+    {
+        Identifier          name;
+        RepositoryId        id;
+        boolean             is_abstract;
+        boolean             is_custom;
+        RepositoryId        defined_in;
+        VersionSpec         version;
+        RepositoryIdSeq     supported_interfaces;
+        RepositoryIdSeq     abstract_base_values;
+        boolean             is_truncatable;
+        RepositoryId        base_value;
+    };
+
+  //======================================================================
+  //
+  // ValueBoxDef interface.
+  //
+  //======================================================================
+
+    interface ValueBoxDef : TypedefDef
+    {
+        attribute IDLType original_type_def;
+    };
+
+  //======================================================================
+  //
+  // NativeDef interface.
+  //
+  //======================================================================
+
+    interface NativeDef : TypedefDef
+    {
+    };
+
+  //======================================================================
+  //
+  // ProvidesDef interface.
+  //
+  //======================================================================
+
+    interface ProvidesDef : Contained
+    {
+        // read interface
+
+        // ISSUE: why readonly?
+        //       this is not compliant with the IR2 design, isn't it?
+        readonly attribute InterfaceDef interface_type;
+    };
+
+    typedef sequence<ProvidesDef> ProvidesDefSeq;
+
+    struct ProvidesDescription
+    {
+        Identifier    name;
+        RepositoryId  id;
+        RepositoryId  defined_in;
+        VersionSpec   version;
+
+        // ISSUE: this is not compliant with the IR2 design, isn't it?
+        //       A TypeCode or RepositoryId is more adequate!
+        InterfaceDef  interface_type;
+    };
+
+    typedef sequence<ProvidesDescription> ProvidesDescSeq;
+
+  //======================================================================
+  //
+  // UsesDef interface.
+  //
+  //======================================================================
+
+    interface UsesDef : Contained
+    {
+        // read interface
+
+        // ISSUE: why readonly?
+        //       this is not compliant with the IR2 design, isn't it?
+        readonly attribute InterfaceDef  interface_type;
+        readonly attribute boolean       is_multiple;
+    };
+
+    typedef sequence<UsesDef> UsesDefSeq;
+
+    struct UsesDescription
+    {
+        Identifier    name;
+        RepositoryId  id;
+        RepositoryId  defined_in;
+        VersionSpec   version;
+
+        // ISSUE: this is not compliant with the IR2 design, isn't it?
+        //       A TypeCode or RepositoryId is more adequate!
+        InterfaceDef  interface_type;
+
+        boolean       is_multiple;
+    };
+
+    typedef sequence<UsesDescription> UsesDescSeq;
+
+  //======================================================================
+  //
+  // EventDef interface.
+  //
+  //======================================================================
+
+    // abstract : never instantiated
+    interface EventDef : Contained
+    {
+        // read interface
+
+        boolean is_a (in RepositoryId event_id);
+
+       // ISSUE: why readonly?
+       //       this is not compliant with the IR2 design, isn't it?
+       readonly attribute ValueDef event;
+    };
+
+    struct EventDescription
+    {
+        Identifier    name;
+        RepositoryId  id;
+        RepositoryId  defined_in;
+        VersionSpec   version;
+
+      // ISSUE: this is not compliant with the IR2 design, isn't it?
+      //       A TypeCode or RepositoryId is more adequate!
+        ValueDef      value;
+    };
+
+  //======================================================================
+  //
+  // EmitsDef interface.
+  //
+  //======================================================================
+
+    interface EmitsDef : EventDef
+    {
+    };
+
+    typedef sequence<EmitsDef> EmitsDefSeq;
+
+  //======================================================================
+  //
+  // PublishesDef interface.
+  //
+  //======================================================================
+
+    interface PublishesDef : EventDef
+    {
+    };
+
+    typedef sequence<PublishesDef> PublishesDefSeq;
+
+  //======================================================================
+  //
+  // ConsumesDef interface.
+  //
+  //======================================================================
+
+    interface ConsumesDef : EventDef
+    {
+    };
+
+    typedef sequence<ConsumesDef> ConsumesDefSeq;
+
+  //======================================================================
+  //
+  // ComponentDef interface.
+  //
+  //======================================================================
+
+  // ISSUE: why ComponentDef inherits from InterfaceDef?
+  //       inherited base_interfaces, is_abstract, is_local attributes
+  //       and create_operation operation have no sense for component type.    
+  //       only is_a and create_attribute operations have sense here.
+  //
+    interface ComponentDef : InterfaceDef
+    {
+        // read/write interface
+
+        attribute InterfaceDefSeq supported_interfaces;
+
+        // read interface
+
+      // ISSUE: why readonly?
+      //       this is not compliant with the IR2 design, isn't it?
+      //
+      //    readonly attribute ComponentDef     base_component;
+      //
+      // This is needed to create forward components
+      // and complete them latter.
+      //
+        attribute ComponentDef     base_component;
+
+        readonly attribute ProvidesDefSeq   provides_interfaces;
+        readonly attribute UsesDefSeq       uses_interfaces;
+        readonly attribute EmitsDefSeq      emits_events;
+        readonly attribute PublishesDefSeq  publishes_events;
+        readonly attribute ConsumesDefSeq   consumes_events;
+        readonly attribute boolean          is_basic;
+
+        // write interface
+
+        ProvidesDef create_provides (in RepositoryId  id,
+                                     in Identifier    name,
+                                     in VersionSpec   version,
+                                     in InterfaceDef  interface_type);
+
+        UsesDef create_uses (in RepositoryId  id,
+                             in Identifier    name,
+                             in VersionSpec   version,
+                             in InterfaceDef  interface_type,
+                             in boolean       is_multiple);
+
+        EmitsDef create_emits (in RepositoryId  id,
+                               in Identifier    name,
+                               in VersionSpec   version,
+                               in ValueDef      value);
+
+        PublishesDef create_publishes (in RepositoryId  id,
+                                       in Identifier    name,
+                                       in VersionSpec   version,
+                                       in ValueDef      value);
+
+        ConsumesDef create_consumes (in RepositoryId  id,
+                                     in Identifier    name,
+                                     in VersionSpec   version,
+                                     in ValueDef      value);
+    };
+
+    // ISSUE: a full_describe () operation and a FullComponentDescription are
+    // needed to be compliant with IR2 design!
+    // then this struct must be purged (simplified)!
+
+    struct ComponentDescription
+    {
+        Identifier          name;
+        RepositoryId        id;
+        RepositoryId        defined_in;
+        VersionSpec         version;
+        RepositoryId        base_component;
+        RepositoryIdSeq     supports_interfaces;
+        ProvidesDefSeq      provides_interfaces;
+        UsesDefSeq          uses_interfaces;
+        AttrDescriptionSeq  attributes;
+
+      // ISSUE: Why DefSeq and not DescriptionSeq as for InterfaceDef and ValueDef?
+        EmitsDefSeq         emits_events;
+        PublishesDefSeq     publishes_events;
+        ConsumesDefSeq      consumes_events;
+
+        boolean             is_basic;
+
+        // Forget type, isn't it?
+        CORBA::TypeCode     type;
+    };
+
+  //======================================================================
+  //
+  // PrimaryKeyDef interface.
+  //
+  //======================================================================
+
+// ISSUE: What is it sense? When is it used?
+
+/*
+    interface PrimaryKeyDef : Contained
+    {
+        // read interface
+
+        boolean is_a (in RepositoryId primary_key_id);
+
+        readonly attribute ValueDef primary_key;
+    };
+
+    struct PrimaryKeyDescription
+    {
+        Identifier    name;
+        RepositoryId  id;
+        RepositoryId  defined_in;
+        VersionSpec   version;
+
+      // ISSUE: RepositoryId or TypeCode is more IR2 design compliant!
+        ValueDef      primary_key;
+    };
+*/
+
+  //======================================================================
+  //
+  // FactoryDef interface.
+  //
+  //======================================================================
+
+    interface FactoryDef : OperationDef
+    { // only PARAM_IN parameters
+    };
+
+  //======================================================================
+  //
+  // FinderDef interface.
+  //
+  //======================================================================
+
+    interface FinderDef : OperationDef
+    { // only PARAM_IN parameters
+    };
+
+  //======================================================================
+  //
+  // HomeDef interface.
+  //
+  //======================================================================
+
+    typedef sequence<FactoryDef> FactoryDefSeq;
+
+    typedef sequence<FinderDef> FinderDefSeq;
+
+    interface HomeDef : InterfaceDef
+    {
+        // read operations
+
+      // ISSUE: why readonly?
+      //       this is not compliant with the IR2 design, isn't it?
+      //    readonly attribute HomeDef        base_home;
+      //    readonly attribute ComponentDef   managed_component;
+        attribute HomeDef        base_home;
+        attribute ComponentDef   managed_component;
+
+        // readonly attribute PrimaryKeyDef  primary_key; // NOTE: primary_key_def?
+        //  readonly attribute ValueDef  primary_key; // NOTE: primary_key_def?
+        attribute ValueDef  primary_key; // NOTE: primary_key_def?
+
+        readonly attribute FactoryDefSeq  factories;
+        readonly attribute FinderDefSeq   finders;
+        readonly attribute boolean        is_basic;
+
+        // write interfaces
+
+      // ISSUE: What is the sense? When and where is it used?
+/*
+        PrimaryKeyDef create_primary_key (in RepositoryId  id,
+                                          in Identifier    name,
+                                          in VersionSpec   version,
+                                          in ValueDef      primary_key);
+*/
+
+        FactoryDef create_factory (in RepositoryId      id,
+                                   in Identifier        name,
+                                   in VersionSpec       version,
+                                   in ParDescriptionSeq params, // only PARAM_INs
+                                   in ExceptionDefSeq exceptions);
+
+        FinderDef create_finder (in RepositoryId       id,
+                                 in Identifier         name,
+                                 in VersionSpec        version,
+                                 in ParDescriptionSeq  params, // only PARAM_INs
+                                 in ExceptionDefSeq    exceptions);
+    };
+
+// ISSUE: Need a full_describe () operation and FullHomeDescription struct ?
+
+    struct HomeDescription
+    {
+        Identifier          name;
+        RepositoryId        id;
+        RepositoryId        defined_in;
+        VersionSpec         version;
+        RepositoryId        base_home;
+        RepositoryId        managed_component;
+    //    PrimaryKeyDef       primary_key_def;
+        ValueDef       primary_key_def;
+        FactoryDefSeq       factories;
+        FinderDefSeq        finders;
+        OpDescriptionSeq    operations;
+        AttrDescriptionSeq  attributes;
+        boolean             is_basic;
+
+        // Forget type, isn't it?
+        CORBA::TypeCode     type;
+    };
+
+  //======================================================================
+  //
+  // TCKind enumeration.
+  //
+  //======================================================================
+
+#ifdef __OMG_IDL3__
+
+    enum TCKind
+    {
+        tk_null,
+        tk_void,
+        tk_short,
+        tk_long,
+        tk_ushort,
+        tk_ulong,
+        tk_float,
+        tk_double,
+        tk_boolean,
+        tk_char,
+        tk_octet,
+        tk_any,
+        tk_TypeCode,
+        tk_Principal,
+        tk_objref,
+        tk_struct,
+        tk_union,
+        tk_enum,
+        tk_string,
+        tk_sequence,
+        tk_array,
+        tk_alias,
+        tk_except,
+        tk_longlong,
+        tk_ulonglong,
+        tk_longdouble,
+        tk_wchar,
+        tk_wstring,
+        tk_fixed,
+        tk_value,
+        tk_valuebox,
+        tk_native,
+        tk_abstract_interface,
+        tk_local_interface,
+        tk_component,
+        tk_home
+    };
+
+    typedef short ValueModifier;
+    const ValueModifier VM_NONE = 0;
+    const ValueModifier VM_CUSTOM = 1;
+    const ValueModifier VM_ABSTRACT = 2;
+    const ValueModifier VM_TRUNCATABLE = 3;
+
+  //======================================================================
+  //
+  // TypeCode interface.
+  //
+  //======================================================================
+
+    interface TypeCode
+    {
+        exception Bounds {};
+        exception BadKind {};
+
+        // for all TypeCode kinds
+        boolean equal (in TypeCode tc);
+
+        boolean equivalent (in TypeCode tc);
+
+        TypeCode get_compact_typecode ();
+
+        TCKind kind ();
+
+        //
+        RepositoryId id ()
+                     raises (BadKind);
+
+        //
+        Identifier name ()
+                   raises (BadKind);
+
+        //
+        unsigned long member_count ()
+                      raises (BadKind);
+
+        Identifier member_name (in unsigned long index)
+                   raises (BadKind, Bounds);
+
+        //
+        TypeCode member_type (in unsigned long index)
+                 raises (BadKind, Bounds);
+
+        //
+        any member_label (in unsigned long index)
+            raises (BadKind, Bounds);
+
+        TypeCode discriminator_type ()
+                 raises (BadKind);
+
+        long default_index ()
+             raises (BadKind);
+
+        //
+        unsigned long length()
+                      raises (BadKind);
+
+        //
+        TypeCode content_type ()
+                 raises (BadKind);
+
+        //
+        unsigned short fixed_digits ()
+                       raises (BadKind);
+
+        short fixed_scale ()
+              raises (BadKind);
+
+        //
+        Visibility member_visibility (in unsigned long index)
+                   raises (BadKind, Bounds);
+
+        ValueModifier type_modifier ()
+                      raises (BadKind);
+
+        TypeCode concrete_base_type ()
+                 raises (BadKind);
+  };
+#endif
+
+};
+
+#endif
+
+//======================================================================
+// End of the 'idl/IFR_3_0.idl' file.
+//======================================================================

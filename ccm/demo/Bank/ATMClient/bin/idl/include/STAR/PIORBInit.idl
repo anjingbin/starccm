@@ -1,0 +1,80 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_ORB_INIT_IDL
+#define PORTABLE_INTERCEPTOR_ORB_INIT_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/Codec.idl>
+
+#include <STAR/PICommon.idl>
+#include <STAR/PIPolicy.idl>
+
+module PortableInterceptor
+{
+
+
+local interface ClientRequestInterceptor;
+local interface ServerRequestInterceptor;
+local interface IORInterceptor;
+
+
+local interface ORBInitInfo
+{
+    typedef string ObjectId;
+
+    exception DuplicateName
+    {
+	string name;
+    };
+
+    exception InvalidName
+    {
+    };
+
+    readonly attribute CORBA::StringSeq arguments;
+
+    readonly attribute string orb_id;
+
+    readonly attribute IOP::CodecFactory codec_factory;
+
+    void register_initial_reference(in ObjectId id, in Object obj)
+        raises(InvalidName);
+
+    Object resolve_initial_references(in ObjectId id)
+	raises(InvalidName);
+
+    void add_client_request_interceptor(
+        in ClientRequestInterceptor interceptor)
+        raises(DuplicateName);
+    
+    void add_server_request_interceptor(
+        in ServerRequestInterceptor interceptor)
+        raises(DuplicateName);
+    
+    void add_ior_interceptor(in IORInterceptor interceptor)
+        raises(DuplicateName);
+    
+    SlotId allocate_slot_id();
+    
+    void register_policy_factory(in CORBA::PolicyType type,
+                                 in PolicyFactory policy_factory);   
+};
+
+local interface ORBInitializer
+{
+    void pre_init(in ORBInitInfo info);
+    void post_init(in ORBInitInfo info);
+};
+
+}; // End of module PortableInterceptor
+
+#endif

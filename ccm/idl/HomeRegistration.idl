@@ -1,0 +1,52 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __HomeRegistration_idl__
+#define __HomeRegistration_idl__
+
+#include <CCMHome.idl>
+
+module STARCCM
+{
+
+exception HomeHaveRegistered { };
+exception HomeNotRegistered{ };
+
+interface HomeRegistration
+{
+    
+    void register_home_by_component_type(in CORBA::RepositoryId comp_repid, in Components::CCMHome homeref)
+        raises(HomeHaveRegistered);
+    
+    void register_home_by_home_type(in CORBA::RepositoryId home_repid, in Components::CCMHome homeRef)
+        raises(HomeHaveRegistered);
+    
+    void register_home_by_name(in string name, in Components::CCMHome homeRef)
+        raises(HomeHaveRegistered);
+        
+    void unregister_home(in Components::CCMHome homeRef)
+    	raises(HomeNotRegistered);
+    
+    
+    //SuLiang add .2003.4.2
+    void unregister_by_name(in string homeName)
+    	raises(HomeNotRegistered);
+        
+};
+
+};
+
+#endif

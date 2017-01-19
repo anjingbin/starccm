@@ -1,0 +1,14 @@
+#include <HelloWorld.idl3>
+#include <HelloWorld.psdl>
+
+module HelloWorld
+{
+	composition session PersonImpl
+	{
+		home executor CCM_PersonHome_impl
+		{
+			implements PersonHome;
+			manages CCM_Person_impl;	
+		};
+	};
+};

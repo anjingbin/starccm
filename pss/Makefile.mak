@@ -1,0 +1,21 @@
+#  **********************************************************************
+# 
+#  Copyright (c) 2001-2003 StarMiddleware.net
+# 
+#  www.StarMiddleware.net
+#  All Rights Reserved
+# 
+# **********************************************************************
+
+# Version: 1.0.0
+
+top_srcdir	= .
+
+!include $(top_srcdir)\config\Make.rules.mak
+
+SUBDIRS	= src idl include bin
+all min install install_min:: lib bin
+
+$(EVERYTHING)::
+	@for %i in ( $(SUBDIRS) ) do \
+	    @cmd /c "cd %i & cd & $(MAKE) /NOLOGO  /f Makefile.mak $@"

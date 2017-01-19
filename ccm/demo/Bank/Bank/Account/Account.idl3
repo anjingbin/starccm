@@ -1,0 +1,27 @@
+#include <ComponentsClient.idl>
+
+module Bank
+{	
+
+	//
+	//component Account
+	//
+	
+	interface AccountOp
+	{
+		unsigned long getBalance(in string id);		
+		void deposit(in string id, in unsigned long amount);
+		void withdraw(in string id, in unsigned long amount);
+		boolean authenticate(in string id, in string password);
+		void changePassword(in string id, in string newPassword);		
+	};
+	
+	component Account
+	{
+		provides AccountOp account_op;
+	};
+
+	home AccountHome manages Account
+	{
+	};
+};

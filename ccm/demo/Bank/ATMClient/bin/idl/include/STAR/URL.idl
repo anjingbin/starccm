@@ -1,0 +1,75 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_URL_IDL
+#define STAR_URL_IDL
+
+#pragma prefix "nis.net"
+
+#ifndef STARE
+#   include <STAR/IOP.idl>
+#else
+#   include <STAREC/IOP.idl>
+#endif
+
+module STAR
+{
+
+local interface URLScheme;
+
+local interface URLRegistry
+{
+    exception SchemeAlreadyExists {};
+
+    void add_scheme(in URLScheme scheme)
+        raises(SchemeAlreadyExists);
+
+    URLScheme find_scheme(in string name);
+
+    Object parse_url(in string url);
+
+    void destroy();
+};
+
+local interface URLScheme
+{
+    readonly attribute string name;
+
+    Object parse_url(in string url);
+
+    void destroy();
+};
+
+local interface CorbalocProtocol;
+
+local interface CorbalocURLScheme : URLScheme
+{
+    exception ProtocolAlreadyExists {};
+
+    void add_protocol(in CorbalocProtocol protocol)
+        raises(ProtocolAlreadyExists);
+        
+    CorbalocProtocol find_protocol(in string name);
+};
+
+local interface CorbalocProtocol
+{
+    readonly attribute string name;
+
+    typedef sequence<octet> ObjectKey;
+
+    IOP::TaggedProfile parse_address(in string addr, in ObjectKey key);
+
+    void destroy();
+};
+
+}; // End of module STAR
+
+#endif

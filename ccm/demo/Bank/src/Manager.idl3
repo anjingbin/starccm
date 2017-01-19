@@ -1,0 +1,49 @@
+#include <ComponentsClient.idl>
+
+#include <ATM.idl3>
+#include <OpenAccountComp.idl3>
+#include <DelAccountComp.idl3>
+
+#ifndef __Manager_IDL_
+#define __Manager_IDL_
+
+module Bank
+{	
+
+	//
+	//component Manager
+	//
+	
+	interface ManagerOp
+	{
+		unsigned long getBalance(in string id);
+		void deposit(in string id, in unsigned long amount);
+		unsigned long withdraw(in string id, in unsigned long amount);
+		void transfer(in string fromId, in string toId, in unsigned long amount);
+		void changePassword(in string id, in string newPassword);
+
+		void createAccount(in string id, in string password);
+		void deleteAccount(in string id);
+		
+	};	
+
+	component Manager
+	{			
+		provides ManagerOp manager_op;
+		
+		uses DepositOp deposit;
+		uses WithdrawOp withdraw;
+		uses QueryOp query;
+		uses AuthenticationOp authenticator;
+		
+		uses OpenAccountOp openAccount;
+		uses DelAccountOp delAccount;
+	};
+
+	home ManagerHome manages Manager
+	{
+	};
+
+};
+
+#endif

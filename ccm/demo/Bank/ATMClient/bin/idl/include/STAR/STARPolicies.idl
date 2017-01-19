@@ -1,0 +1,118 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_POLICIES_IDL
+#define STAR_POLICIES_IDL
+
+#ifndef STARE
+#  include <STAR/Policy.idl>
+#  include <STAR/ATFTypes.idl>
+#else
+#  include <STARE/Policy.idl>
+#  include <STARE/ATFTypes.idl>
+#endif // STARE
+
+#pragma prefix "nis.net"
+
+module STAR
+{
+const CORBA::PolicyType ORB_PROTOCOL_POLICY_ID = 2 | 0xfffe0000;
+
+local interface ORBProtocolPolicy : CORBA::Policy
+{
+    readonly attribute ATF::PluginIdSeq value;
+
+    boolean contains(in ATF::PluginId id);
+};
+
+const CORBA::PolicyType ORB_CON_REUSE_POLICY_ID = 3 | 0xfffe0000;
+
+local interface ORBConReusePolicy : CORBA::Policy
+{
+    readonly attribute boolean value;
+};
+
+const short RETRY_NEVER = 0;
+
+const short RETRY_STRICT = 1;
+
+const short RETRY_ALWAYS = 2;
+
+struct RetryAttributes
+{
+    short mode;
+    unsigned long interval;
+    unsigned long max;
+    boolean remote;
+};
+
+const CORBA::PolicyType ORB_RETRY_POLICY_ID = 4 | 0xfffe0000;
+
+local interface ORBRetryPolicy : CORBA::Policy
+{
+    readonly attribute short retry_mode;
+    readonly attribute unsigned long retry_interval;
+    readonly attribute unsigned long retry_max;
+    readonly attribute boolean retry_remote;
+}; 
+
+const CORBA::PolicyType ORB_TIMEOUT_POLICY_ID = 5 | 0xfffe0000;
+
+local interface ORBTimeoutPolicy : CORBA::Policy
+{
+    readonly attribute unsigned long value;
+};
+
+#ifndef STARE
+
+const short LOCATION_TRANSPARENCY_STRICT = 0;
+
+const short LOCATION_TRANSPARENCY_RELAXED = 1;
+
+const CORBA::PolicyType ORB_LOCATION_TRANSPARENCY_POLICY_ID = 6 | 0xfffe0000;
+
+local interface ORBLocationTransparencyPolicy : CORBA::Policy
+{
+    readonly attribute short value;
+};
+
+const CORBA::PolicyType ORB_PI_POLICY_ID = 7 | 0xfffe0000;
+
+local interface ORBPIPolicy : CORBA::Policy
+{
+    readonly attribute boolean value;
+};
+
+#endif // STARE
+
+const CORBA::PolicyType ORB_CON_TIMEOUT_POLICY_ID = 8 | 0xfffe0000;
+
+local interface ORBConTimeOutPolicy : CORBA::Policy
+{
+    readonly attribute unsigned long value;
+};
+
+const CORBA::PolicyType ORB_REQ_TIMEOUT_POLICY_ID = 9 | 0xfffe0000;
+
+local interface ORBReqTimeOutPolicy : CORBA::Policy
+{
+    readonly attribute unsigned long value;
+};
+
+const CORBA::PolicyType ORB_LOCATE_REQUEST_POLICY_ID = 10 | 0xfffe0000;
+
+local interface ORBLocateRequestPolicy : CORBA::Policy
+{
+    readonly attribute boolean value;
+};
+
+}; // End module STAR
+
+#endif

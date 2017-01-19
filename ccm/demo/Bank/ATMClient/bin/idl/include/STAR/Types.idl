@@ -1,0 +1,60 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef TYPES_IDL
+#define TYPES_IDL
+
+#pragma prefix "omg.org"
+
+module CORBA
+{
+
+#ifndef STARE
+typedef sequence<any> AnySeq;
+#endif // STARE
+typedef sequence<boolean> BooleanSeq;
+typedef sequence<char> CharSeq;
+#ifndef STARE
+typedef sequence<wchar> WCharSeq;
+#endif // STARE
+typedef sequence<octet> OctetSeq;
+typedef sequence<short> ShortSeq;
+typedef sequence<unsigned short> UShortSeq;
+typedef sequence<long> LongSeq;
+typedef sequence<unsigned long> ULongSeq;
+typedef sequence<long long> LongLongSeq;
+typedef sequence<unsigned long long> ULongLongSeq;
+typedef sequence<float> FloatSeq;
+typedef sequence<double> DoubleSeq;
+
+typedef sequence<string> StringSeq;
+#ifndef STARE
+typedef sequence<wstring> WStringSeq;
+#endif // STARE
+
+
+typedef string RepositoryId;
+
+#ifndef STARE
+
+typedef string ScopedName, Identifier, VersionSpec;
+
+enum ParameterMode
+{
+    PARAM_IN,
+    PARAM_OUT,
+    PARAM_INOUT
+};
+
+#endif // STARE
+
+};
+
+#endif

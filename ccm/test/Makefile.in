@@ -1,0 +1,29 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#  author: BaiXiaoBo  bxbgfkd@tom.com                         
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+include $(top_srcdir)/config/Make.rules
+
+SUBDIRS		= TEST_STARCCM_OTS TEST_CCM_COMPLIANCE
+
+all min install install_min:: lib bin
+
+
+$(EVERYTHING)::
+	@for subdir in $(SUBDIRS); \
+	do \
+	    echo "making $@ in $$subdir"; \
+	    ( cd $$subdir && $(MAKE) $@ ) || exit 1; \
+	done

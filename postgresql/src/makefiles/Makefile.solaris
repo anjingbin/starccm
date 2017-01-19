@@ -1,0 +1,28 @@
+# $Header: /home/hjcvs/OB-CCM-1.0/postgresql/src/makefiles/Makefile.solaris,v 1.2 2004/07/05 08:56:17 SuLiang Exp $
+
+AROPT = crs
+
+ifeq ($(with_gnu_ld), yes)
+export_dynamic = -Wl,-E
+rpath = -Wl,-rpath,$(libdir)
+else
+rpath = -R$(libdir)
+endif
+shlib_symbolic = -Wl,-Bsymbolic
+
+DLSUFFIX = .so
+ifeq ($(GCC), yes)
+CFLAGS_SL = -fPIC
+else
+CFLAGS_SL = -KPIC
+endif
+ifeq ($(GXX), yes)
+CXXFLAGS_SL = -fPIC
+else
+CXXFLAGS_SL = -KPIC
+endif
+
+%.so: %.o
+	$(LD) -G -Bdynamic -o $@ $<
+
+sqlmansect = 5sql

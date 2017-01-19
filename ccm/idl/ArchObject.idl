@@ -1,0 +1,128 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Shufeng Wang    icestar@163.com
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __ArchObject_idl__
+#define __ArchObject_idl__
+
+#include <orb.idl>
+
+module STARCCM 
+{
+
+	typedef sequence<string> ComUUIDSeq;	
+	
+	typedef sequence<string> LinkSeq;
+	
+	typedef sequence<string> PortNameSeq;
+	
+	struct CrypticConnection
+	{
+		string srcport;
+		PortNameSeq targetports;
+	};
+	
+	typedef sequence<CrypticConnection> CrypticConnectionSeq;
+	
+	typedef sequence<string> RegisterNameSeq;
+	
+	struct ArchHome
+	{
+		string id;
+		string uuid;
+		string type;
+		Object homeref;
+		string homerepid;
+		string componentrepid;
+		string serveractivatorid;
+		Object serveractivatorref;
+		string componentserverid;
+		Object componentserverref;
+		string containerid;
+		Object containerref;
+		ComUUIDSeq coms;
+		LinkSeq links;
+		string isboundable;
+		PortNameSeq componentboundaryports;
+		CrypticConnectionSeq crypticconnections;
+		PortNameSeq initialreqports;
+		string homeinitiative;
+		string componentinitiative;
+		string runcomplete;
+		PortNameSeq runcompleteusesports;
+		string configurationcomplete;
+		PortNameSeq configurationcompleteusesports;
+		Object homefinder;
+		RegisterNameSeq withhomefinder;
+		Object nameservice;
+		RegisterNameSeq withnaming;
+	};
+	
+	typedef sequence<ArchHome> ArchHomes;
+	
+	struct Port
+	{
+		string type;
+		string name;
+		Object reference;
+	};
+	
+	typedef sequence<Port> PortSeq;
+	
+	struct PortWithNaming
+	{
+		string portname;
+		RegisterNameSeq withnaming;
+	};
+	
+	typedef sequence<PortWithNaming> PortWithNamingSeq;
+	
+	struct ArchComponent
+	{
+		string id;
+		string uuid;
+		Object comref;
+		string homeuuid;
+		PortSeq ports;
+		LinkSeq links;
+		string isboundable;
+		PortNameSeq boundaryports;
+		Object nameservice;
+		RegisterNameSeq withnaming;
+		PortWithNamingSeq portwithnamings;
+	};
+	
+	typedef sequence<ArchComponent> ArchComponents;
+	
+	struct ArchConnection
+	{
+		string id;
+		string cookie;
+		string connectmode;
+		string srccomuuid;
+		Object srccomref;
+		string srcport;
+		string targetuuid;
+		string targettype;
+		Object targetref;
+		string targetport;
+	};
+	
+	typedef sequence<ArchConnection> ArchConnections;
+	
+	typedef sequence<string> DeletedComs;
+	
+	typedef sequence<string> UUIDs;
+};
+
+#endif

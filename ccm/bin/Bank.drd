@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DynReconfig PUBLIC "" "DynReconfig.dtd">
+<DynReconfig>
+	<description>To create the delegation dynamicly</description>	
+	<componentassembly id="3a6dbda6-2889-11d7-8581-e8a99f3d1d27">
+		<title>Bank</title>
+		<objectport port="10010"/>
+	 	<namingservice corbaloc="corbaloc:iiop:127.0.0.1:9991/NameService" />
+	 </componentassembly>
+	<create dir="F:\Open_Micro_CCM\StarCCM_Run\bin\Delegation.zip" />
+	<link id="1">
+		<connections>
+			<connectinterface id="DelegationToDepositComp">
+				<usesport>
+					<usesidentifier>deposit</usesidentifier>
+					<componentinstantiationref idref="Delegation1"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>deposit_op</providesidentifier>
+					<componentinstantiationref idref="depositcomp1"/>
+				</providesport>
+			</connectinterface>
+			<connectinterface id="DelegationToWithdrawComp">
+				<usesport>
+					<usesidentifier>withdraw</usesidentifier>
+					<componentinstantiationref idref="Delegation1"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>withdraw_op</providesidentifier>
+					<componentinstantiationref idref="withdrawcomp1"/>
+				</providesport>
+			</connectinterface>
+		</connections>
+	</link>
+</DynReconfig>

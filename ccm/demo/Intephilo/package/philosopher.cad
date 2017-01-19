@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE componentassembly PUBLIC "" "componentassembly.dtd">
+<componentassembly id="5037f430-49ed-11d7-bccb-887617272ac7">
+	<title>philosopher</title>
+	<objectport port="10010"/>
+  	<namingservice corbaloc="corbaloc:iiop:172.26.13.33:9991/NameService" />
+  	<homeregistration corbaloc="corbaloc:iiop:172.26.13.33:9992/HomeRegistration" />	
+	<componentfiles>
+		<componentfile type="CORBA component" id="Philosopher">
+			<fileinarchive name="philosopher.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="Cutlery">
+			<fileinarchive name="cutlery.csd"/>
+		</componentfile>
+	</componentfiles>
+	<partitioning>
+			<homeplacement cardinality="1" id="PhilosopherHome">
+				<componentfileref idref="Philosopher"/>
+				<componentimplref idref="8f42239b-1e67-11d7-b81f-dc8107a7889d"/>
+				<componentinstantiation id="wkb">
+					<componentproperties>
+						<fileinarchive name="wkb.cpf"/>
+					</componentproperties>
+				</componentinstantiation>
+				<componentinstantiation id="hj">
+					<componentproperties>
+						<fileinarchive name="hj.cpf"/>
+					</componentproperties>
+				</componentinstantiation>
+				<componentinstantiation id="dl">
+					<componentproperties>
+						<fileinarchive name="dl.cpf"/>
+					</componentproperties>
+				</componentinstantiation>
+				<destination>
+					<serveractivator id="172.26.13.33"/>
+					<componentserver port="10022" id="7ce36ae1-49ed-11d7-bccb-887617272ac7"/>
+					<container id="6ce36ae2-49ed-11d7-bccb-887617272ac7"/>
+				</destination>
+			</homeplacement>
+			<homeplacement cardinality="1" id="CutleryHome">
+				<componentfileref idref="Cutlery"/>
+				<componentimplref idref="bb38d965-1e54-11d7-9b85-8a6194305b45"/>
+				<componentinstantiation id="c1"/>
+				<componentinstantiation id="c2"/>
+				<componentinstantiation id="c3"/>
+				<destination>
+					<serveractivator id="172.26.13.33"/>
+					<componentserver port="10020" id="8ce36ae1-49ed-11d7-bccb-887617272ac7"/>
+					<container id="ea0c2453-49ed-11d7-bccb-887617272ac7"/>
+				</destination>
+			</homeplacement>		
+	</partitioning>
+	<connections>
+		<connectinterface id="wkbleft">
+			<usesport>
+				<usesidentifier>left_hand</usesidentifier>
+				<componentinstantiationref idref="wkb"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>the_fork</providesidentifier>
+				<componentinstantiationref idref="c1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="wkbright">
+			<usesport>
+				<usesidentifier>right_hand</usesidentifier>
+				<componentinstantiationref idref="wkb"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>the_fork</providesidentifier>
+				<componentinstantiationref idref="c3"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="hjleft">
+			<usesport>
+				<usesidentifier>left_hand</usesidentifier>
+				<componentinstantiationref idref="hj"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>the_fork</providesidentifier>
+				<componentinstantiationref idref="c2"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="hjright">
+			<usesport>
+				<usesidentifier>right_hand</usesidentifier>
+				<componentinstantiationref idref="hj"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>the_fork</providesidentifier>
+				<componentinstantiationref idref="c1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="dlleft">
+			<usesport>
+				<usesidentifier>left_hand</usesidentifier>
+				<componentinstantiationref idref="dl"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>the_fork</providesidentifier>
+				<componentinstantiationref idref="c3"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="dlright">
+			<usesport>
+				<usesidentifier>right_hand</usesidentifier>
+				<componentinstantiationref idref="dl"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>the_fork</providesidentifier>
+				<componentinstantiationref idref="c2"/>
+			</providesport>
+		</connectinterface>
+	</connections>
+</componentassembly>

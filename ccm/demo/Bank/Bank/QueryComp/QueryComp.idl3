@@ -1,0 +1,27 @@
+#include <ComponentsClient.idl>
+
+#include <Account.idl3>
+
+module Bank
+{	
+	//
+	//component QueryComp
+	//
+	
+	interface QueryOp
+	{
+		unsigned long getBalance(in string id);		
+	};
+
+	component QueryComp
+	{
+		provides QueryOp query_op;
+		
+		uses AccountOp the_account;
+	};
+
+	home QueryCompHome manages QueryComp
+	{
+	};
+
+};

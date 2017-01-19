@@ -1,0 +1,1 @@
+http://xml.apache.org/dist/xerces-c/archives/Xerces-C_1_7_0/xerces-c1_7_0-linux7.2.tar.gz

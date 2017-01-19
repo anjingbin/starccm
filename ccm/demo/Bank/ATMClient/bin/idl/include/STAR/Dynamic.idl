@@ -1,0 +1,38 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef DYNAMIC_IDL
+#define DYNAMIC_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/TypeCode.idl>
+#include <STAR/Types.idl>
+
+module Dynamic
+{
+
+struct Parameter
+{
+    any argument;
+    CORBA::ParameterMode mode;
+};
+
+typedef sequence<Parameter> ParameterList;
+
+typedef CORBA::StringSeq ContextList;
+
+typedef sequence<CORBA::TypeCode> ExceptionList;
+
+typedef CORBA::StringSeq RequestContext;
+
+};
+
+#endif

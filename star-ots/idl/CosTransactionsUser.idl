@@ -1,0 +1,28 @@
+// **********************************************************************
+//
+// Copyright (c) 1999
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_COS_TRANSACTIONS_USER_IDL
+#define STAR_COS_TRANSACTIONS_USER_IDL
+
+#include "CosTransactionsOTS.idl"
+
+
+module CosTransactions 
+{
+interface Synchronization : TransactionalObject 
+{
+    void before_completion();
+
+    void after_completion(in Status s);
+};
+
+};
+
+#endif

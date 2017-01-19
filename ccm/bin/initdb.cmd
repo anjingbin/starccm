@@ -1,0 +1,1 @@
+expect -f initdb.expect

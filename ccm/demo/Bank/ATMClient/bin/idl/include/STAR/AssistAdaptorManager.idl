@@ -1,0 +1,52 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ASSIST_ADAPTOR_MANAGER_IDL
+#define ASSIST_ADAPTOR_MANAGER_IDL
+
+#include <STAR/POACommon.idl>
+#include <STAR/IOP.idl>
+
+#pragma prefix "nis.net"
+
+module STAR
+{
+
+local interface AssistAdaptor;
+local interface AssistAdaptorManager
+{
+    exception NotFound
+    {
+    };
+ 
+    exception AlreadyExists
+    {
+    };
+
+    void binding_objref(in PortableServer::ObjectId oid, in Object obj)
+        raises(AlreadyExists);
+
+    void delete_binding(in PortableServer::ObjectId oid)
+        raises(NotFound);
+
+    void set_assistadaptor(in AssistAdaptor locator);
+};
+
+local interface AssistAdaptor
+{
+    void locate(in PortableServer::ObjectId oid, 
+    		out Object obj,
+		out boolean add)
+        raises(AssistAdaptorManager::NotFound);
+};
+
+}; // End module STAR
+
+#endif

@@ -1,0 +1,23 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_IDL
+#define PORTABLE_INTERCEPTOR_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/PIClient.idl>
+#include <STAR/PIServer.idl>
+#include <STAR/PIPolicy.idl>
+#include <STAR/PIORBInit.idl>
+#include <STAR/PIIOR.idl>
+#include <STAR/PICurrent.idl>
+
+#endif

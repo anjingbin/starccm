@@ -1,0 +1,23 @@
+[OTSServerInterceptor_impl::receive_request_service_contexts begin!]
+[OTSServerInterceptor_impl::getOTSPolicyValue begin!]
+[OTSServerInterceptor_impl::getOTSPolicyValue end!]
+T@1760 ExecutorInvoker preinvoking
+T@1760 Object id : -1652554908
+T@1760 Operation name is create
+T@1760 ContainerRunTime preinvoke
+T@1760 Home servant found
+T@1760 ExecutorInvoker postinvoking
+T@1760 Operation name is create
+T@1760 TxnInterceptor::postinvoke has no transaction policy.
+T@1760 ContainerRunTime postinvoke
+warning: Servant method raised a non-CORBA exception
+Client receives this exception as CORBA::UNKNOWN
+operation name: "create"
+Collocated method call
+[OTSServerInterceptor_impl::send_reply begin!]
+[OTSServerInterceptor_impl::getOTSPolicyValue begin!]
+[OTSServerInterceptor_impl::getOTSPolicyValue end!]
+[OTSClientInterceptor_impl::receive_reply begin!]
+[OTSClientInterceptor_impl::getOTSPolicyValue begin!]
+[OTSClientInterceptor_impl::getOTSPolicyValue end!]
+Assertion failed: rc, file OTSClientInterceptor_impl.cpp, line 394

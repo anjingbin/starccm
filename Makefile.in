@@ -1,0 +1,95 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+srcdir          = @srcdir@
+prefix          = @prefix@
+exec_prefix	= @exec_prefix@
+bindir          = @bindir@
+libdir          = @libdir@
+includedir      = @includedir@
+idldir		= $(prefix)/idl
+mandir          = @mandir@
+
+SUBDIRS		= @subdirs@
+
+EVERYTHING	= all install min install_min test depend clean distclean
+
+all::
+
+clean::
+	rm -f config.cache config.log
+
+Makefile:: Makefile.in $(top_srcdir)/config.status
+	cd $(top_srcdir); ./config.status
+
+$(top_srcdir)/config.status: $(top_srcdir)/configure
+	cd $(top_srcdir); ./config.status --recheck
+
+$(top_srcdir)/configure: $(top_srcdir)/configure.in
+	cd $(top_srcdir); autoconf
+
+install install_min::
+	@if test ! -d $(bindir) ; \
+	then \
+	    echo "Creating $(bindir)..." ; \
+	    mkdir $(bindir) ; \
+	    chmod a+rx $(bindir) ; \
+	fi
+
+	@if test ! -d $(libdir) ; \
+	then \
+	    echo "Creating $(libdir)..." ; \
+	    mkdir $(libdir) ; \
+	    chmod a+rx $(libdir) ; \
+	fi
+
+	@if test ! -d $(includedir) ; \
+	then \
+	    echo "Creating $(includedir)..." ; \
+	    mkdir $(includedir) ; \
+	    chmod a+rx $(includedir) ; \
+	fi
+
+	@if test ! -d $(idldir) ; \
+	then \
+	    echo "Creating $(idldir)..." ; \
+	    mkdir $(idldir) ; \
+	    chmod a+rx $(idldir) ; \
+	fi
+
+	@if test ! -d $(mandir) ; \
+	then \
+	    echo "Creating $(mandir)..." ; \
+	    mkdir $(mandir) ; \
+	    chmod a+rx $(mandir) ; \
+	fi
+
+	@if test ! -d $(mandir)/man1 ; \
+	then \
+	    echo "Creating $(mandir)/man1..." ; \
+	    mkdir $(mandir)/man1 ; \
+	    chmod a+rx $(mandir)/man1 ; \
+	fi
+
+$(EVERYTHING)::
+	@for subdir in $(SUBDIRS) ; \
+	do \
+	    if test -d $$subdir ; \
+	    then \
+	        echo "making $@ in $$subdir"; \
+	        ( cd $$subdir && $(MAKE) $@ ) || exit 1; \
+	    fi ; \
+	done

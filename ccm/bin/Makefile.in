@@ -1,0 +1,44 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2004
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#  author: BaiXiaoBo        bxbgfkd@tom.com                         
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA    = @INSTALL_DATA@
+
+BIN_FILES	= ApplicationServer.xml.xml \
+		ccmc.cmd \
+		cidl \
+		DebugConfig.ini \
+		Demo.tcl \
+		idl3 \
+		idlcpp \
+		start_server.pl \
+		stop_server.pl \
+		server.ini \
+		starccm.ini \
+		nameserv
+
+install::
+	@for i in ($(BIN_FILES)) ; \
+	do \
+	    echo "Installing $$i" ; \
+	    $(INSTALL_PROGRAM) $$i $(bindir)/$$i ; \
+	done
+
+install_min:: install

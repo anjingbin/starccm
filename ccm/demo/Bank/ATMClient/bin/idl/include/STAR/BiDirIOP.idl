@@ -1,0 +1,93 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef BIDIRIOP_IDL
+#define BIDIRIOP_IDL
+
+#include <STAR/GIOP.idl>
+
+#pragma prefix "nis.net"
+
+module BiDirIOP
+{
+
+/** The profile ID for BiDirIOP over IIOP. */
+const IOP::ProfileId TAG_BIDIR_IIOP = IOP::TAG_INTERNET_IOP | 1024;
+
+/**
+ *
+ * A protocol version.
+ *
+ * @member major The major version number.
+ * @member minor The minor version number.
+ *
+ **/
+
+struct Version
+{
+    octet major;
+    octet minor;
+};
+
+/** Sequence of tagged components */
+typedef sequence<IOP::TaggedComponent> TaggedComponentSeq;
+
+/** Sequence of tagged profiles */
+typedef sequence<IOP::TaggedProfile> TaggedProfileSeq;
+
+/**
+ *
+ * The bi-directional IOR profile.
+ *
+ * @member bidiriop_version The version of BiDirIOP supported by this profile.
+ * @member giop_version The version of GIOP supported by this profile.
+ * @member peer The peer id.
+ * @member object_key The object key.
+ * @member components A sequence of tagged components.
+ * @member profiles Tagged profiles of the encapsulated protocol.
+ *
+ **/
+
+struct ProfileBody
+{
+    Version bidiriop_version;
+    Version giop_version;
+    string peer;
+    sequence<octet> object_key;
+    TaggedComponentSeq components;
+    TaggedProfileSeq profiles;
+};
+
+/**
+ *
+ * The format of a bi-directional message header.
+ *
+ * @member magic Bytes that indicate the beginning of a message header.
+ * @member bidiriop_version The version of the bi-directional protocol.
+ * @member callback If true, this message is associated with the
+ *         <EM>callback</EM> connection.
+ * @member endian Indicates the byte order of the <CODE>message_size</CODE>
+ *         member.
+ * @member message_size The size of the message, not including the header.
+ *
+ **/
+
+struct Header
+{
+    octet magic[4];
+    Version bidiriop_version;
+    octet flags;
+    octet reserved[5];
+    unsigned long message_size;
+};
+
+}; // End module STAR
+
+#endif

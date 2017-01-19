@@ -1,0 +1,800 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net
+#  www.StarMiddleware.net
+#
+#  All Rights Reserved
+#
+# **********************************************************************
+
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+IDLDIR		= $(top_srcdir)/idl
+HDIR		= $(top_srcdir)/include
+
+TARGETS		= CCM_Account.idl \
+		CCM_DepositComp.idl \
+		CCM_Authentication.idl \
+		CCM_QueryComp.idl \
+		CCM_InterestComputer.idl \
+		CCM_WithdrawComp.idl \
+		CCM_Delegations.idl \
+		CCM_ATM.idl \
+		CCM_OpenAccountComp.idl \
+		CCM_DelAccountComp.idl \
+		CCM_Manager.idl \
+		libAccount$(SHLIBEXT) \
+		libStdAccount$(SHLIBEXT) \
+		libDepositComp$(SHLIBEXT) \
+		libStdDepositComp$(SHLIBEXT) \
+		libAuthentication$(SHLIBEXT) \
+		libStdAuthentication$(SHLIBEXT) \
+		libQueryComp$(SHLIBEXT) \
+		libStdQueryComp$(SHLIBEXT) \
+		libInterestComputer$(SHLIBEXT) \
+		libStdInterestComputer$(SHLIBEXT) \
+		libWithdrawComp$(SHLIBEXT) \
+		libStdWithdrawComp$(SHLIBEXT) \
+		libDelegations$(SHLIBEXT) \
+		libStdDelegations$(SHLIBEXT) \
+		libATM$(SHLIBEXT) \
+		libStdATM$(SHLIBEXT) \
+		libOpenAccountComp$(SHLIBEXT) \
+		libStdOpenAccountComp$(SHLIBEXT) \
+		libDelAccountComp$(SHLIBEXT) \
+		libStdDelAccountComp$(SHLIBEXT) \
+		libManager$(SHLIBEXT) \
+		libStdManager$(SHLIBEXT)
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA	= @INSTALL_DATA@
+
+GENERATED1  = Account.idl \
+		Account_impl.h \
+		Account_impl.cpp \
+		Account_ValueType_impl.h \
+		Account_ValueType_impl.cpp \
+		AccountDll.cpp \
+		StdAccountDll.cpp \
+		Account.cpf \
+		Account.h \
+		Account.cpp \
+		Account_skel.cpp \
+		Account_skel.h \
+		CCM_Account_Context_impl.h \
+		CCM_Account_Context_impl.cpp \
+		CCM_Account.idl \
+		Account.ccd \
+		CCM_Account.cpp \
+		CCM_Account.h \
+		CCM_Account_skel.cpp \
+		CCM_Account_skel.h 
+GENERATED2  = DepositComp.idl \
+		DepositComp_impl.h \
+		DepositComp_impl.cpp \
+		DepositComp_ValueType_impl.h \
+		DepositComp_ValueType_impl.cpp \
+		DepositCompDll.cpp \
+		StdDepositCompDll.cpp \
+		DepositComp.cpf \
+		DepositComp.h \
+		DepositComp.cpp \
+		DepositComp_skel.cpp \
+		DepositComp_skel.h \
+		CCM_DepositComp_Context_impl.h \
+		CCM_DepositComp_Context_impl.cpp \
+		CCM_DepositComp.idl \
+		DepositComp.ccd \
+		CCM_DepositComp.cpp \
+		CCM_DepositComp.h \
+		CCM_DepositComp_skel.cpp \
+		CCM_DepositComp_skel.h 
+GENERATED3  = Authentication.idl \
+		Authentication_impl.h \
+		Authentication_impl.cpp \
+		Authentication_ValueType_impl.h \
+		Authentication_ValueType_impl.cpp \
+		AuthenticationDll.cpp \
+		StdAuthenticationDll.cpp \
+		Authentication.cpf \
+		Authentication.h \
+		Authentication.cpp \
+		Authentication_skel.cpp \
+		Authentication_skel.h \
+		CCM_Authentication_Context_impl.h \
+		CCM_Authentication_Context_impl.cpp \
+		CCM_Authentication.idl \
+		Authentication.ccd \
+		CCM_Authentication.cpp \
+		CCM_Authentication.h \
+		CCM_Authentication_skel.cpp \
+		CCM_Authentication_skel.h 
+GENERATED4  = QueryComp.idl \
+		QueryComp_impl.h \
+		QueryComp_impl.cpp \
+		QueryComp_ValueType_impl.h \
+		QueryComp_ValueType_impl.cpp \
+		QueryCompDll.cpp \
+		StdQueryCompDll.cpp \
+		QueryComp.cpf \
+		QueryComp.h \
+		QueryComp.cpp \
+		QueryComp_skel.cpp \
+		QueryComp_skel.h \
+		CCM_QueryComp_Context_impl.h \
+		CCM_QueryComp_Context_impl.cpp \
+		CCM_QueryComp.idl \
+		QueryComp.ccd \
+		CCM_QueryComp.cpp \
+		CCM_QueryComp.h \
+		CCM_QueryComp_skel.cpp \
+		CCM_QueryComp_skel.h 
+GENERATED5  = InterestComputer.idl \
+		InterestComputer_impl.h \
+		InterestComputer_impl.cpp \
+		InterestComputer_ValueType_impl.h \
+		InterestComputer_ValueType_impl.cpp \
+		InterestComputerDll.cpp \
+		StdInterestComputerDll.cpp \
+		InterestComputer.cpf \
+		InterestComputer.h \
+		InterestComputer.cpp \
+		InterestComputer_skel.cpp \
+		InterestComputer_skel.h \
+		CCM_InterestComputer_Context_impl.h \
+		CCM_InterestComputer_Context_impl.cpp \
+		CCM_InterestComputer.idl \
+		InterestComputer.ccd \
+		CCM_InterestComputer.cpp \
+		CCM_InterestComputer.h \
+		CCM_InterestComputer_skel.cpp \
+		CCM_InterestComputer_skel.h 
+GENERATED6  = WithdrawComp.idl \
+		WithdrawComp_impl.h \
+		WithdrawComp_impl.cpp \
+		WithdrawComp_ValueType_impl.h \
+		WithdrawComp_ValueType_impl.cpp \
+		WithdrawCompDll.cpp \
+		StdWithdrawCompDll.cpp \
+		WithdrawComp.cpf \
+		WithdrawComp.h \
+		WithdrawComp.cpp \
+		WithdrawComp_skel.cpp \
+		WithdrawComp_skel.h \
+		CCM_WithdrawComp_Context_impl.h \
+		CCM_WithdrawComp_Context_impl.cpp \
+		CCM_WithdrawComp.idl \
+		WithdrawComp.ccd \
+		CCM_WithdrawComp.cpp \
+		CCM_WithdrawComp.h \
+		CCM_WithdrawComp_skel.cpp \
+		CCM_WithdrawComp_skel.h 
+GENERATED7  = Delegations.idl \
+		Delegations_impl.h \
+		Delegations_impl.cpp \
+		Delegations_ValueType_impl.h \
+		Delegations_ValueType_impl.cpp \
+		DelegationsDll.cpp \
+		StdDelegationsDll.cpp \
+		Delegations.cpf \
+		Delegations.h \
+		Delegations.cpp \
+		Delegations_skel.cpp \
+		Delegations_skel.h \
+		CCM_Delegations_Context_impl.h \
+		CCM_Delegations_Context_impl.cpp \
+		CCM_Delegations.idl \
+		Delegations.ccd \
+		CCM_Delegations.cpp \
+		CCM_Delegations.h \
+		CCM_Delegations_skel.cpp \
+		CCM_Delegations_skel.h 
+GENERATED8  = ATM.idl \
+		ATM_impl.h \
+		ATM_impl.cpp \
+		ATM_ValueType_impl.h \
+		ATM_ValueType_impl.cpp \
+		ATMDll.cpp \
+		StdATMDll.cpp \
+		ATM.cpf \
+		ATM.h \
+		ATM.cpp \
+		ATM_skel.cpp \
+		ATM_skel.h \
+		CCM_ATM_Context_impl.h \
+		CCM_ATM_Context_impl.cpp \
+		CCM_ATM.idl \
+		ATM.ccd \
+		CCM_ATM.cpp \
+		CCM_ATM.h \
+		CCM_ATM_skel.cpp \
+		CCM_ATM_skel.h 
+GENERATED9  = OpenAccountComp.idl \
+		OpenAccountComp_impl.h \
+		OpenAccountComp_impl.cpp \
+		OpenAccountComp_ValueType_impl.h \
+		OpenAccountComp_ValueType_impl.cpp \
+		OpenAccountCompDll.cpp \
+		StdOpenAccountCompDll.cpp \
+		OpenAccountComp.cpf \
+		OpenAccountComp.h \
+		OpenAccountComp.cpp \
+		OpenAccountComp_skel.cpp \
+		OpenAccountComp_skel.h \
+		CCM_OpenAccountComp_Context_impl.h \
+		CCM_OpenAccountComp_Context_impl.cpp \
+		CCM_OpenAccountComp.idl \
+		OpenAccountComp.ccd \
+		CCM_OpenAccountComp.cpp \
+		CCM_OpenAccountComp.h \
+		CCM_OpenAccountComp_skel.cpp \
+		CCM_OpenAccountComp_skel.h 
+GENERATED10  = DelAccountComp.idl \
+		DelAccountComp_impl.h \
+		DelAccountComp_impl.cpp \
+		DelAccountComp_ValueType_impl.h \
+		DelAccountComp_ValueType_impl.cpp \
+		DelAccountCompDll.cpp \
+		StdDelAccountCompDll.cpp \
+		DelAccountComp.cpf \
+		DelAccountComp.h \
+		DelAccountComp.cpp \
+		DelAccountComp_skel.cpp \
+		DelAccountComp_skel.h \
+		CCM_DelAccountComp_Context_impl.h \
+		CCM_DelAccountComp_Context_impl.cpp \
+		CCM_DelAccountComp.idl \
+		DelAccountComp.ccd \
+		CCM_DelAccountComp.cpp \
+		CCM_DelAccountComp.h \
+		CCM_DelAccountComp_skel.cpp \
+		CCM_DelAccountComp_skel.h 
+GENERATED11  = Manager.idl \
+		Manager_impl.h \
+		Manager_impl.cpp \
+		Manager_ValueType_impl.h \
+		Manager_ValueType_impl.cpp \
+		ManagerDll.cpp \
+		StdManagerDll.cpp \
+		Manager.cpf \
+		Manager.h \
+		Manager.cpp \
+		Manager_skel.cpp \
+		Manager_skel.h \
+		CCM_Manager_Context_impl.h \
+		CCM_Manager_Context_impl.cpp \
+		CCM_Manager.idl \
+		Manager.ccd \
+		CCM_Manager.cpp \
+		CCM_Manager.h \
+		CCM_Manager_skel.cpp \
+		CCM_Manager_skel.h 
+
+GENERATED 	= $(GENERATED1) $(GENERATED2) $(GENERATED3) $(GENERATED4) $(GENERATED5) $(GENERATED6) $(GENERATED7) $(GENERATED8) $(GENERATED9) $(GENERATED10) $(GENERATED11)
+
+ACCOUNTOBJS	= CCM_Account.o \
+	CCM_Account_Context_impl.o \
+	Account.o \
+	Account_impl.o \
+	Account_skel.o \
+	AccountDll.o
+
+ACCOUNTSTDOBJS	=   CCM_Account.o \
+	CCM_Account_impl.o \
+	CCM_Account_skel.o \
+	Account.o \
+	Account_ValueType_impl.o \
+	StdAccountDll.o \
+
+DEPOSOBJS	= CCM_DepositComp.o \
+	CCM_DepositComp_Context_impl.o \
+	DepositComp.o \
+	DepositComp_impl.o \
+	DepositComp_skel.o \
+	DepositCompDll.o \
+	Account.o
+
+DEPOSSTDOBJS	=   CCM_DepositComp.o \
+	CCM_DepositComp_impl.o \
+	CCM_DepositComp_skel.o \
+	DepositComp.o \
+	DepositComp_ValueType_impl.o \
+	StdDepositCompDll.o \
+	Account.o
+
+AUTHOBJS	= CCM_Authentication.o \
+	CCM_Authentication_Context_impl.o \
+	Authentication.o \
+	Authentication_impl.o \
+	Authentication_skel.o \
+	AuthenticationDll.o \
+	Account.o
+
+AUTHSTDOBJS	=   CCM_Authentication.o \
+	CCM_Authentication_impl.o \
+	CCM_Authentication_skel.o \
+	Authentication.o \
+	Authentication_ValueType_impl.o \
+	StdAuthenticationDll.o \
+	Account.o
+
+QUERYOBJS	= CCM_QueryComp.o \
+	CCM_QueryComp_Context_impl.o \
+	QueryComp.o \
+	QueryComp_impl.o \
+	QueryComp_skel.o \
+	QueryCompDll.o \
+	Account.o
+
+QUERYSTDOBJS	=   CCM_QueryComp.o \
+	CCM_QueryComp_impl.o \
+	CCM_QueryComp_skel.o \
+	QueryComp.o \
+	QueryComp_ValueType_impl.o \
+	StdQueryCompDll.o \
+	Account.o
+
+INTERESTOBJS	= CCM_InterestComputer.o \
+	CCM_InterestComputer_Context_impl.o \
+	InterestComputer.o \
+	InterestComputer_impl.o \
+	InterestComputer_skel.o \
+	InterestComputerDll.o \
+	Account.o
+
+INTERESTSTDOBJS	=   CCM_InterestComputer.o \
+	CCM_InterestComputer_impl.o \
+	CCM_InterestComputer_skel.o \
+	InterestComputer.o \
+	InterestComputer_ValueType_impl.o \
+	StdInterestComputerDll.o \
+	Account.o
+
+WITHDRAWOBJS	= CCM_WithdrawComp.o \
+	CCM_WithdrawComp_Context_impl.o \
+	WithdrawComp.o \
+	WithdrawComp_impl.o \
+	WithdrawComp_skel.o \
+	WithdrawCompDll.o \
+	Account.o \
+	InterestComputer.o 
+
+WITHDRAWSTDOBJS	=   CCM_WithdrawComp.o \
+	CCM_WithdrawComp_impl.o \
+	CCM_WithdrawComp_skel.o \
+	WithdrawComp.o \
+	WithdrawComp_ValueType_impl.o \
+	StdWithdrawCompDll.o \
+	Account.o \
+	InterestComputer.o 
+
+DELEGOBJS	= CCM_Delegations.o \
+	CCM_Delegations_Context_impl.o \
+	Delegations.o \
+	Delegations_impl.o \
+	Delegations_skel.o \
+	DelegationsDll.o \
+	Account.o \
+	DepositComp.o \
+	WithdrawComp.o \
+	InterestComputer.o
+
+DELEGSTDOBJS	=   CCM_Delegations.o \
+	CCM_Delegations_impl.o \
+	CCM_Delegations_skel.o \
+	Delegations.o \
+	Delegations_ValueType_impl.o \
+	StdDelegationsDll.o \
+	Account.o \
+	DepositComp.o \
+	WithdrawComp.o \
+	InterestComputer.o
+
+ATMOBJS	= CCM_ATM.o \
+	CCM_ATM_Context_impl.o \
+	ATM.o \
+	ATM_impl.o \
+	ATM_skel.o \
+	ATMDll.o \
+	Account.o \
+	DepositComp.o \
+	WithdrawComp.o \
+	QueryComp.o \
+	Authentication.o \
+	InterestComputer.o
+
+ATMSTDOBJS	=   CCM_ATM.o \
+	CCM_ATM_impl.o \
+	CCM_ATM_skel.o \
+	ATM.o \
+	ATM_ValueType_impl.o \
+	StdATMDll.o \
+	Account.o \
+	DepositComp.o \
+	WithdrawComp.o \
+	QueryComp.o \
+	Authentication.o \
+	InterestComputer.o
+
+OPENOBJS	= CCM_OpenAccountComp.o \
+	CCM_OpenAccountComp_Context_impl.o \
+	OpenAccountComp.o \
+	OpenAccountComp_impl.o \
+	OpenAccountComp_skel.o \
+	OpenAccountCompDll.o
+
+OPENSTDOBJS	=   CCM_OpenAccountComp.o \
+	CCM_OpenAccountComp_impl.o \
+	CCM_OpenAccountComp_skel.o \
+	OpenAccountComp.o \
+	OpenAccountComp_ValueType_impl.o \
+	StdOpenAccountCompDll.o
+
+DELOBJS	= CCM_DelAccountComp.o \
+	CCM_DelAccountComp_Context_impl.o \
+	DelAccountComp.o \
+	DelAccountComp_impl.o \
+	DelAccountComp_skel.o \
+	DelAccountCompDll.o
+
+DELSTDOBJS	=   CCM_DelAccountComp.o \
+	CCM_DelAccountComp_impl.o \
+	CCM_DelAccountComp_skel.o \
+	DelAccountComp.o \
+	DelAccountComp_ValueType_impl.o \
+	StdDelAccountCompDll.o \
+	Account.o
+
+MANOBJS	= CCM_Manager.o \
+	CCM_Manager_Context_impl.o \
+	Manager.o \
+	Manager_impl.o \
+	Manager_skel.o \
+	ManagerDll.o \
+	OpenAccountComp.o \
+	DelAccountComp.o \
+	ATM.o \
+	Account.o \
+	Authentication.o \
+	DepositComp.o \
+	WithdrawComp.o \
+	QueryComp.o \
+	InterestComputer.o
+
+MANSTDOBJS	=   CCM_Manager.o \
+	CCM_Manager_impl.o \
+	CCM_Manager_skel.o \
+	Manager.o \
+	Manager_ValueType_impl.o \
+	StdManagerDll.o \
+	OpenAccountComp.o \
+	DelAccountComp.o \
+	ATM.o \
+	Account.o \
+	Authentication.o \
+	DepositComp.o \
+	WithdrawComp.o \
+	QueryComp.o \
+	InterestComputer.o
+
+SRCS            = $(ACCOUNTOBJS:.o=.cpp) \
+		$(ACCOUNTSTDOBJS:.o=.cpp) \
+		$(DEPOSOBJS:.o=.cpp) \
+		$(DEPOSSTDOBJS:.o=.cpp) \
+		$(AUTHOBJS:.o=.cpp) \
+		$(AUTHSTDOBJS:.o=.cpp) \
+		$(QUERYOBJS:.o=.cpp) \
+		$(QUERYSTDOBJS:.o=.cpp) \
+		$(INTERESTOBJS:.o=.cpp) \
+		$(INTERESTSTDOBJS:.o=.cpp) \
+		$(WITHDRAWOBJS:.o=.cpp) \
+		$(WITHDRAWSTDOBJS:.o=.cpp) \
+		$(DELEGOBJS:.o=.cpp) \
+		$(DELEGSTDOBJS:.o=.cpp) \
+		$(ATMOBJS:.o=.cpp) \
+		$(ATMSTDOBJS:.o=.cpp) \
+		$(OPENOBJS:.o=.cpp) \
+		$(OPENSTDOBJS:.o=.cpp) \
+		$(DELOBJS:.o=.cpp) \
+		$(DELSTDOBJS:.o=.cpp) \
+		$(MANOBJS:.o=.cpp) \
+		$(MANSTDOBJS:.o=.cpp)
+
+CCMDIR=$(prefix)
+ORBDIR=$(OB_HOME)
+
+ALL_CXXFLAGS	= $(CXXFLAGS)
+ALL_CPPFLAGS	= -I. $(CCM_CPPFLAGS) $(OB_CPPFLAGS) $(CPPFLAGS) \
+	 $(PSS_CPPFLAGS) $(OTS_CPPFLAGS) $(XERCESC_CPPFLAGS) $(PSQL_CPPFLAGS) -DWITH_OTS
+
+ALL_LDFLAGS	= $(OB_LDFLAGS) $(LDFLAGS) $(CCM_LDFLAGS) $(XERCESC_LDFLAGS) $(OTS_LDFLAGS) $(PSS_LDFLAGS) $(PSQL_LDFLAGS)
+ALL_LIBS	= -lIDL $(OB_LIBS) $(LIBS) $(CCM_LIBS) $(XERCESC_LIBS) $(OTS_LIBS) $(PSS_LIBS) $(PSQL_LIBS) -ldl -lcrypt
+
+ifeq ($(ORB_NAME), OB)
+ALL_IDLFLAGS	= -I. $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS) -I../idl/
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+ALL_IDLFLAGS	= -I. $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS) -I../idl/ --no-localobject-ids
+endif
+
+ALL_IDL3FLAGS	= -I. $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS) -I../idl/
+
+ALL_CCM_IDL3FLAGS = $(CCM_IDL3FLAGS) --std-dll-entry
+ALL_CCM_CIDLFLAGS = $(CCM_CIDLFLAGS) --std-dll-entry
+
+libAccount$(SHLIBEXT): $(ACCOUNTOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(ACCOUNTOBJS) $(ALL_LIBS) -o $@
+
+libStdAccount$(SHLIBEXT): $(ACCOUNTSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(ACCOUNTSTDOBJS) $(ALL_LIBS) -o $@
+
+libDepositComp$(SHLIBEXT): $(DEPOSOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(DEPOSOBJS) $(ALL_LIBS) -o $@
+
+libStdDepositComp$(SHLIBEXT): $(DEPOSSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(DEPOSSTDOBJS) $(ALL_LIBS) -o $@
+
+libAuthentication$(SHLIBEXT): $(AUTHOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(AUTHOBJS) $(ALL_LIBS) -o $@
+
+libStdAuthentication$(SHLIBEXT): $(AUTHSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(AUTHSTDOBJS) $(ALL_LIBS) -o $@
+
+libQueryComp$(SHLIBEXT): $(QUERYOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(QUERYOBJS) $(ALL_LIBS) -o $@
+
+libStdQueryComp$(SHLIBEXT): $(QUERYSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(QUERYSTDOBJS) $(ALL_LIBS) -o $@
+
+libInterestComputer$(SHLIBEXT): $(INTERESTOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(INTERESTOBJS) $(ALL_LIBS) -o $@
+
+libStdInterestComputer$(SHLIBEXT): $(INTERESTSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(INTERESTSTDOBJS) $(ALL_LIBS) -o $@
+
+libWithdrawComp$(SHLIBEXT): $(WITHDRAWOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(WITHDRAWOBJS) $(ALL_LIBS) -o $@
+
+libStdWithdrawComp$(SHLIBEXT): $(WITHDRAWSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(WITHDRAWSTDOBJS) $(ALL_LIBS) -o $@
+
+libDelegations$(SHLIBEXT): $(DELEGOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(DELEGOBJS) $(ALL_LIBS) -o $@
+
+libStdDelegations$(SHLIBEXT): $(DELEGSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(DELEGSTDOBJS) $(ALL_LIBS) -o $@
+
+libATM$(SHLIBEXT): $(ATMOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(ATMOBJS) $(ALL_LIBS) -o $@
+
+libStdATM$(SHLIBEXT): $(ATMSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(ATMSTDOBJS) $(ALL_LIBS) -o $@
+
+libOpenAccountComp$(SHLIBEXT): $(OPENOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(OPENOBJS) $(ALL_LIBS) -o $@
+
+libStdOpenAccountComp$(SHLIBEXT): $(OPENSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(OPENSTDOBJS) $(ALL_LIBS) -o $@
+
+libDelAccountComp$(SHLIBEXT): $(DELOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(DELOBJS) $(ALL_LIBS) -o $@
+
+libStdDelAccountComp$(SHLIBEXT): $(DELSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(DELSTDOBJS) $(ALL_LIBS) -o $@
+
+libManager$(SHLIBEXT): $(MANOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(MANOBJS) $(ALL_LIBS) -o $@
+
+libStdManager$(SHLIBEXT): $(MANSTDOBJS)
+	rm -f $@
+	$(CXX) $(SHLIB_FLAGS) $(ALL_LDFLAGS) $(MANSTDOBJS) $(ALL_LIBS) -o $@
+
+
+
+install all:: $(TARGETS)
+
+
+CCM_Account.idl: Account.idl3
+	$(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) Account.idl3
+	$(IDL)  $(ALL_IDLFLAGS) Account.idl
+	$(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) Account.cidl
+
+ifeq ($(ORB_NAME), OB)
+	$(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_Account.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	$(IDL) $(ALL_IDLFLAGS) --no-skel CCM_Account.idl
+endif
+
+CCM_DepositComp.idl: DepositComp.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) DepositComp.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) DepositComp.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) DepositComp.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_DepositComp.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_DepositComp.idl
+endif
+
+CCM_Authentication.idl: Authentication.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) Authentication.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) Authentication.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) Authentication.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_Authentication.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_Authentication.idl
+endif
+
+CCM_QueryComp.idl: QueryComp.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) QueryComp.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) QueryComp.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) QueryComp.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_QueryComp.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_QueryComp.idl
+endif
+
+CCM_InterestComputer.idl: InterestComputer.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) InterestComputer.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) InterestComputer.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) InterestComputer.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_InterestComputer.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_InterestComputer.idl
+endif
+
+CCM_WithdrawComp.idl: WithdrawComp.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) WithdrawComp.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) WithdrawComp.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) WithdrawComp.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_WithdrawComp.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_WithdrawComp.idl
+endif
+
+CCM_Delegations.idl: Delegations.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) Delegations.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) Delegations.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) Delegations.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_Delegations.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_Delegations.idl
+endif
+
+CCM_ATM.idl: ATM.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) ATM.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) ATM.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) ATM.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_ATM.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_ATM.idl
+endif
+
+CCM_OpenAccountComp.idl: OpenAccountComp.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) OpenAccountComp.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) OpenAccountComp.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) OpenAccountComp.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_OpenAccountComp.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_OpenAccountComp.idl
+endif
+
+CCM_DelAccountComp.idl: DelAccountComp.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) DelAccountComp.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) DelAccountComp.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) DelAccountComp.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_DelAccountComp.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_DelAccountComp.idl
+endif
+
+CCM_Manager.idl: Manager.idl3
+	   $(IDL3) $(ALL_CCM_IDL3FLAGS) $(ALL_IDL3FLAGS) Manager.idl3
+	   $(IDL)  $(ALL_IDLFLAGS) Manager.idl
+	   $(CIDL) $(ALL_CCM_CIDLFLAGS) $(ALL_IDL3FLAGS) Manager.cidl
+
+ifeq ($(ORB_NAME), OB)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skeletons CCM_Manager.idl
+endif
+
+ifeq ($(ORB_NAME), STARBUS)
+	   $(IDL) $(ALL_IDLFLAGS) --no-skel CCM_Manager.idl
+endif
+
+
+install:: all
+	cp libAccount.so ../Bank-linux/Account/93e1e9a6-2880-11d7-9c64-f6a003291bf5/
+	cp libStdAccount.so ../Bank-linux/Account/93e1e9a6-2880-11d7-9c64-f6a003291bf5/
+	cp libDepositComp.so ../Bank-linux/DepositComp/d35275cc-286a-11d7-8c80-8fca68dc242e/
+	cp libStdDepositComp.so ../Bank-linux/DepositComp/d35275cc-286a-11d7-8c80-8fca68dc242e/
+	cp libAuthentication.so ../Bank-linux/Authentication/1408d24a-2886-11d7-8609-d971ee33e54a/
+	cp libStdAuthentication.so ../Bank-linux/Authentication/1408d24a-2886-11d7-8609-d971ee33e54a/
+	cp libQueryComp.so ../Bank-linux/QueryComp/fcda6382-287e-11d7-9c64-f6a003291bf5/
+	cp libStdQueryComp.so ../Bank-linux/QueryComp/fcda6382-287e-11d7-9c64-f6a003291bf5/
+	cp libInterestComputer.so ../Bank-linux/InterestComputer/744697e3-287f-11d7-9c64-f6a003291bf5/
+	cp libStdInterestComputer.so ../Bank-linux/InterestComputer/744697e3-287f-11d7-9c64-f6a003291bf5/
+	cp libWithdrawComp.so ../Bank-linux/WithdrawComp/f8f3fc5d-4725-4c5b-b814-157c0f71c589/
+	cp libStdWithdrawComp.so ../Bank-linux/WithdrawComp/f8f3fc5d-4725-4c5b-b814-157c0f71c589/
+	cp libDelegations.so ../Bank-linux/Delegations/8f42239b-1e67-11d7-b81f-dc8107a7889d/
+	cp libStdDelegations.so ../Bank-linux/Delegations/8f42239b-1e67-11d7-b81f-dc8107a7889d/
+	cp libATM.so ../Bank-linux/ATM/d31e39d4-287f-11d7-9c64-f6a003291bf5/
+	cp libStdATM.so ../Bank-linux/ATM/d31e39d4-287f-11d7-9c64-f6a003291bf5/
+	cp libOpenAccountComp.so ../Bank-linux/OpenAccountComp/dd16da20-577d-4275-96fa-705384422a1f/
+	cp libStdOpenAccountComp.so ../Bank-linux/OpenAccountComp/dd16da20-577d-4275-96fa-705384422a1f/
+	cp libDelAccountComp.so ../Bank-linux/DelAccountComp/83f9e630-dace-40a7-854f-f6089f3c7364/
+	cp libStdDelAccountComp.so ../Bank-linux/DelAccountComp/83f9e630-dace-40a7-854f-f6089f3c7364/
+	cp libManager.so ../Bank-linux/Manager/2aa2dbc5-2880-11d7-9c64-f6a003291bf5/
+	cp libStdManager.so ../Bank-linux/Manager/2aa2dbc5-2880-11d7-9c64-f6a003291bf5/
+	cd ../Bank-linux &&\
+	zip -r Bank.zip * &&\
+	mv Bank.zip $(top_srcdir)/bin/
+
+include .depend
+

@@ -1,0 +1,13 @@
+#include <Account.idl3>
+
+module Bank
+{	
+	composition service AccountComposition
+	{		
+		home executor CCM_AccountHome_Impl
+		{
+			implements AccountHome;
+			manages CCM_Account_Impl;
+		};
+	};	
+};	

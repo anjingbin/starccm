@@ -1,0 +1,52 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef CosEventComm_idl
+#define CosEventComm_idl
+
+#pragma prefix "omg.org"
+ 
+module CosEventComm
+{
+
+exception Disconnected {};
+
+interface PushConsumer
+{
+    void push(in any data)
+	raises(Disconnected);
+
+    void disconnect_push_consumer();
+};
+
+interface PushSupplier
+{
+    void disconnect_push_supplier();
+};
+
+interface PullSupplier
+{
+    any pull()
+	raises(Disconnected);
+
+    any try_pull(out boolean has_event)
+	raises(Disconnected);
+
+    void disconnect_pull_supplier();
+};
+
+interface PullConsumer
+{
+    void disconnect_pull_consumer();
+};
+
+};
+
+#endif // CosEventComm_idl

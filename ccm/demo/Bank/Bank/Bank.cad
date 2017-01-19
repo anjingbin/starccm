@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE componentassembly PUBLIC "" "componentassembly.dtd">
+<componentassembly id="3a6dbda6-2889-11d7-8581-e8a99f3d1d27">
+	<title>Bank</title>
+	<objectport port="10010"/>
+ 	<namingservice corbaloc="corbaloc:iiop:127.0.0.1:9991/NameService" />
+	<componentfiles>
+		<componentfile type="CORBA component" id="Account">
+			<fileinarchive name="Account.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="ATM">
+			<fileinarchive name="ATM.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="Authentication">
+			<fileinarchive name="Authentication.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="DepositComp">
+			<fileinarchive name="DepositComp.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="InterestComputer">
+			<fileinarchive name="InterestComputer.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="Manager">
+			<fileinarchive name="Manager.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="QueryComp">
+			<fileinarchive name="QueryComp.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="WithdrawComp">
+			<fileinarchive name="WithdrawComp.csd"/>
+		</componentfile>	
+		<componentfile type="CORBA component" id="OpenAccountComp">
+			<fileinarchive name="OpenAccountComp.csd"/>
+		</componentfile>
+		<componentfile type="CORBA component" id="DelAccountComp">
+			<fileinarchive name="DelAccountComp.csd"/>
+		</componentfile>					
+	</componentfiles>
+	<partitioning>
+		<processcollocation cardinality="1" id="p1">
+			<homeplacement cardinality="1" id="ATMHome">
+				<componentfileref idref="ATM"/>
+				<componentimplref idref="d31e39d4-287f-11d7-9c64-f6a003291bf5"/>
+				<componentinstantiation id="ATM1">
+					<registercomponent>
+						<registerwithnaming name="ATM"/>
+					</registercomponent>
+				</componentinstantiation>				
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="c12fba0b-2889-11d7-8581-e8a99f3d1d27"/>
+				</destination>
+			</homeplacement>
+			<homeplacement cardinality="1" id="AuthenticationHome">
+				<componentfileref idref="Authentication"/>
+				<componentimplref idref="1408d24a-2886-11d7-8609-d971ee33e54a"/>
+				<componentinstantiation id="authentication1">
+					<registercomponent>
+						<registerwithnaming name="Authentication"/>
+					</registercomponent>
+				</componentinstantiation>	
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="da87ea9c-2889-11d7-8581-e8a99f3d1d27"/>
+				</destination>
+			</homeplacement>
+			<homeplacement cardinality="1" id="ManagerHome">
+				<componentfileref idref="Manager"/>
+				<componentimplref idref="2aa2dbc5-2880-11d7-9c64-f6a003291bf5"/>
+				<componentinstantiation id="manager1">
+					<registercomponent>
+						<registerwithnaming name="Manager"/>
+					</registercomponent>
+				</componentinstantiation>
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="f18477ed-2889-11d7-8581-e8a99f3d1d27"/>
+				</destination>
+			</homeplacement>
+			<homeplacement cardinality="1" id="DepositCompHome">
+				<componentfileref idref="DepositComp"/>
+				<componentimplref idref="d35275cc-286a-11d7-8c80-8fca68dc242e"/>
+				<componentinstantiation id="depositcomp1"/>
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="c0a88e85-59df-4f99-8dbd-92442ae94cf0"/>
+				</destination>
+			</homeplacement>
+			<homeplacement cardinality="1" id="QueryCompHome">
+				<componentfileref idref="QueryComp"/>
+				<componentimplref idref="fcda6382-287e-11d7-9c64-f6a003291bf5"/>
+				<componentinstantiation id="querycomp1"/>				
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="28d95cd5-ba9b-44cf-9d88-188c87254d8e"/>
+				</destination>
+			</homeplacement>
+			<homeplacement cardinality="1" id="WithdrawCompHome">
+				<componentfileref idref="WithdrawComp"/>
+				<componentimplref idref="f8f3fc5d-4725-4c5b-b814-157c0f71c589"/>
+				<componentinstantiation id="withdrawcomp1"/>				
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="a7161e73-9ad6-4fd6-bd1c-b7059185ed4c"/>
+				</destination>
+			</homeplacement>			
+			<homeplacement cardinality="1" id="OpenAccountCompHome">
+				<componentfileref idref="OpenAccountComp"/>
+				<componentimplref idref="dd16da20-577d-4275-96fa-705384422a1f"/>
+				<componentinstantiation id="openaccountcomp1"/>				
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="d8f72e8c-f464-46ff-8b16-476095a75798"/>
+				</destination>
+			</homeplacement>	
+			<homeplacement cardinality="1" id="DelAccountCompHome">
+				<componentfileref idref="DelAccountComp"/>
+				<componentimplref idref="83f9e630-dace-40a7-854f-f6089f3c7364"/>
+				<componentinstantiation id="delaccountcomp1"/>				
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="32f48981-3303-47fa-8141-74bbf35840aa"/>
+				</destination>
+			</homeplacement>							
+			<homeplacement cardinality="1" id="InterestComputerHome">
+				<componentfileref idref="InterestComputer"/>
+				<componentimplref idref="744697e3-287f-11d7-9c64-f6a003291bf5"/>
+				<componentinstantiation id="interestcomputer1"/>
+				<destination>
+					<serveractivator id="127.0.0.1"/>
+					<componentserver port="10020" id="94851867-2889-11d7-8581-e8a99f3d1d27"/>
+					<container id="6c80851d-da67-4ada-ad8f-975fdcccf8b7"/>
+				</destination>
+			</homeplacement>
+		</processcollocation>
+		<homeplacement cardinality="1" id="AccountHome">
+			<componentfileref idref="Account"/>
+			<componentimplref idref="93e1e9a6-2880-11d7-9c64-f6a003291bf5"/>
+			<componentinstantiation id="account1"/>
+			<destination>
+				<serveractivator id="127.0.0.1"/>
+				<componentserver port="10021" id="0c3310be-288a-11d7-8581-e8a99f3d1d27"/>
+				<container id="0c3310bf-288a-11d7-8581-e8a99f3d1d27"/>
+			</destination>
+		</homeplacement>
+	</partitioning>
+	<connections>
+		<connectinterface id="ATMToAuthentication">
+			<usesport>
+				<usesidentifier>authenticator</usesidentifier>
+				<componentinstantiationref idref="ATM1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>authentication_op</providesidentifier>
+				<componentinstantiationref idref="authentication1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ATMToQueryComp">
+			<usesport>
+				<usesidentifier>query</usesidentifier>
+				<componentinstantiationref idref="ATM1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>query_op</providesidentifier>
+				<componentinstantiationref idref="querycomp1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ATMToDepositComp">
+			<usesport>
+				<usesidentifier>deposit</usesidentifier>
+				<componentinstantiationref idref="ATM1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>deposit_op</providesidentifier>
+				<componentinstantiationref idref="depositcomp1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ATMToWithdrawComp">
+			<usesport>
+				<usesidentifier>withdraw</usesidentifier>
+				<componentinstantiationref idref="ATM1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>withdraw_op</providesidentifier>
+				<componentinstantiationref idref="withdrawcomp1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ManagerToAuthentication">
+			<usesport>
+				<usesidentifier>authenticator</usesidentifier>
+				<componentinstantiationref idref="manager1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>authentication_op</providesidentifier>
+				<componentinstantiationref idref="authentication1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ManagerToQueryComp">
+			<usesport>
+				<usesidentifier>query</usesidentifier>
+				<componentinstantiationref idref="manager1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>query_op</providesidentifier>
+				<componentinstantiationref idref="querycomp1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ManagerToDepositComp">
+			<usesport>
+				<usesidentifier>deposit</usesidentifier>
+				<componentinstantiationref idref="manager1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>deposit_op</providesidentifier>
+				<componentinstantiationref idref="depositcomp1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ManagerToWithdrawComp">
+			<usesport>
+				<usesidentifier>withdraw</usesidentifier>
+				<componentinstantiationref idref="manager1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>withdraw_op</providesidentifier>
+				<componentinstantiationref idref="withdrawcomp1"/>
+			</providesport>
+		</connectinterface>	
+		<connectinterface id="ManagerToOpenAccountComp">
+			<usesport>
+				<usesidentifier>openAccount</usesidentifier>
+				<componentinstantiationref idref="manager1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>open_account_op</providesidentifier>
+				<componentinstantiationref idref="openaccountcomp1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="ManagerToDelAccountComp">
+			<usesport>
+				<usesidentifier>delAccount</usesidentifier>
+				<componentinstantiationref idref="manager1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>del_account_op</providesidentifier>
+				<componentinstantiationref idref="delaccountcomp1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="AuthenticationToAccount">
+			<usesport>
+				<usesidentifier>the_account</usesidentifier>
+				<componentinstantiationref idref="authentication1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>account_op</providesidentifier>
+				<componentinstantiationref idref="account1"/>
+			</providesport>
+		</connectinterface>	
+		<connectinterface id="QueryCompToAccount">
+			<usesport>
+				<usesidentifier>the_account</usesidentifier>
+				<componentinstantiationref idref="querycomp1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>account_op</providesidentifier>
+				<componentinstantiationref idref="account1"/>
+			</providesport>
+		</connectinterface>
+		<connectinterface id="WithdrawCompToAccount">
+			<usesport>
+				<usesidentifier>the_account</usesidentifier>
+				<componentinstantiationref idref="withdrawcomp1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>account_op</providesidentifier>
+				<componentinstantiationref idref="account1"/>
+			</providesport>
+		</connectinterface>	
+		<connectinterface id="DepositCompToAccount">
+			<usesport>
+				<usesidentifier>the_account</usesidentifier>
+				<componentinstantiationref idref="depositcomp1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>account_op</providesidentifier>
+				<componentinstantiationref idref="account1"/>
+			</providesport>
+		</connectinterface>	
+		<connectinterface id="WithdrawCompToInterestComputer">
+			<usesport>
+				<usesidentifier>interest_computer</usesidentifier>
+				<componentinstantiationref idref="withdrawcomp1"/>
+			</usesport>
+			<providesport>
+				<providesidentifier>compute_op</providesidentifier>
+				<componentinstantiationref idref="interestcomputer1"/>
+			</providesport>
+		</connectinterface>								
+	</connections>
+</componentassembly>
+

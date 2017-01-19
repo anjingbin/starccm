@@ -1,0 +1,13 @@
+#include <ATM.idl3>
+
+module Bank
+{	
+	composition service ATMComposition
+	{
+		home executor CCM_ATMHome_impl
+		{
+			implements ATMHome;
+			manages CCM_ATM_impl; 
+		}; 
+	};	
+};	

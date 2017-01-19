@@ -1,0 +1,70 @@
+#ifndef __CCMCommon_idl__
+#define __CCMCommon_idl__
+
+#include <orb.idl>
+
+#pragma prefix "omg.org"
+
+/*
+module CORBA
+{
+
+    typedef string RepositoryId;
+
+    interface IRObject;
+
+    typedef sequence<octet> OctetSeq;
+};
+*/
+
+module Components
+{	
+	typedef unsigned long FailureReason;
+
+	exception InvalidConfiguration { };
+
+	typedef string FeatureName;
+
+	typedef sequence<FeatureName> NameList;
+
+	exception WrongComponentType { };
+
+	exception DuplicateKeyValue { };
+
+	exception InvalidKey { };
+
+	exception UnknownKeyValue { };
+
+	exception FinderFailure
+	{
+		FailureReason reason;
+	};
+
+	abstract valuetype PrimaryKeyBase { };
+
+	valuetype Cookie
+	{
+		private CORBA::OctetSeq cookieValue;
+	};
+
+	// Required here but defined in Chapter 62
+
+	enum CCMExceptionReason
+	{
+		SYSTEM_ERROR,
+		CREATE_ERROR,
+		REMOVE_ERROR,
+		DUPLICATE_KEY,
+		FIND_ERROR,
+		OBJECT_NOT_FOUND,
+		NO_SUCH_ENTITY
+	};
+
+	exception CCMException
+	{
+		CCMExceptionReason reason;
+	};
+
+};
+
+#endif

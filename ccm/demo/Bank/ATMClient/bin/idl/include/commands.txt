@@ -1,0 +1,28 @@
+idl CosTransactions.idl
+OB:idl CosTransactions.idl
+
+idl --same-process CosTransactionsOTS.idl
+OB:idl CosTransactionsOTS.idl
+
+idl --same-process PostgreSQLResource.idl
+OB:idl PostgreSQLResource.idl
+OB:idl Resource.idl
+
+idl --same-process Resource.idl
+idl --local-restricted CosTransactionsCurrent.idl
+OB1:idl CosTransactionsCurrent.idl//idl文件接口前加关键字“local”(包括Current.idl中)
+OB2:idl --no-type-codes --no-skeletons CosTransactionsCurrent.idl  
+
+idl --no-skel CosTransactionsPolicyType.idl
+OB:idl --no-skeletons CosTransactionsPolicyType.idl
+
+idl --local-restricted CosTransactionsPolicy.idl
+OB1:idl CosTransactionsPolicy.idl//idl文件接口前加关键字“local”
+OB2:idl --no-skeletons CosTransactionsPolicy.idl
+
+idl CosTransactionsUser.idl
+
+//STAR_IDLFLAGS
+idl --no-skel CosTSInteroperation.idl
+OB:idl --no-skeletons CosTSInteroperation.idl
+

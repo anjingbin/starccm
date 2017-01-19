@@ -1,0 +1,23 @@
+#include <Test.idl3>
+#include <test.psdl>
+
+module Test
+{
+	composition session PhilosopherImpl
+	{
+		home executor CCM_PhilosopherHome_impl
+		{
+			implements PhilosopherHome;
+			manages CCM_Philosopher_impl; 
+		}; 
+	};
+	
+	composition session ObserverImpl
+	{
+		home executor CCM_ObserverHome_impl
+		{
+			implements ObserverHome;
+			manages CCM_Observer_impl;  
+		};
+	};
+};

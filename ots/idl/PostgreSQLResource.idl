@@ -1,0 +1,184 @@
+// **********************************************************************
+//
+// Copyright (c) 2002-2003 
+// StarMiddleware.net	
+// www.StarMiddleware.net
+// 
+// All Rights Reserved
+//
+// Author: Ren Yi	starots@sohu.com	
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef _PostgreSQLResource_idl_
+#define _PostgreSQLResource_idl_
+
+#include "CosTransactionsOTS.idl"
+
+//
+// The following macro done for has the same type definations as postgresql-7.2.1.
+//
+#ifndef	pg_ConnStatusType
+typedef	short	pg_ConnStatusType;
+#endif
+
+#ifndef	pg_PGresult
+typedef	short	pg_ExecStatusType;
+#endif
+
+struct pg_PGnotify{
+	string relname;
+	long be_pid;
+};
+
+interface PG_Resource {
+	
+	CosTransactions::Vote pg_prepare()
+		raises(
+		    	CosTransactions::HeuristicMixed,
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void pg_rollback()
+		raises(
+               		CosTransactions::HeuristicCommit,
+               		CosTransactions::HeuristicMixed,
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void pg_commit()
+		raises(
+               		CosTransactions::NotPrepared,
+	               	CosTransactions::HeuristicRollback,
+        	       		CosTransactions::HeuristicMixed,
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void pg_commit_one_phase()
+		raises(
+               		CosTransactions::HeuristicHazard,
+
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void pg_forget()
+		raises(
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+
+	
+	// Added to free space of this PG_Resource object.
+	void pg_release ();
+
+	// Added to begin transaction in Coordinator::register_resource.
+	boolean pg_BeginTrans ();
+
+	//
+	// Added for 2PC
+	//
+	void pg_set_recoverycoordinator (in CosTransactions::RecoveryCoordinator rc)
+		raises(
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+		
+	void pg_heuristic_decision()	
+		raises(
+			CosTransactions::TRANSACTION_REQUIRED,				
+			CosTransactions::TRANSACTION_ROLLEDBACK,
+			CosTransactions::INVALID_TRANSACTION,
+			CosTransactions::WRONG_TRANSACTION
+		);
+	
+
+
+	//
+	// Exception for postgresql-7.2.1.					  
+	//
+	
+	exception PG_CONNECTTION_FAILED {};
+	
+	
+	//
+	// Operations for Postgresql-7.2.1 LIBPQ : 
+	//
+	
+	//renyi changed 6 30 2003
+	/*void pg_PQsetdb(in string pghost, in string pgport, 
+		in string pgoptions, in string pgtty, 
+		in string dbName)
+		raises (PG_CONNECTTION_FAILED);*/
+	void pg_PQsetdbLogin(in string pghost, in string pgport, 
+		in string pgoptions, in string pgtty, 
+		in string dbName,in string login,in string pwd)
+		raises (PG_CONNECTTION_FAILED);
+		
+	string pg_PQdb();
+	string pg_PQhost();
+	string pg_PQoptions();
+	string pg_PQport();
+	string pg_PQtty();
+	
+	pg_ConnStatusType pg_PQstatus();
+	string pg_PQerrorMessage();
+	void pg_PQfinish();
+	void pg_PQreset();
+	
+	// 11
+	//void pg_PQtrace(in FILE* debug_port);
+	void pg_PQuntrace();
+	void pg_PQexec(in string query);
+	pg_ExecStatusType pg_PQresultStatus();	
+	long pg_PQntuples();
+	long pg_PQnfields();
+	
+	string pg_PQfname(in long field_index);
+	long pg_PQfnumber(in string field_name);
+	long pg_PQftype(in long field_num); // Oid??
+	long pg_PQfsize(in long field_index); // int2??
+	string pg_PQgetvalue(in long tup_num, in long field_num);
+	
+	//21
+	long pg_PQgetlength(in long tup_num, in long field_num);
+	string pg_PQcmdStatus();
+	string pg_PQoidStatus();
+	//string pg_PQdisplayTuples(in FILE* fout, in long fillAlign,
+	//	in string fieldSep, in long printHeader, in long quiet);
+	void pg_PQclear();
+	
+	//pg_PGresult pg_PQfn(in long fnid, in long result_buf??	
+	pg_PGnotify pg_PQnotifies();
+	long pg_PQgetline(in string str, in long length);
+	void pg_PQputline(in string str);
+	long pg_PQendcopy();
+	
+	//31
+	string pg_fe_getauthname(in string errorMessage);
+	void pg_fe_setauthsvc(in string  name, in string errorMessage);	
+	
+}; // eof 'PG_Resource'
+#endif _PostgreSQLResource_idl_

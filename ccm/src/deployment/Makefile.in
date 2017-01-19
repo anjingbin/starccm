@@ -1,0 +1,217 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+IDLDIR          = $(top_srcdir)/idl
+HDIR            = $(top_srcdir)/include
+
+top_srcdir	= @top_srcdir@
+
+ASM_NAME	= $(top_srcdir)/bin/Assembly
+ASF_NAME 	= $(top_srcdir)/bin/AssemblyFactory
+CINS_NAME	= $(top_srcdir)/bin/ComponentInstallation
+DPL_NAME	= $(top_srcdir)/bin/Deploy
+DDM_NAME	= $(top_srcdir)/bin/DeployDomainMgr
+FAF_NAME	= $(top_srcdir)/bin/FileAccessorFactory
+MHI_NAME 	= $(top_srcdir)/bin/MainHostInstall
+SA_NAME		= $(top_srcdir)/bin/ServerActivator
+DYNDM_NAME	= $(top_srcdir)/bin/DynDeploymentMgr
+HI_NAME		= $(top_srcdir)/bin/HostInstall
+
+TARGETS		= $(ASM_NAME) \
+		  $(ASF_NAME) \
+		  $(CINS_NAME) \
+		  $(DPL_NAME) \
+		  $(DDM_NAME) \
+		  $(FAF_NAME) \
+		  $(MHI_NAME) \
+		  $(SA_NAME) \
+		  $(DYNDM_NAME) \
+		  $(HI_NAME)
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA    = @INSTALL_DATA@
+
+SUBDIRS		=
+
+GENERATED	= FileAccessor.cpp \
+		FileAccessor.h \
+		FileAccessor_skel.cpp \
+		FileAccessor_skel.h \
+		DynDeploymentMgr.cpp \
+		DynDeploymentMgr.h \
+		DynDeploymentMgr_skel.cpp \
+		DynDeploymentMgr_skel.h \
+		Manager.cpp \
+		Manager.h \
+		Manager_skel.cpp \
+		Manager_skel.h 
+
+ASM_OBJS	= Assembly_impl.o \
+		AssemblyServer.o \
+		Manager_skel.o \
+		Manager.o \
+		Architecture.o
+		
+ASF_OBJS 	= AssemblyFactory_impl.o \
+		AssemblyFactoryServer.o
+		
+CINS_OBJS	= ComponentInstallation_impl.o \
+		ComponentInstallationServer.o
+		
+DPL_OBJS	= Deploy.o
+
+DDM_OBJS	= DeployDomainMgr_impl.o \
+		DeployDomainMgrServer.o \
+		Manager_skel.o \
+		Manager.o 
+		
+FAF_OBJS	= fileaccessor_impl.o \
+		FileAccessor_skel.o \
+		FileAccessorServer.o  
+		
+MHI_OBJS 	= MainHostInstall.o
+
+SA_OBJS		= ServerActivator_impl.o \
+                ServerActivatorServer.o \
+		Manager_skel.o \
+		Manager.o
+
+DYNDM_OBJS	= DynDeploymentMgr_impl.o \
+		DynDeploymentMgrServer.o \
+		DynDeploymentMgr_skel.o \
+		DynDeploymentMgr.o \
+		Architecture.o
+				
+HI_OBJS		= HostInstall.o
+
+
+
+
+SRCS		= $(ASM_OBJS:.o=.cpp) \
+		$(ASF_OBJS:.o=.cpp) \
+		$(CINS_OBJS:.o=.cpp) \
+		$(DPL_OBJS:.o=.cpp) \
+		$(DDM_OBJS:.o=.cpp) \
+		$(FAF_OBJS:.o=.cpp) \
+		$(MHI_OBJS:.o=.cpp) \
+		$(SA_OBJS:.o=.cpp) \
+		$(DYNDM_OBJS:.o=.cpp) \
+		$(HI_OBJS:.o=.cpp)
+
+ALL_CXXFLAGS	= $(CXXFLAGS)
+ALL_CPPFLAGS	= -I. $(CCM_CPPFLAGS) $(OB_CPPFLAGS) $(CPPFLAGS) \
+	$(OTS_CPPFLAGS) $(PSS_CPPFLAGS) $(XERCESC_CPPFLAGS) -DWITH_OTS
+ALL_LDFLAGS	= $(OB_LDFLAGS) $(LDFLAGS) $(CCM_LDFLAGS) $(XERCESC_LDFLAGS) $(OTS_LDFLAGS) $(PSS_LDFLAGS) $(PSQL_LDFLAGS)
+ALL_LIBS	= -lIDL -lCosNaming  $(OB_LIBS) $(LIBS) $(CCM_LIBS) $(XERCESC_LIBS) $(OTS_LIBS) $(PSS_LIBS) $(PSQL_LIBS) -ldl -lcrypt 
+
+ALL_IDLFLAGS    = $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS)
+
+$(ASM_NAME): $(ASM_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(ASM_OBJS) $(ALL_LIBS)
+
+$(ASF_NAME): $(ASF_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(ASF_OBJS) $(ALL_LIBS)
+
+$(CINS_NAME): $(CINS_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(CINS_OBJS) $(ALL_LIBS)
+
+$(FAF_NAME): $(FAF_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(FAF_OBJS) $(ALL_LIBS)
+
+$(DDM_NAME): $(DDM_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(DDM_OBJS) $(ALL_LIBS)
+
+$(DPL_NAME): $(DPL_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(DPL_OBJS) $(ALL_LIBS)
+
+$(MHI_NAME): $(MHI_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(MHI_OBJS) $(ALL_LIBS)
+
+$(SA_NAME): $(SA_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(SA_OBJS) $(ALL_LIBS)
+
+$(DYNDM_NAME): $(DYNDM_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(DYNDM_OBJS) $(ALL_LIBS)
+
+$(HI_NAME): $(HI_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(HI_OBJS) $(ALL_LIBS)
+
+FileAccessor.cpp FileAccessor.h FileAccessor_skel.cpp FileAccessor_skel.h: \
+		$(IDLDIR)/FileAccessor.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f FileAccessor.cpp ;\
+		rm -f FilEAccessor.h ;\
+		rm -f FileAccessor_skel.h ;\
+		rm -f FileAccessor_skel.cpp ;\
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/FileAccessor.idl ;\
+	fi
+
+DynDeploymentMgr.cpp DynDeploymentMgr.h DynDeploymentMgr_skel.cpp DynDeploymentMgr_skel.h: \
+		$(IDLDIR)/DynDeploymentMgr.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f DynDeploymentMgr.cpp ;\
+		rm -f DynDeploymentMgr.h ;\
+		rm -f DynDeploymentMgr_skel.h ;\
+		rm -f DynDeploymentMgr_skel.cpp ;\
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/DynDeploymentMgr.idl ;\
+	fi
+
+Manager.cpp Manager.h Manager_skel.cpp Manager_skel.h: \
+		$(IDLDIR)/Manager.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f Manager.cpp ;\
+		rm -f Manager.h ;\
+		rm -f Manager_skel.h ;\
+		rm -f Manager_skel.cpp ;\
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/Manager.idl ;\
+	fi
+
+install:: all
+	$(INSTALL_PROGRAM) $(ASM_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(ASF_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(CINS_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(DDM_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(DPL_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(FAF_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(MHI_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(SA_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(DYNDM_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(HI_NAME) $(bindir)
+
+
+min:: all
+
+install_min:: install
+
+clean::
+
+include .depend

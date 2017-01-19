@@ -1,0 +1,14 @@
+#include <plus.idl3>
+#include <plus.psdl>
+
+module Example
+{
+	composition session PlusImpl
+	{
+		home executor CCM_PlusHome_impl
+		{
+			implements PlusHome;
+			manages CCM_Plus_impl; 
+		}; 
+	};
+};

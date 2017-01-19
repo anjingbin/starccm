@@ -1,0 +1,73 @@
+#include <PetStore.idl3>
+#include <PetStore.psdl>
+
+module PetStore
+{	
+
+	composition service PricerComposition
+	{
+		home executor CCM_PricerHome_impl
+		{
+			implements PricerHome;
+			manages CCM_Pricer_impl; 
+		}; 
+	};	
+
+	composition session CartComposition
+	{
+		home executor CCM_CartHome_impl
+		{
+			implements CartHome;
+			manages CCM_Cart_impl; 
+		}; 
+	};	
+
+	composition session SalesComposition
+	{
+		home executor CCM_SalesHome_impl
+		{
+			implements SalesHome;
+			manages CCM_Sales_impl; 
+		}; 
+	};	
+
+	composition session ManagerComposition
+	{
+		home executor CCM_ManagerHome_impl
+		{
+			implements ManagerHome;
+			manages CCM_Manager_impl; 
+		}; 
+	};
+		
+	composition entity ProductComposition
+	{		
+		home executor CCM_ProductHome_Impl
+		{
+			implements ProductHome;
+			bindsTo PetStoreRecord::ProductHome;
+			manages CCM_Product_Impl;
+		};
+	};
+	
+	composition entity OrderComposition
+	{		
+		home executor CCM_OrderHome_Impl
+		{
+			implements OrderHome;
+			bindsTo PetStoreRecord::OrderHome;
+			manages CCM_Order_Impl;
+		};
+	};
+	
+	composition entity OrderItemComposition
+	{		
+		home executor CCM_OrderItemHome_Impl
+		{
+			implements OrderItemHome;
+			bindsTo PetStoreRecord::OrderItemHome;
+			manages CCM_OrderItem_Impl;
+		};
+	};
+
+};	

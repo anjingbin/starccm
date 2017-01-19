@@ -1,0 +1,42 @@
+// **********************************************************************
+//
+// IDL Copyright (c) The Object Management Group, Inc. (OMG)
+//
+// Documentation Copyright (c) 2000
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef COS_TS_INTEROPERATION_IDL
+#define COS_TS_INTEROPERATION_IDL
+
+#include <STAR/IOP.idl>
+#include "CosTransactionsPolicyType.idl"
+
+#pragma prefix "omg.org"
+
+module CosTSInteroperation
+{
+
+/** TransactionPolicyComponent is current not implemented. */
+
+/**
+ *
+ * This component id identifies the OTS policy value
+ *
+ **/
+const IOP::ComponentId TAG_OTS_POLICY= 31;
+
+/**
+ *
+ * This component id identifies the invocation policy value
+ *
+ **/
+const IOP::ComponentId TAG_INV_POLICY= 32;
+
+}; // End module CosTSInteroperation
+
+#endif

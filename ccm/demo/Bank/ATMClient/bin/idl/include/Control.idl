@@ -1,0 +1,12 @@
+#ifndef __Control__
+#define __Control__
+
+module AppServer
+{
+	interface Control
+	{
+		oneway void shut_down();
+	};
+};
+
+#endif

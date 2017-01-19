@@ -1,0 +1,20 @@
+// **********************************************************************
+//
+// Copyright (c) 2002
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_COS_TRANSACTIONS_IDL
+#define STAR_COS_TRANSACTIONS_IDL
+
+#include "CosTransactionsOTS.idl"
+#include "CosTransactionsCurrent.idl"
+#include "PostgreSQLResource.idl"
+#include "CosTransactionsUser.idl"
+#include "CosTransactionsPolicy.idl"
+
+#endif

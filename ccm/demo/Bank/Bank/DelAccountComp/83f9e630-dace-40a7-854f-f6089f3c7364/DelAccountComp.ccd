@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE corbacomponent PUBLIC "" "corbacomponent.dtd">
+<corbacomponent>
+	<corbaversion>3.0</corbaversion>
+	<componentrepid repid="IDL:Bank/DelAccountComp:1.0"/>
+	<homerepid repid="IDL:Bank/DelAccountCompHome:1.0"/>
+	<componentkind>
+		<service/>
+	</componentkind>
+	<transaction use="supports"/>
+	<threading policy="serialize "/>
+	<configurationcomplete set="true"/>
+	<homefeatures name="DelAccountCompHome" repid="IDL:Bank/DelAccountCompHome:1.0"/>
+	<componentfeatures name="DelAccountComp" repid="IDL:Bank/DelAccountComp:1.0">
+		<ports>
+			<provides providesname="del_account_op" repid="IDL:Bank/DelAccountOp:1.0">
+				<operationpolicies>
+					<operation name="*">
+						<transaction use="supports"/>
+					</operation>
+				</operationpolicies>
+			</provides>
+		</ports>
+	</componentfeatures>
+	<interface name="DelAccountOp" repid="IDL:Bank/DelAccountOp:1.0"/>
+</corbacomponent>

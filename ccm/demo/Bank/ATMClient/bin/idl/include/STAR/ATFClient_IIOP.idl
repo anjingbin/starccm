@@ -1,0 +1,62 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_CLIENT_IIOP_IDL
+#define ATF_CLIENT_IIOP_IDL
+
+#ifndef STARE
+#  include <STAR/ATFClient.idl>
+#else // STARE
+#  include <STARE/ATFClient.idl>
+#endif // STARE
+
+#pragma prefix "nis.net"
+
+module ATF
+{
+
+module IIOP
+{
+
+const PluginId PLUGIN_ID = "iiop";
+
+#ifndef STARE
+
+typedef octet InetAddr[4];
+
+local interface TransportInfo : ATF::TransportInfo
+{
+    readonly attribute InetAddr addr;
+
+    readonly attribute unsigned short port;
+
+    readonly attribute InetAddr remote_addr;
+
+    readonly attribute unsigned short remote_port;
+};
+
+local interface ConnectorInfo : ATF::ConnectorInfo
+{    
+    readonly attribute InetAddr remote_addr;
+
+    readonly attribute unsigned short remote_port;
+};
+
+local interface ConFactoryInfo : ATF::ConFactoryInfo
+{
+};
+
+#endif // STARE
+
+}; // End module ATF::IIOP
+
+}; // End module ATF
+
+#endif

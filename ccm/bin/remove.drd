@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DynReconfig PUBLIC "" "DynReconfig.dtd">
+<DynReconfig>
+	<description>To create two philosopher and two cultery dynamicly</description>
+	<componentassembly idref="5037f430-49ed-11d7-bccb-887617272ac7">
+	  	<namingservice corbaloc="corbaloc:iiop:127.0.0.1:9991/NameService" />
+	  	<homeregistration corbaloc="corbaloc:iiop:127.0.0.1:9992/HomeRegistration" />
+	</componentassembly>
+	<remove>
+		<passivatecomponents>
+			<passivatecomponent idref="wkb" />
+		</passivatecomponents>
+		<disconnections>
+			<connectinterface id="wkbleft">
+				<usesport>
+					<usesidentifier>left_hand</usesidentifier>
+					<componentinstantiationref idref="wkb"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>the_fork</providesidentifier>
+					<componentinstantiationref idref="c1"/>
+				</providesport>
+			</connectinterface>
+			<connectinterface id="wkbright">
+				<usesport>
+					<usesidentifier>right_hand</usesidentifier>
+					<componentinstantiationref idref="wkb"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>the_fork</providesidentifier>
+					<componentinstantiationref idref="c3"/>
+				</providesport>
+			</connectinterface>
+			<connectevent id="wkbobserver">
+			<consumesport>
+					<consumesidentifier>philosopher_state</consumesidentifier>
+					<componentinstantiationref idref="o"/>
+				</consumesport>
+				<publishesport>
+					<publishesidentifier>philosopher_state</publishesidentifier>
+					<componentinstantiationref idref="wkb"/>
+				</publishesport>
+			</connectevent>
+		</disconnections>
+		<delete idref="wkb" />
+	</remove>
+</DynReconfig>

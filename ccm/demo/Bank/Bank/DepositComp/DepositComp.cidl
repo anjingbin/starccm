@@ -1,0 +1,13 @@
+#include <DepositComp.idl3>
+
+module Bank
+{
+	composition service DepositCompComposition
+	{		
+		home executor CCM_DepositCompHome_Impl
+		{
+			implements DepositCompHome;
+			manages CCM_DepositComp_Impl;
+		};
+	};
+};	

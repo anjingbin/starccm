@@ -1,0 +1,33 @@
+#include <ComponentsClient.idl>
+
+module Bank
+{ 
+	exception MultiThreadAccessError{};
+	interface BankTestOp
+	{
+		unsigned long getBalance(in string id);
+		void deposit(in string id, in unsigned long amount)
+			raises(MultiThreadAccessError);
+		unsigned long withdraw(in string id, in unsigned long amount)
+			raises(MultiThreadAccessError);
+		void transfer(in string fromId, in string toId, in unsigned long amount)
+			raises(MultiThreadAccessError);
+		void changePassword(in string id, in string newPassword);
+
+		void createAccount(in string id, in string password);
+		void deleteAccount(in string id);
+		
+		boolean authenticate(in string id,in string password);
+	};	      
+ 
+	component BankTest supports BankTestOp
+	{
+	 
+	};
+	home BankTestHome manages  BankTest
+	{
+		
+	};
+
+};
+

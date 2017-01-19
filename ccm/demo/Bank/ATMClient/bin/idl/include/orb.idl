@@ -1,0 +1,4 @@
+#ifndef __OMG_ORB_idl__
+#define __OMG_ORB_idl__
+#include <STAR/orb.idl>
+#endif

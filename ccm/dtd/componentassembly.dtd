@@ -1,0 +1,265 @@
+<!-- DTD for Component Assembly Descriptor. The root element
+     is <componentassembly>. 
+  -->
+
+<!ELEMENT componentassembly
+     ( title?
+     , description?
+     , objectport
+     , transactionservice?
+     , namingservice?
+     , notificationservice?
+     , homefinder?
+     , homeregistration?
+     , resourcepoolname?
+     , createresourcepool*
+     , componentfiles
+     , partitioning
+     , connections?   
+     ) >
+<!ATTLIST componentassembly
+     id ID #REQUIRED >
+
+<!ELEMENT title ( #PCDATA ) >
+
+<!ELEMENT description ( #PCDATA ) >
+
+<!ELEMENT objectport EMPTY >
+<!ATTLIST objectport 
+	port CDATA #REQUIRED>
+
+<!ELEMENT transactionservice EMPTY >
+<!ATTLIST transactionservice 
+	corbaloc CDATA #REQUIRED>
+
+<!ELEMENT notificationservice EMPTY >
+<!ATTLIST notificationservice 
+	corbaloc CDATA #REQUIRED>
+	
+<!ELEMENT namingservice EMPTY >
+<!ATTLIST namingservice 
+	corbaloc CDATA #REQUIRED>
+
+<!ELEMENT homefinder EMPTY >
+<!ATTLIST homefinder 
+	corbaloc CDATA #REQUIRED>
+
+<!ELEMENT homeregistration EMPTY >
+<!ATTLIST homeregistration 
+	corbaloc CDATA #REQUIRED>
+
+<!ELEMENT resourcepoolname EMPTY >
+<!ATTLIST resourcepoolname 
+	name CDATA #REQUIRED>
+
+<!ELEMENT createresourcepool EMPTY>
+<!ATTLIST createresourcepool 
+	name CDATA #REQUIRED
+	host CDATA #REQUIRED
+	database CDATA #REQUIRED
+	user CDATA #REQUIRED
+	password CDATA #REQUIRED
+	initialconnections CDATA #REQUIRED
+	maxconnections CDATA #REQUIRED
+	increment CDATA #REQUIRED>	
+
+<!ELEMENT componentfiles
+     ( componentfile+
+     ) >
+
+<!ELEMENT componentfile ( fileinarchive ) >
+<!ATTLIST componentfile
+     id   ID    #REQUIRED
+     type CDATA "CORBA component" >
+
+<!ELEMENT fileinarchive EMPTY>
+<!ATTLIST fileinarchive
+     name CDATA #REQUIRED >
+
+<!ELEMENT partitioning
+     ( homeplacement    
+     | processcollocation
+     | hostcollocation    
+     )* >
+
+<!ELEMENT homeplacement
+     ( usagename?
+     , componentfileref
+     , componentimplref?
+     , homeproperties?
+     , componentproperties?
+     , registerwithhomefinder*
+     , registerwithnaming*     
+     , componentinstantiation*
+     , destination?
+     , boundable?
+     , homeboundaryports?
+     , componentboundaryports?
+     ) >
+<!ATTLIST homeplacement
+     id          ID    #REQUIRED
+     cardinality CDATA  "1" >
+
+<!ELEMENT usagename ( #PCDATA ) >
+
+<!ELEMENT componentfileref EMPTY >
+<!ATTLIST componentfileref
+     idref CDATA #REQUIRED >
+
+<!ELEMENT componentimplref EMPTY >
+<!ATTLIST componentimplref
+     idref CDATA #REQUIRED >
+
+<!ELEMENT homeproperties ( fileinarchive ) >
+
+<!ELEMENT componentproperties ( fileinarchive ) >
+
+<!ELEMENT registerwithhomefinder EMPTY >
+<!ATTLIST registerwithhomefinder
+     name CDATA #REQUIRED >
+
+<!ELEMENT registerwithnaming EMPTY >
+<!ATTLIST registerwithnaming
+     name CDATA #IMPLIED >
+
+<!ELEMENT componentinstantiation
+     ( usagename?
+     , componentproperties?
+     , registercomponent* 
+     , boundable?
+     , boundaryports?    
+     ) >
+<!ATTLIST componentinstantiation
+     id ID #REQUIRED >
+
+<!ELEMENT registercomponent
+     ( providesidentifier?
+     , registerwithnaming+
+     ) >
+
+<!ELEMENT providesidentifier ( #PCDATA ) >
+
+<!ELEMENT boundable EMPTY >
+<!ATTLIST boundable
+     set ( true | false ) #REQUIRED > 
+     
+<!ELEMENT boundaryports 
+	( boundaryport*) >
+	
+<!ELEMENT boundaryport EMPTY >
+<!ATTLIST boundaryport
+    name CDATA #REQUIRED >
+    
+<!ELEMENT destination 
+     ( serveractivator
+     , componentserver
+     , container
+     )>
+
+<!ELEMENT serveractivator EMPTY>
+<!ATTLIST serveractivator
+     id ID #REQUIRED>
+     
+
+<!ELEMENT componentserver EMPTY>
+<!ATTLIST componentserver
+     id ID #REQUIRED 
+     port CDATA #REQUIRED>    
+
+<!ELEMENT container EMPTY>
+<!ATTLIST container
+     id ID #REQUIRED >           
+     
+<!ELEMENT homeboundaryports 
+	( boundaryport*) >
+    
+<!ELEMENT componentboundaryports 
+	( boundaryport*) >
+
+<!ELEMENT processcollocation
+     ( usagename? 
+     , homeplacement+
+     ) >
+<!ATTLIST processcollocation
+     id          ID    #IMPLIED
+     cardinality CDATA  "1" >
+
+<!ELEMENT hostcollocation
+     ( usagename?    
+     , ( homeplacement
+       | processcollocation
+       )+
+     ) >
+<!ATTLIST hostcollocation
+     id          ID    #IMPLIED
+     cardinality CDATA "1" >
+
+<!ELEMENT connections
+     ( connectinterface
+     | connectevent      
+     )* >
+
+<!ELEMENT connectinterface
+     ( usesport
+     , ( providesport
+       | componentsupportedinterface
+       | homeinterface             
+       )
+     ) >
+<!ATTLIST connectinterface
+     id ID #REQUIRED >
+
+<!ELEMENT usesport
+     ( usesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT usesidentifier ( #PCDATA ) >
+
+<!ELEMENT componentinstantiationref EMPTY >
+<!ATTLIST componentinstantiationref
+     idref CDATA #REQUIRED >
+
+<!ELEMENT providesport
+     ( providesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT componentsupportedinterface ( componentinstantiationref ) >
+
+<!ELEMENT connectevent
+     ( consumesport
+     , ( emitsport
+       | publishesport
+       )
+     ) >
+<!ATTLIST connectevent
+     id ID #REQUIRED >
+
+<!ELEMENT consumesport
+     ( consumesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT consumesidentifier ( #PCDATA ) >
+
+<!ELEMENT emitsport
+     ( emitsidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT emitsidentifier ( #PCDATA ) >
+
+<!ELEMENT publishesport
+     ( publishesidentifier
+     , componentinstantiationref
+     ) >
+
+<!ELEMENT publishesidentifier ( #PCDATA ) >
+
+<!ELEMENT homeinterface  (homeplacementref)>
+
+<!ELEMENT homeplacementref EMPTY >
+<!ATTLIST homeplacementref
+     idref CDATA #REQUIRED >
+     

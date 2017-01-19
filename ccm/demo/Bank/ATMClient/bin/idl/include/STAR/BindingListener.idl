@@ -1,0 +1,119 @@
+
+// **********************************************************************
+//
+// Copyright (c) 2000
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+
+#ifndef STAR_BINDING_LISTENER_IDL
+#define STAR_BINDING_LISTENER_IDL
+
+#include <STAR/CosNaming.idl>
+
+//
+// The NIS Extended NamingService
+//
+#pragma prefix "nis.net"
+
+module CosNaming
+{
+
+/**********************************************************************
+ *
+ * An interface for forwarding changes in bindings to
+ * BindingListener clients.
+ *
+ * @version 1.1
+ * @author Uwe Seimet
+ *
+ **********************************************************************/
+
+interface BindingListener
+{
+    /**
+     *
+     * A context binding was added.
+     *
+     * @param parent_ctx The naming context the binding was added to.
+     * @param child_ctx The new context.
+     * @param name The new context's name.
+     *
+     **/
+    oneway void context_added(in NamingContext parent_ctx,
+			      in NamingContext child_ctx,
+			      in NameComponent name);
+
+    /**
+     *
+     * A context binding was removed.
+     *
+     * @param parent_ctx The naming context the binding was removed from.
+     * @param name The context's name.
+     *
+     **/
+    oneway void context_removed(in NamingContext parent_ctx,
+				in NameComponent name);
+
+    /**
+     *
+     * A context binding has changed.
+     *
+     * @param parent_ctx The parent of the naming context that was changed.
+     * @param child_ctx The context that was changed.
+     * @param old_name The context's old name.
+     * @param new_name The context's new name.
+     *
+     **/
+    oneway void context_changed(in NamingContext parent_ctx,
+				in NamingContext child_ctx,
+				in NameComponent old_name,
+				in NameComponent new_name);
+
+    /**
+     *
+     * An object binding was added.
+     *
+     * @param parent_ctx The naming context the binding was added to.
+     * @param child_ctx The new object.
+     * @param name The object's name.
+     *
+     **/
+    oneway void object_added(in NamingContext parent_ctx,
+			     in Object child_obj,
+			     in NameComponent name);
+
+    /**
+     *
+     * An object binding was removed.
+     *
+     * @param parent_ctx The naming context the binding was removed from.
+     * @param name The object's name.
+     *
+     **/
+    oneway void object_removed(in NamingContext parent_ctx,
+			       in NameComponent name);
+
+    /**
+     *
+     * An object binding was changed.
+     *
+     * @param parent_ctx The naming context the binding is contained in.
+     * @param child The object that was changed.
+     * @param old_name The object's old name.
+     * @param new_name The object's new name.
+     *
+     **/
+    oneway void object_changed(in NamingContext parent_ctx,
+			       in Object child,
+			       in NameComponent old_name,
+			       in NameComponent new_name);
+}; // End interface BindingListener
+
+}; // End module CosNaming
+
+#endif

@@ -1,0 +1,25 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POA_SERVANT_MANAGER_IDL
+#define POA_SERVANT_MANAGER_IDL
+
+#pragma prefix "omg.org"
+
+module PortableServer
+{
+#pragma version PortableServer 2.3
+
+local interface ServantManager
+{
+};
+
+}; // End module PortableServer
+#endif

@@ -1,0 +1,114 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef IFR1_IDL
+#define IFR1_IDL
+
+#include <STAR/TypeCode.idl>
+#include <STAR/Types.idl>
+
+#pragma prefix "omg.org"
+
+module CORBA
+{
+
+enum DefinitionKind
+{
+    dk_none,
+    dk_all,
+    dk_Attribute,
+    dk_Constant,
+    dk_Exception,
+    dk_Interface,
+    dk_Module,
+    dk_Operation,
+    dk_Typedef,
+    dk_Alias,
+    dk_Struct,
+    dk_Union,
+    dk_Enum,
+    dk_Primitive,
+    dk_String,
+    dk_Sequence,
+    dk_Array,
+    dk_Repository,
+    dk_Wstring,
+    dk_Fixed,
+    dk_Value,
+    dk_ValueBox,
+    dk_ValueMember,
+    dk_Native,
+    dk_AbstractInterface,
+    dk_LocalInterface
+};
+
+interface IRObject
+{
+    readonly attribute DefinitionKind def_kind;
+    void destroy();
+};
+
+interface IDLType : IRObject
+{
+    readonly attribute TypeCode type;
+};
+
+struct StructMember
+{
+    Identifier name;
+    TypeCode type;
+    IDLType type_def;
+};
+typedef sequence<StructMember> StructMemberSeq;
+
+struct Initializer
+{
+    StructMemberSeq members;
+    Identifier name;
+};
+typedef sequence <Initializer> InitializerSeq;
+
+struct UnionMember
+{
+    Identifier name;
+    any label;
+    TypeCode type;
+    IDLType type_def;
+};
+
+typedef sequence<UnionMember> UnionMemberSeq;
+
+typedef sequence<Identifier> EnumMemberSeq;
+
+typedef short ValueModifier;
+const ValueModifier VM_NONE = 0;
+const ValueModifier VM_CUSTOM = 1;
+const ValueModifier VM_ABSTRACT = 2;
+const ValueModifier VM_TRUNCATABLE = 3;
+
+typedef short Visibility;
+const Visibility PRIVATE_MEMBER = 0;
+const Visibility PUBLIC_MEMBER = 1;
+
+struct ValueMember
+{
+    Identifier name;
+    RepositoryId id;
+    RepositoryId defined_in;
+    VersionSpec version;
+    TypeCode type;
+    IDLType type_def;
+    Visibility access;
+};
+typedef sequence<ValueMember> ValueMemberSeq;
+
+}; // End module CORBA
+
+#endif

@@ -1,0 +1,171 @@
+<!-- DTD for Domain Configurator Descriptor. The root element
+     is <DomainConf>. 
+  -->
+
+<!ELEMENT domainconf
+     ( description?
+     , rootdir
+     , verbose
+     , timeout
+     , deploydomainmgr
+     , dyndeploymentmgr
+     , componentinstallation
+     , assemblyfactory
+     , fileaccessorfactory
+     , consolefileaccessorfactory?
+     , assembly*
+     , serveractivator+
+     , componentserver*
+     , container*
+     , implementation*       
+     ) >
+<!ATTLIST domainconf
+     id ID #IMPLIED >
+
+<!ELEMENT description ( #PCDATA ) >
+
+<!ELEMENT rootdir EMPTY>
+<!ATTLIST rootdir
+     directory CDATA #REQUIRED>
+
+<!ELEMENT verbose EMPTY>	
+<!ATTLIST verbose
+     open (true|false) #REQUIRED>
+     
+<!ELEMENT timeout EMPTY>	
+<!ATTLIST timeout
+     time CDATA #REQUIRED>     
+
+<!ELEMENT deploydomainmgr EMPTY>
+<!ATTLIST deploydomainmgr
+     corbaloc CDATA #REQUIRED >
+
+<!ELEMENT dyndeploymentmgr EMPTY>
+<!ATTLIST dyndeploymentmgr
+     corbaloc CDATA #REQUIRED >
+
+<!ELEMENT componentinstallation EMPTY>
+<!ATTLIST componentinstallation
+     corbaloc CDATA #REQUIRED>
+     
+<!ELEMENT assemblyfactory EMPTY>
+<!ATTLIST assemblyfactory
+     corbaloc CDATA #REQUIRED>     
+
+<!ELEMENT fileaccessor EMPTY>
+<!ATTLIST fileaccessor
+     corbaloc CDATA #REQUIRED>          
+     
+<!ELEMENT consolefileaccessor EMPTY>
+<!ATTLIST consolefileaccessor
+     corbaloc CDATA #REQUIRED>         
+
+<!ELEMENT serveractivator 
+     ( componentserverref 
+     , assemblyref
+     )* >
+<!ATTLIST serveractivator
+     id ID #REQUIRED 
+     corbaloc CDATA #REQUIRED>
+
+<!ELEMENT componentserverref EMPTY >
+<!ATTLIST componentserverref
+     idref CDATA #REQUIRED >    
+
+<!ELEMENT assemblyref EMPTY >
+<!ATTLIST assemblyref
+     idref CDATA #REQUIRED >      
+
+<!ELEMENT componentserver 
+     ( serveractivatorref
+     , containerref+
+     , assemblyref+
+     , configvalues
+     ) >
+<!ATTLIST componentserver
+     id ID #REQUIRED 
+     corbaloc CDATA #REQUIRED>
+
+<!ELEMENT configvalues 
+     ( configvalue+
+     , transactionpolicy*
+     , eventpolicy*
+     , valuefactory*     
+     ) >
+
+<!ELEMENT configvalue EMPTY >
+<!ATTLIST configvalue
+     name CDATA #REQUIRED 
+     value CDATA #REQUIRED >
+
+<!ELEMENT transactionpolicy EMPTY >
+<!ATTLIST transactionpolicy
+     methodname CDATA #REQUIRED 
+     policy CDATA #REQUIRED >
+
+<!ELEMENT eventpolicy EMPTY >
+<!ATTLIST eventpolicy
+     portname CDATA #REQUIRED 
+     policy CDATA #REQUIRED >     
+     
+<!ELEMENT valuefactory EMPTY >
+<!ATTLIST valuefactory
+     name              CDATA #REQUIRED
+     repid             CDATA #REQUIRED
+     valueentrypoint   CDATA #IMPLIED
+     factoryentrypoint CDATA #IMPLIED >     
+
+<!ELEMENT containerref EMPTY >
+<!ATTLIST containerref
+     idref CDATA #REQUIRED >
+
+<!ELEMENT serveractivatorref EMPTY >
+<!ATTLIST serveractivatorref
+     idref CDATA #REQUIRED >
+
+<!ELEMENT container 
+     ( componentserverref
+     , assemblyref+ 
+     , configvalues 
+     , installhome  
+     ) >
+<!ATTLIST container
+     id ID #REQUIRED 
+     corbaloc CDATA #REQUIRED>
+    
+<!ELEMENT installhome (configvalues) >
+<!ATTLIST installhome
+     id ID #REQUIRED >
+    
+<!ELEMENT implementation (assemblyref*) >
+<!ATTLIST implementation
+     id ID #REQUIRED
+     source CDATA #REQUIRED
+     locallocation CDATA #REQUIRED>     
+
+<!ELEMENT assembly
+	( home+
+	, implementationref+	  
+	, connect* 
+	)>
+<!ATTLIST assembly
+     id ID #REQUIRED
+     corbaloc CDATA #REQUIRED>
+
+<!ELEMENT home
+	( serveractivatorref
+	, componentserverref
+	, containerref 
+	)>
+<!ATTLIST home
+     id ID #REQUIRED
+     homeref CDATA #REQUIRED>
+
+<!ELEMENT implementationref EMPTY >
+<!ATTLIST implementationref
+     idref CDATA #REQUIRED > 
+     
+<!ELEMENT connect EMPTY >
+<!ATTLIST connect
+     id ID #REQUIRED 
+     cookie CDATA #REQUIRED>      

@@ -1,0 +1,248 @@
+// **********************************************************************
+//
+// Copyright (c) 2000
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STARORB_IDL
+#define STARORB_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/Policy.idl>
+#include <STAR/IFR1.idl>
+#include <STAR/ServiceInfo.idl>
+#include <STAR/Native.idl>
+
+#pragma prefix "omg.org"
+
+module CORBA
+{
+
+interface _Context;
+interface NVList;
+
+#ifdef STAR_CPLUSPLUS
+//
+// The IDL-to-C++ mapping adds operations with out parameters of these
+// interface types
+//
+interface NamedValue;
+interface ContextList;
+interface ExceptionList;
+interface Environment;
+#endif
+
+interface OperationDef;
+
+interface Request;
+
+#ifndef STAR_CPLUSPLUS
+typedef sequence< Request > RequestSeq;
+#endif
+
+//
+// Do *not* move ORB to a separate header ORB.idl, to avoid conflicts
+// with orb.idl on file systems that are case insensitive
+//
+interface ORB
+{
+#   pragma version ORB 2.3
+
+    typedef string ObjectId;
+
+    typedef sequence< ObjectId > ObjectIdList;
+
+    exception InvalidName { };
+
+    string object_to_string(in Object obj);
+    Object string_to_object(in string str);
+
+    void create_list(in long count, out NVList new_list);
+    void create_operation_list(in OperationDef oper, out NVList new_list);
+
+    void get_default_context(out _Context ctx);
+
+#ifdef STAR_CPLUSPLUS
+    //
+    // The IDL-to-C++ mapping adds the following operations
+    //
+    void create_named_value(out NamedValue nmval);
+    void create_exception_list(out ExceptionList exclist);
+    void create_context_list(out ContextList ctxtlist);
+    void create_environment(out Environment new_env);
+
+    typedef sequence< Request > RequestSeq;
+#endif
+
+    void send_multiple_requests_oneway(in RequestSeq req);
+    void send_multiple_requests_deferred(in RequestSeq req);
+
+    boolean poll_next_response();
+    void get_next_response(out Request req);
+
+    boolean get_service_information(in ServiceType service_type,
+	                           out ServiceInformation service_information);
+
+    ObjectIdList list_initial_services();
+
+    Object resolve_initial_references(in ObjectId identifier)
+	 raises(InvalidName);
+
+    //
+    // This will become part of CORBA once the PI spec is adopted
+    //
+    void register_initial_reference(in ObjectId id,
+                                    in Object obj)
+	 raises(InvalidName);
+
+    TypeCode create_struct_tc(in RepositoryId id,
+			      in Identifier name,
+			      in StructMemberSeq members);
+
+    TypeCode create_union_tc(in RepositoryId id,
+			     in Identifier name,
+			     in TypeCode discriminator_type,
+			     in UnionMemberSeq members);
+
+    TypeCode create_enum_tc(in RepositoryId id,
+			    in Identifier name,
+			    in EnumMemberSeq members);
+
+    TypeCode create_alias_tc(in RepositoryId id,
+			     in Identifier name,
+			     in TypeCode original_type);
+
+    TypeCode create_exception_tc(in RepositoryId id,
+				 in Identifier name,
+				 in StructMemberSeq members);
+
+    TypeCode create_interface_tc(in RepositoryId id,
+				 in Identifier name);
+
+    TypeCode create_string_tc(in unsigned long bound);
+
+    TypeCode create_wstring_tc(in unsigned long bound);
+
+    TypeCode create_fixed_tc(in unsigned short digits,
+			     in short scale);
+
+    TypeCode create_sequence_tc(in unsigned long bound,
+				in TypeCode element_type);
+
+    TypeCode create_array_tc(in unsigned long length,
+			     in TypeCode element_type);
+
+    TypeCode create_value_tc(in RepositoryId id,
+			     in Identifier name,
+			     in ValueModifier type_modifier,
+			     in TypeCode concrete_base,
+			     in ValueMemberSeq members);
+
+    TypeCode create_value_box_tc(in RepositoryId id,
+				 in Identifier name,
+				 in TypeCode boxed_type);
+
+    TypeCode create_native_tc(in RepositoryId id,
+			      in Identifier name);
+
+    TypeCode create_recursive_tc(in RepositoryId id);
+
+    TypeCode create_abstract_interface_tc(in RepositoryId id,
+					  in Identifier name);
+    //ADD BY LILEI
+    //2002-11-28
+    TypeCode create_local_interface_tc(in RepositoryId id,
+		                       in Identifier name);
+    //END OF ADD		
+    
+    
+    //ADD BY LILEI
+    //2002-12-4
+    TypeCode create_component_tc(in RepositoryId id,
+		                 in Identifier name);
+		                 
+		                    
+    TypeCode create_home_tc(in RepositoryId id,
+		            in Identifier name);	
+		            	                 
+		            	                 			 
+    TypeCode create_event_tc(in RepositoryId id,
+		             in Identifier name,
+		             in ValueModifier type_modifier,
+		             in TypeCode  concrete_base,
+		             in ValueMemberSeq members);
+		             
+    //END OF ADD		             
+    boolean work_pending();
+    void perform_work();
+    void run();
+    void shutdown(in boolean wait_for_completion);
+    void destroy();
+
+    Policy create_policy(in PolicyType type, in any val)
+	raises(PolicyError);
+
+    ValueFactory register_value_factory(in RepositoryId id,
+					in ValueFactory fact);
+  
+    void unregister_value_factory(in RepositoryId id);
+    ValueFactory lookup_value_factory(in RepositoryId id);
+};
+
+}; // End of module CORBA
+
+#pragma prefix "nis.net"
+
+module STAR
+{
+
+interface MsgLog;
+interface Reactor;
+interface UnknownExceptionStrategy;
+
+/** The StarBusproperty set. */
+native PropertySet;
+
+}; // End of module STAR
+
+module STARCORBA
+{
+
+/**
+ *
+ * The StarBusORB interface. This is an extension of the standard
+ * CORBA ORB interface.
+ *
+ **/
+interface ORB : CORBA::ORB
+{
+    /** This ORB's property set. */
+    readonly attribute STAR::PropertySet properties;
+
+    /** This ORB's message logger. */
+    readonly attribute STAR::MsgLog logger;
+
+    /** This ORB's reactor. */
+    readonly attribute STAR::Reactor reactor;
+
+    /**
+     *
+     * Set the unknown exception strategy for this ORB.
+     *
+     * @param strategy The new strategy.
+     *
+     * @return The previous strategy.
+     *
+     **/
+    STAR::UnknownExceptionStrategy set_unknown_exception_strategy(
+        in STAR::UnknownExceptionStrategy strategy);
+};
+
+}; // End of module STARCORBA
+
+#endif

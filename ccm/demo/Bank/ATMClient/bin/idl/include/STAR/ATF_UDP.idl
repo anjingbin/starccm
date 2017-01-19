@@ -1,0 +1,135 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_UDP_IDL
+#define ATF_UDP_IDL
+
+#include <STAR/ATF.idl>
+
+#pragma prefix "nis.net"
+
+module ATF
+{
+
+/**
+ *
+ * This module contains interfaces to support the UDP ATF plug-in.
+ *
+ **/
+
+module UDP
+{
+
+/** The plugin id for the InterBus UDP plug-in. */
+const PluginId PLUGIN_ID = "udp";
+
+/**
+ *
+ * Alias for an array of four octets. This alias will be used
+ * for address information from the various information classes.
+ * The address will always be in network byte order.
+ *
+ **/
+
+typedef octet InetAddr[4];
+
+/**
+ *
+ * Information on a UDP ATF Transport object.
+ *
+ * @see Transport
+ * @see TransportInfo
+ *
+ **/
+
+local interface TransportInfo : ATF::TransportInfo
+{
+    /** The local 32 bit IP address. */
+    readonly attribute InetAddr addr;
+
+    /** The local port. */
+    readonly attribute unsigned short port;
+
+    /** The remote 32 bit IP address. */
+    readonly attribute InetAddr remote_addr;
+
+    /** The remote port. */
+    readonly attribute unsigned short remote_port;
+};
+
+/**
+ *
+ * Information on a UDP ATF Connector object.
+ *
+ * @see Connector
+ * @see ConnectorInfo
+ *
+ **/
+
+local interface ConnectorInfo : ATF::ConnectorInfo
+{
+    /** The remote 32 bit IP address to which this connector connects. */
+    readonly attribute InetAddr remote_addr;
+
+    /** The remote port to which this connector connects. */
+    readonly attribute unsigned short remote_port;
+};
+
+/**
+ *
+ * Information on a UDP ATF Acceptor object.
+ *
+ * @see Acceptor
+ * @see AcceptorInfo
+ *
+ **/
+
+local interface AcceptorInfo : ATF::AcceptorInfo
+{
+    /** Hostname used for creation of UDP object references. */
+    readonly attribute string host;
+
+    /** The local 32 bit IP address on which this acceptor accepts. */
+    readonly attribute InetAddr addr;
+
+    /** The local port on which this acceptor accepts. */
+    readonly attribute unsigned short port;
+};
+
+/**
+ *
+ * Information on a UDP ATF Acceptor Factory object.
+ *
+ * @see AccFactory
+ *
+ **/
+
+local interface AccFactoryInfo : ATF::AccFactoryInfo
+{
+};
+
+/**
+ *
+ * Information on a UDP ATF Connector Factory object.
+ *
+ * @see ConFactory
+ * @see ConFactoryInfo
+ *
+ **/
+
+local interface ConFactoryInfo : ATF::ConFactoryInfo
+{
+};
+
+}; // End module ATF::UDP
+
+}; // End module ATF
+
+#endif

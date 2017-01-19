@@ -1,0 +1,64 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_SERVER_REQUEST_IDL
+#define PORTABLE_INTERCEPTOR_SERVER_REQUEST_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/Policy.idl>
+
+#include <STAR/PIRequest.idl>
+
+module PortableInterceptor
+{
+
+local interface ServerRequestInfo : RequestInfo
+{
+    readonly attribute any sending_exception;
+    readonly attribute CORBA::OctetSeq object_id;
+    readonly attribute CORBA::OctetSeq adapter_id;
+    readonly attribute CORBA::RepositoryId target_most_derived_interface;
+
+    readonly attribute ServerId server_id;
+    readonly attribute ORBId orb_id;
+    readonly attribute AdapterName adapter_name;
+
+    CORBA::Policy get_server_policy(in CORBA::PolicyType type);
+
+    void set_slot(in SlotId id, in any data)
+        raises(InvalidSlot);
+
+    boolean target_is_a(in CORBA::RepositoryId id);
+
+    void add_reply_service_context(in IOP::ServiceContext service_context,
+				   in boolean addReplace);
+};
+
+local interface ServerRequestInterceptor : Interceptor
+{
+    void receive_request_service_contexts(in ServerRequestInfo ri)
+        raises(ForwardRequest);
+
+    void receive_request (in ServerRequestInfo ri)
+        raises(ForwardRequest);
+
+    void send_reply (in ServerRequestInfo ri);
+
+    void send_exception (in ServerRequestInfo ri)
+        raises(ForwardRequest);
+
+    void send_other (in ServerRequestInfo ri)
+        raises(ForwardRequest);
+};
+
+}; // End of module PortableInterceptor
+
+#endif

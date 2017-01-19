@@ -1,0 +1,13 @@
+#include <WithdrawComp.idl3>
+
+module Bank
+{	
+	composition service WithdrawCompComposition
+	{		
+		home executor CCM_WithdrawCompHome_Impl
+		{
+			implements WithdrawCompHome;
+			manages CCM_WithdrawComp_Impl;
+		};
+	};
+};	

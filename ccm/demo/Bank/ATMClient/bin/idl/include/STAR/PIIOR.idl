@@ -1,0 +1,59 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_IOR_IDL
+#define PORTABLE_INTERCEPTOR_IOR_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/Policy.idl>
+#include <STAR/IOP.idl>
+
+#include <STAR/PICommon.idl>
+#include <STAR/PIORT.idl>
+
+module PortableInterceptor
+{
+
+local interface IORInfo
+{
+    CORBA::Policy get_effective_policy(in CORBA::PolicyType type);
+
+    void add_ior_component(in IOP::TaggedComponent component);
+
+    void add_ior_component_to_profile(in IOP::TaggedComponent component,
+                                      in IOP::ProfileId id);
+
+    
+    readonly attribute ObjectReferenceTemplate adapter_template ;
+    attribute ObjectReferenceFactory current_factory ;
+
+    readonly attribute AdapterManagerId manager_id;
+    readonly attribute AdapterState state;
+};
+
+local interface IORInterceptor: Interceptor
+{
+    void establish_components(in IORInfo info);
+
+    
+    void components_established(in IORInfo info);
+
+    void adapter_manager_state_change(in AdapterManagerId id,
+				      in AdapterState state);
+
+    void adapter_state_change(in ObjectReferenceTemplateSeq templates,
+    			      in AdapterState state);
+
+};
+
+}; // End of module PortableInterceptor
+
+#endif

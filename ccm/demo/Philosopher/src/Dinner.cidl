@@ -1,0 +1,29 @@
+#include <Dinner.idl3>
+
+module Dinner
+{
+	composition session PhilosopherImpl
+	{
+		home executor CCM_PhilosopherHome_impl
+		{
+			implements PhilosopherHome;
+			manages CCM_Philosopher_impl; 
+		}; 
+	};
+	composition session CutleryImpl
+	{
+		home executor CCM_CutleryHome_impl
+		{
+			implements CutleryHome;
+			manages CCM_Cutlery_impl;	
+		};
+	};
+	composition session ObserverImpl
+	{
+		home executor CCM_ObserverHome_impl
+		{
+			implements ObserverHome;
+			manages CCM_Observer_impl;  
+		};
+	};
+};

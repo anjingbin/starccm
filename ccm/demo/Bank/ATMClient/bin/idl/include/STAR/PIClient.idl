@@ -1,0 +1,59 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_CLIENT_REQUEST_IDL
+#define PORTABLE_INTERCEPTOR_CLIENT_REQUEST_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/Policy.idl>
+
+#include <STAR/PIRequest.idl>
+
+module PortableInterceptor
+{
+
+local interface ClientRequestInfo : RequestInfo
+{
+    readonly attribute Object target;
+    readonly attribute Object effective_target;
+    readonly attribute IOP::TaggedProfile effective_profile;
+    readonly attribute any received_exception;
+    readonly attribute CORBA::RepositoryId received_exception_id;
+
+    IOP::TaggedComponent get_effective_component(in IOP::ComponentId id);
+
+    IOP::TaggedComponentSeq get_effective_components(in IOP::ComponentId id);
+
+    CORBA::Policy get_request_policy(in CORBA::PolicyType type);
+
+    void add_request_service_context(in IOP::ServiceContext service_context,
+				     in boolean addReplace);
+};
+
+local interface ClientRequestInterceptor : Interceptor
+{
+    void send_request (in ClientRequestInfo ri)
+        raises(ForwardRequest);
+
+    void send_poll(in ClientRequestInfo ri);
+
+    void receive_reply (in ClientRequestInfo ri);
+
+    void receive_exception (in ClientRequestInfo ri)
+        raises(ForwardRequest);
+
+    void receive_other (in ClientRequestInfo ri)
+        raises(ForwardRequest);
+};
+
+}; // End of module PortableInterceptor
+
+#endif

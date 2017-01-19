@@ -1,0 +1,99 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_BiDir_IDL
+#define ATF_BiDir_IDL
+
+#include <STAR/ATF.idl>
+
+#pragma prefix "nis.net"
+
+module ATF
+{
+
+/**
+ *
+ * This module contains interfaces to gather information on the
+ * BiDirectional ATF plug-in.
+ *
+ **/
+
+module BiDir
+{
+
+/**
+ *
+ * Information on a BiDir ATF Transport object.
+ *
+ * @see Transport
+ * @see TransportInfo
+ *
+ **/
+
+local interface TransportInfo : ATF::TransportInfo
+{
+};
+
+/**
+ *
+ * Information on a BiDir ATF Connector object.
+ *
+ * @see Connector
+ * @see ConnectorInfo
+ *
+ **/
+
+local interface ConnectorInfo : ATF::ConnectorInfo
+{
+};
+
+/**
+ *
+ * Information on a BiDir ATF Acceptor object.
+ *
+ * @see Acceptor
+ * @see AcceptorInfo
+ *
+ **/
+
+local interface AcceptorInfo : ATF::AcceptorInfo
+{
+};
+
+/**
+ *
+ * Information on a BiDirIOP ATF Acceptor Factory object.
+ *
+ * @see AccFactory
+ *
+ **/
+
+local interface AccFactoryInfo : ATF::AccFactoryInfo
+{
+};
+
+/**
+ *
+ * Information on a BiDir ATF Connector Factory object.
+ *
+ * @see ConFactory
+ * @see ConFactoryInfo
+ *
+ **/
+
+local interface ConFactoryInfo : ATF::ConFactoryInfo
+{
+};
+
+}; // End module ATF::BiDir
+
+}; // End module ATF
+
+#endif

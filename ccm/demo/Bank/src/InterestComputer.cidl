@@ -1,0 +1,13 @@
+#include <InterestComputer.idl3>
+
+module Bank
+{
+	composition service InterestComputerComposition
+	{
+		home executor CCM_InterestComputerHome_impl
+		{
+			implements InterestComputerHome;
+			manages CCM_InterestComputer_impl; 
+		}; 
+	};
+};	

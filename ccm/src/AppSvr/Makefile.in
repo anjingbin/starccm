@@ -1,0 +1,156 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+IDLDIR		= $(top_srcdir)/idl
+HDIR		= $(top_srcdir)/include
+
+APPSVR_NAME	= $(top_srcdir)/bin/ComponentServer
+
+TARGETS		= $(APPSVR_NAME)
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA    = @INSTALL_DATA@
+
+SUBDIRS		= 
+
+GENERATED	= RunTime.cpp \
+		RunTime.h \
+		RunTime_skel.cpp \
+		RunTime_skel.h \
+		RunTime_pss.cpp \
+		RunTime_pss.h \
+		RunTime_psdl.cpp \
+		RunTime_psdl.h \
+		Manager.cpp \
+		Manager.h \
+		Manager_skel.cpp \
+		Manager_skel.h 
+
+APPSVR_OBJS	= CCM2Context_impl.o \
+		CCMContext_impl.o \
+		CIFHook.o \
+		ComponentServer_impl.o \
+		ComponentServerServer.o \
+		ComponentsPool.o \
+		ConfigFile.o \
+		Container_impl.o \
+		ContainerBase.o \
+		ContainerRunTime.o \
+		Context2_impl.o \
+		Cookie.o \
+		Entity2Context_impl.o \
+		EntityContext_impl.o \
+		ExecutorInvoker.o \
+		ExecutorLoader.o \
+		HomeRegistration_impl.o \
+		Loader.o \
+		PassivationArbitor.o \
+		PSSInitializer.o \
+		ResourcePool_impl.o \
+		RunTime.o \
+		RunTime_psdl.o \
+		RunTime_pss.o \
+		RunTime_skel.o \
+		ServantLoader.o \
+		Session2Context_impl.o \
+		SessionContext_impl.o \
+		StorageObjectLoader.o \
+		SynchronizationManager.o \
+		TxnInterceptor.o \
+		UserTransaction_impl.o \
+		CustomThreadPool.o \
+		LinkedRequestQueue.o \
+		ComponentManager_impl.o \
+		TransactionManager_impl.o \
+		Manager_skel.o \
+		Manager.o
+
+
+
+SRCS		= $(APPSVR_OBJS:.o=.cpp)
+
+ALL_CXXFLAGS	= $(CXXFLAGS)
+ALL_CPPFLAGS	= -I. $(CCM_CPPFLAGS) $(OB_CPPFLAGS) $(CPPFLAGS) \
+	 $(PSS_CPPFLAGS) $(OTS_CPPFLAGS) $(XERCESC_CPPFLAGS) -DWITH_OTS
+
+ALL_LDFLAGS	= $(OB_LDFLAGS) $(LDFLAGS) $(CCM_LDFLAGS) $(XERCESC_LDFLAGS) $(OTS_LDFLAGS) $(PSS_LDFLAGS) $(PSQL_LDFLAGS)
+ALL_LIBS	= -lIDL $(LIBS) $(CCM_LIBS) $(XERCESC_LIBS) $(OTS_LIBS) $(PSS_LIBS) $(PSQL_LIBS) -ldl -lcrypt $(OB_LIBS)
+
+ALL_IDLFLAGS	= $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS)
+ALL_PSDLFLAGS	= -I$(OB_IDLDIR) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS)
+
+
+ifeq ($(PORTNAME), linux)
+$(APPSVR_NAME): $(APPSVR_OBJS)
+	rm -f $@
+	$(CXX) -rdynamic $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(APPSVR_OBJS) $(ALL_LIBS)
+endif
+ifeq ($(PORTNAME), solaris)
+$(APPSVR_NAME): $(APPSVR_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ $(APPSVR_OBJS) $(ALL_LIBS)
+endif
+
+
+
+RunTime.cpp RunTime.h RunTime_skel.cpp RunTime_skel.h: \
+		$(IDLDIR)/RunTime.idl
+	if test -x $(IDL) ; \
+	then \
+		rm -f RunTime.cpp ; \
+		rm -f RunTime.h ; \
+		rm -f RunTime_skel.cpp ; \
+		rm -f RunTime_skel.h ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/RunTime.idl ;\
+	fi
+
+Manager.cpp Manager.h Manager_skel.cpp Manager_skel.h: \
+		$(IDLDIR)/Manager.idl
+	if test -x $(IDL) ; \
+	then \
+		rm -f Manager.cpp ; \
+		rm -f Manager.h ; \
+		rm -f Manager_skel.cpp ; \
+		rm -f Manager_skel.h ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/Manager.idl ;\
+	fi
+
+RunTime_pss.cpp RunTime_pss.h RunTime_psdl.cpp RunTime_psdl.h: \
+		$(IDLDIR)/RunTime.psdl
+	if test -x $(PSDL); \
+	then \
+		rm -f RunTime_pss.h ; \
+		rm -f RunTime_pss.cpp ; \
+		rm -f RunTime_psdl.h ; \
+		rm -f RunTime_psdl.cpp ; \
+		$(PSDL) $(ALL_PSDLFLAGS) $(IDLDIR)/RunTime.psdl ;\
+	fi
+
+install:: all
+	$(INSTALL_PROGRAM) $(APPSVR_NAME) $(bindir)
+
+
+min:: all
+
+install_min:: install
+
+clean::
+
+include .depend

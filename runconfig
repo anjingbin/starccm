@@ -1,0 +1,832 @@
+#!/bin/sh
+
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+# **********************************************************************
+
+
+#
+# Remove echo incompatibilities
+#
+if test "`echo -e xxx`" = "xxx"
+then
+    echo="echo -e"
+else
+    echo=echo
+fi
+
+#
+# Unset everything that starts with "config_" and "env_"
+#
+for i in `set | grep "^config_[a-z_]*=" | sed -e 's/=.*$//'`;
+do
+    unset $i
+done
+for i in `set | grep "^env_[A-Z_]*=" | sed -e 's/=.*$//'`;
+do
+    unset $i
+done
+
+#
+# Read default configuration
+#
+if test ! -f "./config/defaults"
+then
+    $echo "$0: error: can't load \`./config/defaults'"
+    exit
+fi
+
+. ./config/defaults
+
+#
+# Read current configuration
+#
+if test -f "./config/current"
+then
+    . ./config/current
+fi
+
+#
+# Define available configurations
+#
+cpp_sun=1
+cpp_gcc=2
+cpp_sgi=3
+cpp_hp_1100=4
+cpp_aix=5
+cpp_dec=6
+
+cpp_last=$cpp_dec
+
+#
+# Check the input arguments:
+#
+#       --A                    Automatic.  Use the defauts without prompting,
+#                              except where otherwise instructed with
+#                              command line aguments.
+#       --with-debug-yes       With debugging.
+#       --with-debug-no        Without debugging.
+#       --install-path <PATH>  Set the install path.
+#       --orb-path <PATH>      Set the orb path.
+#       --with-optimized-yes   With optimization.
+#       --with-optimized-no    Without optimization.
+#       --use-platform-1       SGI C++ 7.2 or 7.3 on SGI Irix 6.5
+#       --use-platform-2       Forte C++ 6 C++ 5.2 Solaris 2.6, 7 and 8
+#       --use-platform-3       HP A.01.23 on B.10.20
+#       --use-platform-4       HP A.03.27 on B.11.00
+#       --use-platform-5       Compaq C++ V6.2-024 on Compaq Tru64 V5.1
+#       --use-platform-6       AIX C Set ++ xlC 3.6.6," on AIX 4.3.x
+#       --with-shared-yes      With shared libraries.
+#       --with-shared-no       Without shared libraries.
+#       --with-shell-b         With a bourne shell.
+#       --with-shell-c         With a C style shell.
+#
+
+Automate="false"
+for arg in ${1+"$@"} ; do
+    if test -n "$arg" -a "$arg" = "--A"
+    then
+        #
+        # These must be blank for the configure scripts to properly work
+        # with automatic configuration (unless otherwise set).
+        #
+        config_orb_path=
+        Automate="true"
+    elif test -n "$arg" -a "$arg" = "--with-berkeley-yes"
+    then
+        config_berkeleydb="yes"
+    elif test -n "$arg" -a "$arg" = "--with-berkeley-no"
+    then
+        config_berkeleydb="no"
+    elif test -n "$arg" -a "$arg" = "--with-debug-yes"
+    then
+        config_debug="yes"
+    elif test -n "$arg" -a "$arg" = "--with-debug-no"
+    then
+        config_debug="no"
+    elif test -n "$arg" -a "$arg" = "--install-path"
+    then
+        config_install_path="$2"
+    elif test -n "$arg" -a "$arg" = "--orb-path"
+    then
+        config_orb_path="$2"
+    elif test -n "$arg" -a "$arg" = "--with-optimized-yes"
+    then
+        config_optimized="yes"
+    elif test -n "$arg" -a "$arg" = "--with-optimized-no"
+    then
+        config_optimized="no"
+    elif test -n "$arg" -a "$arg" = "--use-platform-1"
+    then
+        config_platform="1"
+    elif test -n "$arg" -a "$arg" = "--use-platform-2"
+    then
+        config_platform="2"
+    elif test -n "$arg" -a "$arg" = "--use-platform-3"
+    then
+        config_platform="3"
+    elif test -n "$arg" -a "$arg" = "--use-platform-4"
+    then
+        config_platform="4"
+    elif test -n "$arg" -a "$arg" = "--use-platform-5"
+    then
+        config_platform="5"
+    elif test -n "$arg" -a "$arg" = "--use-platform-6"
+    then
+        config_platform="6"
+    elif test -n "$arg" -a "$arg" = "--with-shared-yes"
+    then
+        config_shared="yes"
+    elif test -n "$arg" -a "$arg" = "--with-shared-no"
+    then
+        config_shared="no"
+    elif test -n "$arg" -a "$arg" = "--with-shell-b"
+    then
+        config_shell="b"
+    elif test -n "$arg" -a "$arg" = "--with-shell-c"
+    then
+        config_shell="c"
+    fi
+    shift
+done
+
+
+#*******************************************************************
+#
+# This block is executed if there is no automate flag set
+#
+#*******************************************************************
+
+if test -n "$Automate" -a "$Automate" != "true"
+then
+
+#
+# Print welcome message
+#
+$echo
+$echo "************************"
+$echo "* StarCCM Configurator *"
+$echo "************************"
+
+#
+# Ask for shell type
+#
+$echo
+input="x"
+while test -n "$input" -a "$input" != "b" -a "$input" != "c"
+do
+    $echo "Enter 'c' if you use a C shell, or 'b' for a bourne shell:"
+    $echo "[$config_shell] \c"
+    read input
+done
+if test -n "$input"
+then
+    config_shell="$input"
+fi
+
+#
+# added by AnJingBin 2004-07-02
+#
+
+#
+# Ask for orb 
+#
+orbacus="no"
+tao="no"
+starbus="no"
+
+$echo
+$echo "Please select from the following orbs:"
+$echo
+$echo "(1) ORBacus"
+$echo "(2) StarBus"
+$echo "(3) Ace/Tao"
+
+$echo
+input=0
+while test -n "$input" -a \( "0$input" -gt 3 -o "0$input" -lt 1 \)
+do
+    $echo "Please choose your orb:"
+    $echo "[$config_orb] \c"
+    read input
+done
+if test -n "$input"
+then
+    config_orb="$input"
+fi
+
+if test -n "$config_orb" -a "$config_orb" = "1"
+then 
+    orbacus="yes"
+fi
+
+if test -n "$config_orb" -a "$config_orb" = "2"
+then 
+    starbus="yes"
+fi
+
+if test -n "$config_orb" -a "$config_orb" = "3"
+then 
+    tao="yes"
+fi
+
+#
+# Ask orb installation path
+#
+ 
+while true
+do
+    $echo
+    $echo "Please enter the orb installation path:"
+    $echo "[$config_orb_path] \c"
+    input=
+    read input
+    if test -n "$input"
+    then
+	config_orb_path="$input"
+    fi
+    if test ! -d "$config_orb_path"
+    then
+	$echo "Directory $config_orb_path does not exist!"
+    else
+	break
+    fi
+done
+
+
+#
+# Ask for platform and C++ compiler
+#
+$echo
+$echo "Please select from the following compiler/platform combinations:"
+$echo
+$echo "(1) SUN Forte 6 update 2 C++ 5.3         SUN Solaris 2.6, 7 and 8"
+$echo "(2) GCC 2.95.3                           SUN Solaris, Linux"
+$echo "(3) SGI C++ 7.2 or 7.3                   SGI Irix 6.5"
+$echo "(4) HP aC++ A.03.27                      HP-UX B.11.00"
+$echo "(5) AIX VisualAge C++ 5.0                AIX Version 4.3.x"
+$echo "(6) Compaq C++ 6.2-024                   Compaq Tru64 V5.1"
+
+$echo
+input=0
+while test -n "$input" -a \( "0$input" -gt $cpp_last -o "0$input" -lt 1 \)
+do
+    $echo "Please choose your compiler/platform combination:"
+    $echo "[$config_platform] \c"
+    read input
+done
+if test -n "$input"
+then
+    config_platform="$input"
+fi
+
+#
+# Ask for shared libraries
+# 
+$echo
+if test $config_platform = $cpp_dec
+then
+    config_shared="yes"
+    $echo "Do you want to create shared libraries?"
+    $echo "(Compaq C++ only supports shared libraries.)"
+    $echo "[$config_shared] \c"
+    $echo
+else
+    input="x"
+    while test -n "$input" -a "$input" != "yes" -a "$input" != "no"
+    do
+	$echo "Do you want to create shared libraries?"
+	$echo "[$config_shared] \c"
+	read input
+    done
+    if test -n "$input"
+    then
+	config_shared="$input"
+    fi
+fi
+#
+# Ask for optimized code
+#
+$echo
+input="x"
+while test -n "$input" -a "$input" != "yes" -a "$input" != "no"
+do
+    $echo "Do you want optimized code to be generated?"
+    $echo "[$config_optimized] \c"
+    read input
+done
+if test -n "$input"
+then
+    config_optimized="$input"
+fi
+
+#
+# Ask for debug code
+#
+$echo
+input="x"
+while test -n "$input" -a "$input" != "yes" -a "$input" != "no"
+do
+    $echo "Add debug information to the generated code?"
+    $echo "[$config_debug] \c"
+    read input
+done
+if test -n "$input"
+then
+    config_debug="$input"
+fi
+
+
+#deleted by BaiXiaoBo 03.04.2004
+
+#
+# Only ask OTS specific questions if the "ots" subdirectory exists
+#
+
+
+#
+# Ask some BerkeleyDB specific questions
+#
+
+
+#
+# Ask some ORBacus T-Log specific questions
+# 
+
+#
+# Ask for extra preprocessor flags
+#
+
+#
+# Ask for extra compiler flags
+#
+
+#
+# Ask for extra linker flags
+#
+
+#
+# Ask for extra archiver flags
+#
+
+#
+# Ask for the installation path
+#
+while true
+do
+    $echo
+    $echo "Where do you want to install everything?"
+    $echo "[$config_install_path] \c"
+    input=
+    read input
+    if test -n "$input"
+    then
+	config_install_path="$input"
+    fi
+    if test ! -d "$config_install_path"
+    then
+        input="x"
+        while test -n "$input" -a "$input" != "yes" -a "$input" != "no"
+        do
+            $echo "Directory $config_install_path does not exist. Create it?"
+            $echo "[no] \c"
+            read input
+        done
+
+        if test "$input" = "yes"
+        then
+            mkdir -p $config_install_path
+            if test $? -eq 0
+            then
+                break
+            fi
+        fi
+    else
+	break
+    fi
+done
+
+fi
+
+#*******************************************************************
+#
+# End of block that is executed when the automate flag is not set.
+#
+#*******************************************************************
+
+#
+# Write current configuration data
+#
+set | sed -e s/\$\'/\'/ \
+    | grep "^config_[a-z_]*=[^ ]" \
+    | sed "s/='/=/
+           s/=/=\"/
+           s/'$//
+           s/$/\"/" >./config/current
+
+#
+# Set environment variables
+#
+env_RUNCONFIG=yes
+env_AR=
+env_ARFLAGS=
+env_LIBVERFLAG=
+env_CC=
+env_CFLAGS=
+env_CPP=
+env_CPPFLAGS=
+env_CXX=
+# Changed by renyi
+env_CXXFLAGS="-Wall -fpermissive"
+env_LDFLAGS=
+env_LDOPTS=
+#env_LD_LIBRARY_PATH=
+env_LIBEXT=
+env_LIBPATH=
+env_RANLIB=
+env_TMPL_REPOS_DIR=
+env_SHLIB_FLAGS=
+env_SHLIBEXT=
+
+#--------------------------------------
+#Modified by baixiaobo 2004.03.08
+#define the env_var to decide whick orb to use 
+#modified by AnJingbin 2004-07-02
+
+if test -n "$config_orb" -a "$config_orb" = "1"
+then 
+    env_ORB_NAME="OB"
+fi
+
+if test -n "$config_orb" -a "$config_orb" = "2"
+then 
+    env_ORB_NAME="STARBUS"
+fi
+
+if test -n "$config_orb" -a "$config_orb" = "3"
+then 
+    env_ORB_NAME="TAO"
+fi
+
+#env_SHLIB_PATH=
+xincludes=
+xlibraries=
+
+
+dirs=
+if test "$env_ORB_NAME" = "OB"
+then dirs="ots pss ccm postgresql"
+
+elif test "$env_ORB_NAME" = "STARBUS"
+
+then dirs="star-ots pss ccm postgresql"
+
+#elif test "$env_ORB_NAME" = "TAO"
+#then dirs=
+
+fi
+
+
+
+lib_dirs=
+for i in ots pss ccm postgresql
+do
+    if test -d $i
+    then
+	lib_dirs="`pwd`/$i/lib:$lib_dirs"
+    fi
+done
+
+with_orb=
+if test -n "$config_orb_path"
+then
+    if test "$config_orb_path" != "$config_install_path"
+    then
+	with_orb=" --with-orb=\"$config_orb_path\""
+    fi
+    lib_dirs="$config_orb_path/lib:$lib_dirs"
+fi
+
+#with_postgresql=
+#if test "$config_postgresql" = "yes"
+#then 
+
+
+#
+#add uses of postgresql ,03.11.2004 ,baixiaobo
+#
+#
+# ORBacus configuration options.
+#
+
+
+
+#
+# --prefix configuration option.
+#
+prefix=
+if test -n "$config_install_path" -a "$config_install_path" != "/usr/local"
+then
+    if test -n "$Automate" -a "$Automate" != "true"
+    then
+        prefix=" --prefix=\"$config_install_path\""
+    else
+        prefix=" --prefix=$config_install_path"
+    fi
+fi
+
+
+case $config_platform in
+
+    $cpp_sgi ) # SGI C++ 7.2
+	env_CC="cc"
+	env_CXX="CC"
+	env_CXXFLAGS=""
+        env_TMPL_REPOS_DIR=ii_files
+	if test "$config_shared" = "yes"
+	then
+	    env_CXXFLAGS="-G7 $env_CXXFLAGS"
+	    env_AR="$env_CXX"
+	    env_ARFLAGS="-shared -o"
+	    env_RANLIB=":"
+	    env_LIBEXT=".so"
+	    env_LD_LIBRARY_PATH="${lib_dirs}\$LD_LIBRARY_PATH"
+	else
+	    env_CXXFLAGS="-G0 $env_CXXFLAGS"
+	    env_AR="$env_CXX"
+	    env_ARFLAGS="-ar -o"
+	fi
+	;;
+
+    $cpp_sun ) # SUN C++
+	env_CC="cc"
+	env_CXX="CC"
+	env_CXXFLAGS=""
+        env_TMPL_REPOS_DIR=SunWS_cache
+	env_SHLIB_FLAGS="-G"
+	env_SHLIBEXT=".so"
+	if test "$config_shared" = "yes"
+	then
+	    env_CXXFLAGS="-KPIC $env_CXXFLAGS"
+            env_AR="$env_CXX"
+	    env_ARFLAGS="-G -o"
+	    env_LIBVERFLAG="-h "
+	    env_RANLIB=":"
+	    env_LIBEXT=".so"
+	    env_LD_LIBRARY_PATH="${lib_dirs}\$LD_LIBRARY_PATH"
+	else
+            env_AR="$env_CXX"
+	    env_ARFLAGS="-xar -o"
+	fi
+
+	env_CXXFLAGS="-mt $env_CXXFLAGS"
+	env_ARFLAGS="-mt $env_ARFLAGS"
+	;;
+
+    $cpp_hp_1100 ) # HP aC++ for HPUX 11.00
+	env_CC="cc"
+	env_CXX="aCC"
+	env_CXXFLAGS=""
+	if test "$config_shared" = "yes"
+	then
+	    env_CXXFLAGS="+Z $env_CXXFLAGS"
+	    env_AR="$env_CXX"
+	    env_ARFLAGS="-b -o"
+	    env_LIBVERFLAG="-Wl,+h,"
+	    env_RANLIB=":"
+	    env_LDFLAGS=""
+	    env_LIBEXT=".sl"
+	    env_LDOPTS="+s"
+	    env_SHLIB_PATH="${lib_dirs}\$SHLIB_PATH"
+	fi
+	if test -n "$with_jtc_dce"
+	then
+	    env_CPPFLAGS="-D_REENTRANT -D_PTHREADS_DRAFT4 $env_CPPFLAGS"
+	fi
+	;;
+
+    $cpp_aix ) # AIX VisualAge C++
+        env_CC="xlc_r"
+        env_CXX="xlC_r"
+        env_CXXFLAGS="-qnotempinc -qrtti=all"
+	#env_TMPL_REPOS_DIR=tempinc
+        if test "$config_shared" = "yes"
+        then
+            env_CXXFLAGS="$env_CXXFLAGS -brtl"
+            env_AR="makeC++SharedLib"
+            env_ARFLAGS="-p 0 -G -o"
+            env_RANLIB=":"
+            env_LIBEXT=".so"
+            env_LIBPATH="${lib_dirs}\$LIBPATH"
+        fi
+        ;;
+
+    $cpp_gcc ) # GCC 2.95.3
+	if config/gcc-check
+	then
+	    :
+	else
+	    echo "$0: aborted"
+	    exit
+	fi
+	env_CC="gcc"
+	env_CXX="c++"
+	env_CXXFLAGS="-Wall"
+	env_SHLIB_FLAGS="-fPIC -shared"
+	env_SHLIBEXT=".so"
+	if test "$config_shared" = "yes"
+	then
+	    env_CXXFLAGS="-fPIC $env_CXXFLAGS"
+	    env_AR="$env_CXX"
+	    env_ARFLAGS="-fPIC -shared -o"
+	    env_LIBVERFLAG=`config/gcc-version-flag`
+	    env_RANLIB=":"
+	    env_LIBEXT=".so"
+	    env_LD_LIBRARY_PATH="${lib_dirs}\$LD_LIBRARY_PATH"
+	fi
+	;;
+
+    $cpp_dec ) # DEC C++
+        env_CC="cc"
+        env_CXX="cxx"
+        env_CXXFLAGS="-distinguish_nested_enums -msg_disable narrowptr"
+	env_TMPL_REPOS_DIR=cxx_repository
+        if test "$config_shared" = "yes"
+        then
+	    env_CFLAGS=-call_shared
+            env_AR="$env_CXX"
+            env_ARFLAGS="'-Wl,-expect_unresolved,*' -shared -o"
+            env_RANLIB=":"
+            env_LIBEXT=".so"
+            env_LD_LIBRARY_PATH="${lib_dirs}\$LD_LIBRARY_PATH"
+        fi
+
+        env_CXXFLAGS="-pthread $env_CXXFLAGS"
+        ;;
+
+
+    * )
+	$echo "$0: error: unsupported platform and/or compiler"
+	exit
+	;;
+
+esac
+
+if test "$config_optimized" = "yes"
+then
+    env_CPPFLAGS="-DNDEBUG $env_CPPFLAGS"
+    optimize_level="-O"
+    if test $config_platform = $cpp_gcc
+    then
+        optimize_level="-O3"
+    fi
+    env_CXXFLAGS="$optimize_level $env_CXXFLAGS"
+    if test "$env_AR" = "$env_CXX"
+    then
+        env_ARFLAGS="$optimize_level $env_ARFLAGS"
+    fi
+fi
+
+if test "$config_debug" = "yes"
+then
+    env_CXXFLAGS="-g $env_CXXFLAGS"
+    if test "$env_AR" = "$env_CXX"
+    then
+        env_ARFLAGS="-g $env_ARFLAGS"
+    fi
+fi
+
+if test -n "$config_extra_cpp_flags"
+then
+    env_CPPFLAGS="$config_extra_cpp_flags $env_CPPFLAGS"
+fi
+
+if test -n "$config_extra_cxx_flags"
+then
+    env_CXXFLAGS="$config_extra_cxx_flags $env_CXXFLAGS"
+fi
+
+if test -n "$config_extra_ld_flags"
+then
+    env_LDFLAGS="$config_extra_ld_flags $env_LDFLAGS"
+fi
+
+if test -n "$config_extra_ar_flags"
+then
+    env_ARFLAGS="$config_extra_ar_flags $env_ARFLAGS"
+fi
+
+#
+# Write script to set the environment
+#
+{
+    if test "$config_shell" = "b"
+    then
+#	set | sed -e "s/'//g" -e 's/\"//g' | grep "^env_[A-Z_]*=$" | \
+#	sed -e 's/^env_\([A-Z_]*\)=$/unset \1/g'
+#	set | sed -e "s/'//g" -e 's/\"//g' | grep "^env_[A-Z_]*=." | \
+#	sed -e 's/^env_\([A-Z_]*\)=\(.*\)$/\1=\"\2\"; export \1/g'
+	set | sed -e s/\$\'/\'/ | \
+	sed -e "s/'//g" -e 's/\"//g' | grep "^env_[A-Z_]*=" | \
+	sed -e 's/^env_\([A-Z_]*\)=\(.*\)$/\1=\"\2\"; export \1/g'
+    fi
+
+    if test "$config_shell" = "c"
+    then
+        if test -n "$env_LD_LIBRARY_PATH"
+	then
+	    $echo "if ( \$?LD_LIBRARY_PATH == 0 ) then"
+	    $echo "    setenv LD_LIBRARY_PATH \"\""
+	    $echo "endif"
+	    $echo
+        fi
+
+        if test -n "$env_SHLIB_PATH"
+	then
+	    $echo "if ( \$?SHLIB_PATH == 0 ) then"
+	    $echo "    setenv SHLIB_PATH \"\""
+	    $echo "endif"
+	    $echo
+	fi
+
+	if test -n "$env_LIBPATH"
+	then
+	    $echo "if ( \$?LIBPATH == 0 ) then"
+	    $echo "    setenv LIBPATH \"\""
+	    $echo "endif"
+	    $echo
+	fi
+
+#	set | sed -e "s/'//g" -e 's/\"//g' | grep "^env_[A-Z_]*=$" | \
+#	sed -e 's/^env_\([A-Z_]*\)=$/unsetenv \1/g'
+#	set | sed -e "s/'//g" -e 's/\"//g' | grep "^env_[A-Z_]*=." | \
+#	sed -e 's/^env_\([A-Z_]*\)=\(.*\)$/setenv \1 \"\2\"/g'
+	set | sed -e s/\$\'/\'/ | \
+	sed -e "s/'//g" -e 's/\"//g' | grep "^env_[A-Z_]*=" | \
+	sed -e 's/^env_\([A-Z_]*\)=\(.*\)$/setenv \1 \"\2\"/g'
+    fi
+
+} > config.env
+
+if test -n "$Automate" -a "$Automate" != "true"
+then
+
+    #
+    # Tell the user how to run configure
+    #
+    $echo
+    $echo
+    $echo
+    $echo "To run \`configure', execute the following code in your shell:"
+    $echo
+    if test "$config_shell" = "b"
+    then
+        $echo ". ./go"
+	$echo ". ./config.env" > go
+    fi
+    if test "$config_shell" = "c"
+    then
+        $echo "source ./go"
+	$echo "source ./config.env" > go
+    fi
+    $echo "rm -f config.cache" >> go
+    $echo "./configure${prefix} --cache-file=config.cache${xincludes}${xlibraries}\c" >> go
+    $echo "${with_orb}\c" >> go
+    $echo >> go
+    $echo
+
+else
+
+    #
+    # Want to configure the environment automatically
+    #
+    if test "$config_shell" = "b"
+    then
+        $echo ". ./config.env"
+    fi
+    if test "$config_shell" = "c"
+    then
+        $echo "source ./config.env"
+    fi
+    $echo "rm -f config.cache"
+    $echo "./configure${prefix} --cache-file=config.cache${xincludes}${xlibraries}\c"
+    $echo "${with_orb}\c"
+    $echo
+
+    if test "$config_shell" = "b"
+    then
+        . ./config.env
+    fi
+    if test "$config_shell" = "c"
+    then
+        source ./config.env
+    fi
+    rm -f config.cache
+    ./configure${prefix}${xincludes}${xlibraries}${with_orb}
+    
+fi

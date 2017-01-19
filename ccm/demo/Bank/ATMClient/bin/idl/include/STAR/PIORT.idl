@@ -1,0 +1,38 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_ORT_IDL
+#define PORTABLE_INTERCEPTOR_ORT_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/PICommon.idl>
+
+module PortableInterceptor
+{
+
+
+abstract valuetype ObjectReferenceFactory
+{
+    Object make_object(in string repository_id, in ObjectId id);
+};
+
+abstract valuetype ObjectReferenceTemplate : ObjectReferenceFactory
+{
+    readonly attribute ServerId server_id;
+    readonly attribute ORBId orb_id;
+    readonly attribute AdapterName adapter_name;
+};
+
+typedef sequence<ObjectReferenceTemplate> ObjectReferenceTemplateSeq;
+
+}; // End module PortableInterceptor
+
+#endif

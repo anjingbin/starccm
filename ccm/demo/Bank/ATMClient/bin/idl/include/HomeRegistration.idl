@@ -1,0 +1,33 @@
+#ifndef __HomeRegistration_idl__
+#define __HomeRegistration_idl__
+
+#include <CCMHome.idl>
+
+module NUDTCCM
+{
+
+exception HomeHaveRegistered { };
+
+interface HomeRegistration
+{
+    
+    void register_home_by_component_type(in CORBA::RepositoryId comp_repid, in Components::CCMHome home)
+        raises(HomeHaveRegistered);
+    
+    void register_home_by_home_type(in CORBA::RepositoryId home_repid, in Components::CCMHome home)
+        raises(HomeHaveRegistered);
+    
+    void register_home_by_name(in string name, in Components::CCMHome home)
+        raises(HomeHaveRegistered);
+        
+    void unregister_home(in Components::CCMHome home);
+    
+    
+    //SuLiang add .2003.4.2
+    void unregister_by_name(in string homeName);
+        
+};
+
+};
+
+#endif

@@ -1,0 +1,43 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_UNKNOWN_EXCEPTION_IDL
+#define STAR_UNKNOWN_EXCEPTION_IDL
+
+#include <STAR/ATF.idl>
+
+#pragma prefix "nis.net"
+
+module STAR
+{
+
+local interface UnknownExceptionInfo
+{
+    string operation();
+
+    boolean response_expected();
+
+    ATF::TransportInfo transport_info();
+
+    string describe_exception();
+
+    void raise_exception();
+};
+
+local interface UnknownExceptionStrategy
+{
+    void unknown_exception(in UnknownExceptionInfo info);
+
+    void destroy();
+};
+
+}; // End module STAR
+
+#endif

@@ -1,0 +1,23 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef BOUNDS_IDL
+#define BOUNDS_IDL
+
+#pragma prefix "omg.org"
+
+module CORBA
+{
+
+exception Bounds { };
+
+}; // End module CORBA
+
+#endif

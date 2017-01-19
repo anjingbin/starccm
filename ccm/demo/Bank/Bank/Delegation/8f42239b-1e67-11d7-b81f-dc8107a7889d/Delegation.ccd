@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE corbacomponent PUBLIC "" "corbacomponent.dtd">
+<corbacomponent>
+	<corbaversion>3.0</corbaversion>
+	<componentrepid repid="IDL:Bank/Delegation:1.0"/>
+	<homerepid repid="IDL:Bank/DelegationHome:1.0"/>
+	<componentkind>
+		<service/>
+	</componentkind>
+	<transaction use="supports"/>
+	<threading policy="serialize "/>
+	<configurationcomplete set="true"/>
+	<homefeatures name="DelegationHome" repid="IDL:Bank/DelegationHome:1.0"/>
+	<componentfeatures name="Delegation" repid="IDL:Bank/Delegation:1.0">
+		<ports>
+			<uses usesname="deposit" repid="IDL:Bank/DepositOp:1.0"/>
+			<uses usesname="withdraw" repid="IDL:Bank/WithdrawOp:1.0"/>
+			<provides providesname="delegation_Op" repid="IDL:Bank/DelegationOp:1.0">
+				<operationpolicies>
+					<operation name="*">
+						<transaction use="supports"/>
+					</operation>
+				</operationpolicies>
+			</provides>
+		</ports>
+	</componentfeatures>
+	<interface name="DelegationOp" repid="IDL:Bank/DelegationOp:1.0"/>
+</corbacomponent>

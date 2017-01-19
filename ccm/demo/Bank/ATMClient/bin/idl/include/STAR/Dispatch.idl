@@ -1,0 +1,71 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef DISPATCH_IDL
+#define DISPATCH_IDL
+
+#pragma prefix "nis.net"
+
+//
+// InterBus extensions
+//
+
+module STAR
+{
+
+local interface RequestLevelDispatch
+{
+    void invoke();
+};
+
+typedef unsigned long RequestLevelDispatchStrategyId;
+
+const RequestLevelDispatchStrategyId SAME_THREAD = 0;
+
+const RequestLevelDispatchStrategyId THREAD_PER_REQUEST = 1;
+
+const RequestLevelDispatchStrategyId THREAD_POOL = 2;
+
+local interface RequestLevelDispatchStrategy
+{
+     readonly attribute RequestLevelDispatchStrategyId id;
+    
+     readonly attribute any info;
+    
+     void dispatch(in RequestLevelDispatch r);
+};
+
+typedef unsigned long ThreadPoolId;
+
+exception InvalidThreadPool
+{
+};
+
+local interface RequestLevelDispatchStrategyFactory
+{
+   
+    ThreadPoolId create_thread_pool(in long nthreads);
+
+    void destroy_thread_pool(in ThreadPoolId id)
+	raises(InvalidThreadPool);
+    
+    RequestLevelDispatchStrategy create_thread_pool_strategy(in ThreadPoolId id)
+	raises(InvalidThreadPool);
+   
+    RequestLevelDispatchStrategy create_same_thread_strategy();
+    
+    RequestLevelDispatchStrategy create_thread_per_request_strategy();
+    
+    RequestLevelDispatchStrategy create_default_dispatch_strategy();
+};
+
+}; // End module STAR
+
+#endif

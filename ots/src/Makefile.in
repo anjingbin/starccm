@@ -1,0 +1,196 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: Ren Yi    starots@sohu.com	
+# **********************************************************************
+
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+OTSLIB_BASENAME		= libOTS@LIBEXT@@OB_LIBVER@
+RESLIB_BASENAME		= libRES@LIBEXT@@OB_LIBVER@
+OTSCURRENTLIB_BASENAME	= libOTSCurrent@LIBEXT@@OB_LIBVER@
+
+OTSLIB_NAME		= $(top_srcdir)/lib/$(OTSLIB_BASENAME)
+RESLIB_NAME		= $(top_srcdir)/lib/$(RESLIB_BASENAME)
+OTSCURRENTLIB_NAME	= $(top_srcdir)/lib/$(OTSCURRENTLIB_BASENAME)
+
+OTS_NAME	= $(top_srcdir)/bin/ots
+RES_NAME	= $(top_srcdir)/bin/res
+
+TARGETS		= $(OTSLIB_NAME) \
+		  $(RESLIB_NAME) \
+		  $(OTSCURRENTLIB_NAME) \
+		  $(OTS_NAME) \
+		  $(RES_NAME)
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA    = @INSTALL_DATA@
+
+#IDLDIR		= $(top_srcdir)/idl/OB
+#HDIR		= $(top_srcdir)/include/OB
+
+OTSLIB_OBJS	=CosTransactions.o \
+		 CosTransactions_skel.o \
+		 CosTransactionsCurrent.o \
+		 CosTransactionsCurrent_impl.o \
+		 CosTransactionsOTS.o \
+		 CosTransactionsOTS_impl.o \
+		 CosTransactionsOTS_skel.o \
+		 CosTransactionsPolicy.o \
+		 CosTransactionsPolicyType.o \
+		 CosTransactionsUser.o \
+		 CosTransactionsUser_skel.o \
+		 CosTSInteroperation.o \
+		 ImplicitOTSInterceptor.o \
+		 OTSClientInterceptor_impl.o \
+		 OTSIORInterceptor_impl.o \
+		 OTSPolicyFactory_impl.o \
+		 OTSServerInterceptor_impl.o \
+		 PostgreSQLResource.o \
+		 PostgreSQLResource_impl.o \
+		 PostgreSQLResource_skel.o \
+		 Resource.o \
+		 Resource_impl.o \
+		 Resource_skel.o
+
+RESLIB_OBJS	=CosTransactionsOTS.o \
+		 CosTransactionsUser.o \
+		 PostgreSQLResource.o \
+		 PostgreSQLResource_impl.o \
+		 PostgreSQLResource_skel.o \
+		 ResourceFactoryServer.o \
+		 Resource.o \
+		 Resource_impl.o \
+		 Resource_skel.o
+
+OTSCURRENTLIB_OBJS = CosTransactionsCurrent.o \
+		     CosTransactionsCurrent_impl.o \
+		     CosTransactionsPolicy.o \
+		     CosTransactionsPolicyType.o \
+		     CosTSInteroperation.o \
+		     ImplicitOTSInterceptor.o \
+		     OTSClientInterceptor_impl.o \
+		     OTSIORInterceptor_impl.o \
+		     OTSPolicyFactory_impl.o \
+		     OTSServerInterceptor_impl.o
+
+OTS_OBJS      = CosTransactionsOTS.o \
+		CosTransactionsOTS_impl.o \
+		CosTransactionsOTS_skel.o \
+		CosTransactionsUser.o \
+		CosTransactionsUser_skel.o \
+		PostgreSQLResource.o \
+		Resource.o \
+		TransactionFactoryServer.o
+
+RES_OBJS      = CosTransactionsOTS.o \
+		CosTransactionsUser.o \
+		PostgreSQLResource.o \
+		PostgreSQLResource_impl.o \
+		PostgreSQLResource_skel.o \
+		ResourceFactoryServer.o \
+		Resource.o \
+		Resource_impl.o \
+		Resource_skel.o
+
+GENERATED	      = CosTransactions.cpp \
+		CosTransactionsCurrent.cpp \
+		CosTransactionsCurrent_impl.cpp \
+		CosTransactionsOTS.cpp \
+		CosTransactionsOTS_impl.cpp \
+		CosTransactionsOTS_skel.cpp \
+		CosTransactionsPolicy.cpp \
+		CosTransactionsPolicyType.cpp \
+		CosTransactionsUser.cpp \
+		CosTransactionsUser_skel.cpp \
+		CosTransactions_skel.cpp \
+		CosTSInteroperation.cpp \
+		ImplicitOTSInterceptor.cpp \
+		OTSClientInterceptor_impl.cpp \
+		OTSIORInterceptor_impl.cpp \
+		OTSPolicyFactory_impl.cpp \
+		OTSServerInterceptor_impl.cpp \
+		PostgreSQLResource.cpp \
+		PostgreSQLResource_impl.cpp \
+		PostgreSQLResource_skel.cpp \
+		ResourceFactoryServer.cpp \
+		Resource.cpp \
+		Resource_impl.cpp \
+		Resource_skel.cpp \
+		TransactionFactoryServer.cpp
+
+ALL_CXXFLAGS	= $(CXXFLAGS)
+ALL_CPPFLAGS	= -I. -I$(top_srcdir)/include $(OB_CPPFLAGS) $(CPPFLAGS) $(PSQL_CPPFLAGS)
+ALL_LDFLAGS	= -L$(top_srcdir)/lib $(OB_LDFLAGS) $(LDFLAGS) $(PSQL_LDFLAGS)
+ALL_LIBS	= -lOTS -lRES -ldl -lcrypt -lpthread $(OB_LIBS) $(LIBS) $(PSQL_LIBS)
+
+
+$(OTSLIB_NAME): $(OTSLIB_OBJS)
+	rm -f $@
+	$(AR) $(ARFLAGS) $(OTSLIB_BASENAME) `if test -n "$(LIBVERFLAG)"; \
+	 then echo $(LIBVERFLAG)$(OTSLIB_BASENAME); fi` $(OTSLIB_OBJS)
+	mv $(OTSLIB_BASENAME) $@
+	$(RANLIB) $@
+	$(RMLNK_SHLIB) $(top_srcdir)/lib/libOTS@LIBEXT@
+	$(SYMLNK_SHLIB) $(OTSLIB_BASENAME) $(top_srcdir)/lib/libOTS@LIBEXT@
+
+$(RESLIB_NAME): $(RESLIB_OBJS)
+	rm -f $@
+	$(AR) $(ARFLAGS) $(RESLIB_BASENAME) `if test -n "$(LIBVERFLAG)"; \
+	 then echo $(LIBVERFLAG)$(RESLIB_BASENAME); fi` $(RESLIB_OBJS)
+	mv $(RESLIB_BASENAME) $@
+	$(RANLIB) $@
+	$(RMLNK_SHLIB) $(top_srcdir)/lib/libRES@LIBEXT@
+	$(SYMLNK_SHLIB) $(RESLIB_BASENAME) $(top_srcdir)/lib/libRES@LIBEXT@
+	
+$(OTSCURRENTLIB_NAME): $(OTSCURRENTLIB_OBJS)
+	rm -f $@
+	$(AR) $(ARFLAGS) $(OTSCURRENTLIB_BASENAME) `if test -n "$(LIBVERFLAG)"; \
+	 then echo $(LIBVERFLAG)$(OTSCURRENTLIB_BASENAME); fi` $(OTSCURRENTLIB_OBJS)
+	mv $(OTSCURRENTLIB_BASENAME) $@
+	$(RANLIB) $@
+	$(RMLNK_SHLIB) $(top_srcdir)/lib/libOTSCurrent@LIBEXT@
+	$(SYMLNK_SHLIB) $(OTSCURRENTLIB_BASENAME) $(top_srcdir)/lib/libOTSCurrent@LIBEXT@
+
+$(OTS_NAME): $(OTS_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ \
+	$(OTS_OBJS) $(ALL_LIBS)
+
+$(RES_NAME): $(RES_OBJS)
+	rm -f $@
+	$(CXX) $(ALL_CXXFLAGS) $(ALL_LDFLAGS) -o $@ \
+	$(RES_OBJS) $(ALL_LIBS)
+
+
+install:: all
+	$(INSTALL_LIBRARY) $(OTSLIB_NAME) $(libdir)
+	$(INSTALL_LIBRARY) $(RESLIB_NAME) $(libdir)
+	$(INSTALL_LIBRARY) $(OTSCURRENTLIB_NAME) $(libdir)
+	$(RMLNK_SHLIB) $(libdir)/libOTS@LIBEXT@
+	$(RMLNK_SHLIB) $(libdir)/libRES@LIBEXT@
+	$(RMLNK_SHLIB) $(libdir)/libOTSCurrent@LIBEXT@
+	$(SYMLNK_SHLIB) $(OTSLIB_BASENAME) $(libdir)/libOTS@LIBEXT@
+	$(SYMLNK_SHLIB) $(RESLIB_BASENAME) $(libdir)/libRES@LIBEXT@
+	$(SYMLNK_SHLIB) $(OTSCURRENTLIB_BASENAME) $(libdir)/libOTSCurrent@LIBEXT@
+	$(INSTALL_PROGRAM) $(OTS_NAME) $(bindir)
+	$(INSTALL_PROGRAM) $(RES_NAME) $(bindir)
+
+min:: all
+
+install_min:: install
+
+include .depend

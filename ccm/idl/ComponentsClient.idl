@@ -1,0 +1,26 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __CCMComponentsClient_idl__
+#define __CCMComponentsClient_idl__
+
+#include <CCMCommon.idl>
+#include <CCMHome.idl>
+#include <CCMObject.idl>
+#include <HomeFinder.idl>
+#include <Configurator.idl>
+
+#endif

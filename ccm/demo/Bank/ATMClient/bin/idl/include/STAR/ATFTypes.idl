@@ -1,0 +1,66 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_TYPES_IDL
+#define ATF_TYPES_IDL
+
+#ifndef STARE
+#  include <STAR/IOP.idl>
+#  include <STAR/ATFBuffer.idl>
+#  include <STAR/Types.idl>
+#else // STARE
+#  include <STARE/IOP.idl>
+#  include <STARE/ATFBuffer.idl>
+#  include <STARE/Types.idl>
+#endif // STARE
+
+#pragma prefix "nis.net"
+
+module ATF
+{
+	typedef IOP::IOR IOR;
+	
+	typedef IOP::ProfileId ProfileId;
+	
+	typedef sequence< ProfileId > ProfileIdSeq;
+	
+	typedef string PluginId;
+	
+	typedef sequence< PluginId > PluginIdSeq;
+	
+	typedef CORBA::OctetSeq ObjectKey;
+	
+#ifndef STARE	
+	typedef IOP::TaggedComponentSeq TaggedComponentSeq;
+#endif // STARE
+	
+	typedef long Handle;
+	
+	enum SendReceiveMode { SendOnly, ReceiveOnly, SendReceive };
+	 
+	struct ProfileInfo
+	{
+	    ObjectKey key;
+	    octet major;
+	    octet minor;
+	    ProfileId id;
+	    unsigned long index;
+	#ifndef STARE
+	    TaggedComponentSeq components;
+	#endif // STARE
+	};
+	
+	typedef sequence<ProfileInfo> ProfileInfoSeq;
+	
+	typedef sequence<string> ParamSeq;
+
+}; // End module ATF
+
+#endif

@@ -1,0 +1,58 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_NAMING_IDL
+#define STAR_NAMING_IDL
+
+#include <STAR/CosNaming.idl>
+#include <STAR/BindingMonitor.idl>
+
+#pragma prefix "nis.net"
+
+module CosNaming
+{
+
+interface STARNamingContext : NamingContextExt
+{
+    union BindingUnion switch(BindingType)
+    {
+    case ncontext: CosNaming::NamingContext nc;
+    case nobject: Object obj;
+    };
+
+    struct ExtendedBinding
+    {
+	Name binding_name;
+        BindingUnion bound_obj;
+	long timestamp;
+    };
+
+    
+    typedef sequence<ExtendedBinding> ExtendedBindingList;
+
+    
+    ExtendedBindingList list_extended();
+
+    
+    void rename(in Name old_name, in Name new_name)
+        raises(NamingContext::NotFound, NamingContext::AlreadyBound,
+	       NamingContext::CannotProceed, NamingContext::InvalidName);
+
+    boolean add_monitor(in BindingMonitor listener);
+
+    boolean remove_monitor(in BindingMonitor listener);
+
+    boolean callbacks_active();
+
+}; // End interface STARNamingContext
+
+}; // End module CosNaming
+
+#endif

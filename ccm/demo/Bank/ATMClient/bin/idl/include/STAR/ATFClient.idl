@@ -1,0 +1,252 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_CLIENT_IDL
+#define ATF_CLIENT_IDL
+
+#ifndef STARE
+#  include <STAR/ATFTypes.idl>
+#  include <STAR/Policy.idl>
+#else // STARE
+#  include <STARE/ATFTypes.idl>
+#  include <STARE/Policy.idl>
+#endif // STARE
+
+#pragma prefix "nis.net"
+
+module ATF
+{
+
+	const string Version = "1.0";
+
+#ifndef STARE
+
+	local interface TransportInfo;
+	local interface ConnectorInfo;
+	local interface AcceptorInfo;
+	local interface ConFactoryInfo;
+
+#endif // STARE
+
+local interface Plugin
+{
+    readonly attribute PluginId id;
+    
+    readonly attribute ProfileId tag;
+    
+    void init_client(in ParamSeq params);
+    
+    void init_server(in ParamSeq params);
+};
+
+ 
+local interface Transport
+{
+    readonly attribute PluginId id;
+    
+    readonly attribute ProfileId tag;
+    
+    readonly attribute SendReceiveMode mode;
+
+    readonly attribute ATF::Handle handle;
+
+    void close();
+
+    void shutdown();
+
+    void receive(in Buffer buf, in boolean block);
+
+    boolean check_receive(in Buffer buf, in boolean block);
+
+    void receive_timeout(in Buffer buf, in unsigned long timeout);
+
+#ifndef STARE
+
+    boolean receive_timeout_detect(in Buffer buf, in unsigned long timeout);
+#endif // STARE
+
+    void send(in Buffer buf, in boolean block);
+
+    boolean check_send(in Buffer buf, in boolean block);
+
+    void timeout_send(in Buffer buf, in unsigned long timeout);
+
+#ifndef STARE
+
+    boolean timeout_send_detect(in Buffer buf, in unsigned long timeout);
+#endif // STARE
+
+#ifndef STARE
+
+    TransportInfo get_info();
+#endif // STARE
+};
+
+#ifndef STARE
+
+local interface CloseCallback;
+
+local interface TransportInfo
+{
+    readonly attribute PluginId id;
+    
+    readonly attribute ProfileId tag;
+
+    readonly attribute ConnectorInfo connector_info;
+
+    readonly attribute AcceptorInfo acceptor_info;
+
+    string describe();
+
+    void add_close_callback(in CloseCallback cb);
+
+    void remove_close_callback(in CloseCallback cb);
+};
+
+local interface CloseCallback
+{
+    void close_callback(in TransportInfo transport_info);
+};
+
+typedef sequence< CloseCallback > CloseCallbackSeq;
+
+#endif // STARE
+
+
+ 
+local interface Connector
+{
+  
+    readonly attribute PluginId id;
+
+ 
+    readonly attribute ProfileId tag;
+
+    Transport connect();
+
+    Transport connect_timeout(in unsigned long timeout);
+
+    ProfileInfoSeq get_usable_profiles(in IOR ref,
+				       in CORBA::PolicyList policies);
+
+    boolean equal(in Connector con);
+      
+#ifndef STARE
+    
+    ConnectorInfo get_info();
+#endif // STARE
+};
+
+typedef sequence< Connector > ConnectorSeq;
+
+#ifndef STARE
+
+local interface ConCallback;
+
+local interface ConnectorInfo
+{
+    
+    readonly attribute PluginId id;
+
+    
+    readonly attribute ProfileId tag;
+
+    string describe();
+
+    void add_con_callback(in ConCallback cb);
+
+    void remove_con_callback(in ConCallback cb);
+};
+
+
+local interface ConCallback
+{
+    void con_callback(in TransportInfo transport_info);
+};
+
+typedef sequence< ConCallback > ConCallbackSeq;
+
+#endif // STARE
+
+local interface ConFactory
+{
+    
+    readonly attribute PluginId id;
+
+    
+    readonly attribute ProfileId tag;
+
+    string describe_profile(in IOP::TaggedProfile prof);
+    
+    ConnectorSeq create_connectors(in IOR ref, in CORBA::PolicyList policies);
+
+    boolean equivalent(in IOR ior1, in IOR ior2);
+
+    unsigned long hash(in IOR ref, in unsigned long maximum);
+
+#ifndef STARE
+
+    ConFactoryInfo get_info();
+#endif // STARE
+};
+
+typedef sequence< ConFactory > ConFactorySeq;
+
+#ifndef STARE
+
+local interface ConFactoryInfo
+{
+    
+    readonly attribute PluginId id;
+
+    
+    readonly attribute ProfileId tag;
+
+
+    string describe();
+
+
+    void add_con_callback(in ConCallback cb);
+
+
+    void remove_con_callback(in ConCallback cb);
+};
+
+#endif // STARE
+
+
+exception FactoryAlreadyExists
+{
+    PluginId id;
+};
+
+
+exception NoSuchFactory
+{
+    PluginId id;
+};
+
+
+local interface ConFactoryReg
+{
+
+    void add_factory(in ConFactory _factory)
+        raises(FactoryAlreadyExists);
+
+
+    ConFactory get_factory(in PluginId id)
+        raises(NoSuchFactory);
+
+    ConFactorySeq get_factories();
+};
+
+}; // End module ATF
+
+#endif

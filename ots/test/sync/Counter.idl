@@ -1,0 +1,22 @@
+// **********************************************************************
+//
+// Copyright (c) 2002-2003 
+// StarMiddleware.net	
+// www.StarMiddleware.net
+// 
+// All Rights Reserved
+//
+// Author: Ren Yi	starots@sohu.com	
+// **********************************************************************
+
+// Version: 1.0.0
+
+interface Counter
+{
+    readonly attribute long count;
+
+    void increment();
+
+    void decrement();
+
+};

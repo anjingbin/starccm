@@ -1,0 +1,34 @@
+#include <ComponentsClient.idl>
+
+#include <Account.idl3>
+
+#ifndef __Authentication_IDL_
+#define __Authentication_IDL_
+
+module Bank
+{
+
+	//
+	//component Authentication
+	//
+	
+	interface AuthenticationOp
+	{
+		boolean authenticate(in string id, in string password);
+		void changePassword(in string id, in string newPassword);
+	};
+	
+	component Authentication
+	{
+		provides AuthenticationOp authentication_op;
+		
+		uses AccountOp the_account;
+	};
+
+	home AuthenticationHome manages Authentication
+	{
+	};	
+
+};
+
+#endif

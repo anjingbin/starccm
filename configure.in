@@ -1,0 +1,69 @@
+dnl **********************************************************************
+dnl
+dnl Copyright (c) 2003
+dnl StarMiddleware.net	 
+dnl www.StarMiddleware.net
+dnl                       
+dnl All Rights Reserved   
+dnl 
+dnl Author: An Jingbin	anjb@sina.com                         
+dnl **********************************************************************
+
+dnl ----------------------------------------------------------------------
+dnl Process this file with autoconf to produce a configure script
+dnl ----------------------------------------------------------------------
+
+AC_INIT(config/Make.rules.in)
+AC_CONFIG_AUX_DIR(config)
+
+dnl ----------------------------------------------------------------------
+dnl Check whether the user executed runconfig
+dnl ----------------------------------------------------------------------
+
+if test "$RUNCONFIG" != "yes"
+then
+	AC_MSG_ERROR(You must run ./runconfig before running configure!
+		  See the file ./INSTALL for more information.)
+fi
+
+builtin(include,./config/macros.m4)
+builtin(include,./config/basic.m4)
+builtin(include,./config/x11.m4)
+builtin(include,./config/motif.m4)
+builtin(include,./config/cplusplus.m4)
+builtin(include,./config/network.m4)
+builtin(include,./config/orb.m4)
+
+
+dnl ----------------------------------------------------------------------
+dnl Configure subdirectories
+dnl ----------------------------------------------------------------------
+
+if test -n "$ORB_NAME" -a "$ORB_NAME" = "OB"
+then 
+	AC_CONFIG_SUBDIRS(ots pss ccm)
+
+elif test -n "$ORB_NAME" -a "$ORB_NAME" = "STARBUS"
+then 
+	AC_CONFIG_SUBDIRS(star-ots pss ccm)
+
+elif test -n "$ORB_NAME" -a "$ORB_NAME" = "TAO"
+then 
+	AC_CONFIG_SUBDIRS(ots pss ccm postgresql)
+
+fi
+
+dnl ----------------------------------------------------------------------
+dnl Checks for programs
+dnl ----------------------------------------------------------------------
+
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+AC_PROG_LN_S
+
+dnl ----------------------------------------------------------------------
+dnl Write files
+dnl ----------------------------------------------------------------------
+
+AC_OUTPUT(config/Make.rules:config/Make.rules.in \
+	  Makefile)

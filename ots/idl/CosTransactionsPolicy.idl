@@ -1,0 +1,51 @@
+// **********************************************************************
+//
+// Copyright (c) 2002-2003 
+// StarMiddleware.net	
+// www.StarMiddleware.net
+// 
+// All Rights Reserved
+//
+// Author: Ren Yi	starots@sohu.com	
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef STAR_COS_TRANSACTIONS_POLICY_IDL
+#define STAR_COS_TRANSACTIONS_POLICY_IDL
+
+//
+// We need this extra file so that we can get TypeCodes for the local
+// types.
+//
+
+#include "CosTransactionsPolicyType.idl"//renyi 6 8:changed
+
+//
+// TODO: Comment
+//
+module CosTransactions
+{
+
+/*local*/ //renyi 6 8:removed
+local interface InvocationPolicy : CORBA::Policy
+{
+    readonly attribute InvocationPolicyValue ipv;
+};
+
+
+/*local*/
+local interface OTSPolicy : CORBA::Policy
+{
+    readonly attribute OTSPolicyValue tpv;
+};
+
+/*local*/
+local interface NonTxTargetPolicy : CORBA::Policy
+{
+    readonly attribute NonTxTargetPolicyValue tpv;
+};
+
+}; // End module CosPolicyDef
+
+#endif

@@ -1,0 +1,25 @@
+module TestRecord
+{
+	abstract storagetype Order;
+	
+	abstract storagetype Product
+	{
+		state string product_id;
+		state string product_name;		
+	};
+	
+	abstract storagehome ProductHome of Product
+	{
+		key product_id;
+		factory create(product_id);
+	};
+	
+	storagetype ProductImpl implements Product
+	{
+	};
+	
+	storagehome ProductHomeImpl of ProductImpl implements ProductHome
+	{
+	};
+};	//end of module Test
+

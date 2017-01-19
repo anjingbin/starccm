@@ -1,0 +1,26 @@
+#ifndef __CCMHomeFinder_idl__
+#define __CCMHomeFinder_idl__
+
+#include <CCMHome.idl>
+
+#pragma prefix "omg.org"
+
+module Components
+{
+	exception HomeNotFound { };
+
+	interface HomeFinder
+	{
+		CCMHome find_home_by_component_type (in CORBA::RepositoryId comp_repid)
+			raises (HomeNotFound);
+
+		CCMHome find_home_by_home_type (in CORBA::RepositoryId home_repid) 
+			raises (HomeNotFound);
+
+		CCMHome find_home_by_name (in string home_name) 
+			raises (HomeNotFound);
+	};
+};
+
+#endif
+

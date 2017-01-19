@@ -1,0 +1,132 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_BALANCER_PROPERTIES_IDL
+#define STAR_BALANCER_PROPERTIES_IDL
+
+#include <STAR/BalancerTypes.idl>
+
+#pragma prefix "nis.net"
+
+/**
+ *
+ * The definitions in this module provide the interface of the InterBus
+ * Balancer.
+ *
+ **/
+module LoadBalancing
+{
+
+/**
+ *
+ * The tolerance load balancing strategy property name.
+ *
+ * Members with a load difference that is less than tolerance are
+ * considered to have the same load.
+ *
+ **/
+const string TolerancePropertyName = "tolerance";
+
+/**
+ *
+ * The tolerance load balancing strategy property value.
+ *
+ * The default value is 0.
+ *
+ **/
+typedef unsigned long TolerancePropertyValue;
+
+/**
+ *
+ * The load-per-client load balancing strategy property name.
+ *
+ * The load-per-client property is an estimate of the load produced by a
+ * client.
+ *
+ **/
+const string LoadPerClientPropertyName = "load-per-client";
+
+/**
+ *
+ * The load-per-client load balancing strategy property value.
+ *
+ * The default value is 0.
+ *
+ **/
+typedef unsigned long LoadPerClientPropertyType;
+
+/**
+ *
+ * The reject-load load balancing strategy property name.
+ *
+ * Only members with loads less than reject-load are selected.
+ *
+ **/
+const string RejectLoadPropertyName = "reject-load";
+
+/**
+ *
+ * The reject-load load balancing strategy property value.
+ *
+ * The default value is 0, meaning no rejections.
+ *
+ **/
+typedef unsigned long RejectPropertyValue;
+
+/**
+ *
+ * The dampening-multiplier load balancing strategy property name.
+ *
+ * A dampening technique is used to smooth out spikes that may occur in
+ * the reported loads of members.  The load of a member is calculated
+ * using the dampening-multiplier property as follows:
+ *
+ * <p><code>
+ *   load = mult * old_load + (1 - mult) * new_load
+ * </code><p>
+ *
+ * where <code>mult</code> is the dampening-multiplier property value.
+ * The dampening-multiplier property must be greater than or equal to 0
+ * and less than 1.
+ * 
+ **/
+const string DampeningMultiplierPropertyName = "dampening-multiplier";
+
+/**
+ *
+ * The dampening-multiplier load balancing strategy property value.
+ *
+ * The default value is 0, which disables dampening.
+ *
+ **/
+typedef float DampeningMultiplierPropertyValue;
+
+/**
+ *
+ * The critical-load load balancing strategy property name.
+ *
+ * Members with loads greater than or equal to the critical-load are
+ * re-balanced.
+ *
+ **/
+const string CriticalLoadPropertyName = "critical-load";
+
+/**
+ *
+ * The critical-load load balancing strategy property value.
+ *
+ * The default value is 0, which disables re-balancing.
+ *
+ **/
+typedef unsigned long CriticalLoadPropertyValue;
+
+}; // End module LoadBalancing
+
+#endif

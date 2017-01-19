@@ -1,0 +1,31 @@
+// **********************************************************************
+//
+// Copyright (c) 2002-2003 
+// StarMiddleware.net	
+// www.StarMiddleware.net
+// 
+// All Rights Reserved
+//
+// Author: Ren Yi	starots@sohu.com	
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef STAR_COS_TRANSACTIONS_USER_IDL
+#define STAR_COS_TRANSACTIONS_USER_IDL
+
+#include "CosTransactionsOTS.idl"
+
+
+module CosTransactions 
+{
+interface Synchronization : TransactionalObject 
+{
+    void before_completion();
+
+    void after_completion(in Status s);
+};
+
+};
+
+#endif

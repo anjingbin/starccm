@@ -1,0 +1,26 @@
+// **********************************************************************
+//
+// Copyright (c) 2000
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_EVENT_RECEIVER_IDL
+#define STAR_EVENT_RECEIVER_IDL
+
+#pragma prefix "nis.net"
+
+module STAR
+{
+
+interface EventReceiver
+{
+    boolean receive(in any event);
+};
+
+}; // End module STAR
+
+#endif

@@ -1,0 +1,31 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// Author : CCM Team
+//
+// Version: 1.0.0
+// All Rights Reserved
+//
+// **********************************************************************
+
+//
+//This demo encapsulates the CORBA famous program ---"Hello".
+//
+
+#include <HelloWorld.idl3>
+#include <HelloWorld.psdl>
+
+module HelloWorld
+{
+	composition session PersonImpl
+	{
+		home executor CCM_PersonHome_impl
+		{
+			implements PersonHome;
+			manages CCM_Person_impl;	
+		};
+	};
+};

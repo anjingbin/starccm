@@ -1,0 +1,28 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+# **********************************************************************
+
+#
+# Check whether GNU C++ using GNU or native linker in order to 
+# determine flag for shared library versioning
+#
+gcc_ld=`gcc -print-prog-name=ld`
+if $gcc_ld -v 2>&1 | grep GNU >/dev/null 2>&1
+then
+    # GNU Linker
+    echo "-Wl,-soname,"
+elif $gcc_ld -V 2>&1 | grep Solaris >/dev/null 2>&1
+then
+    # Native SUN Linker
+    echo "-Wl,-h,"
+elif $gcc_ld -V 2>&1 | grep "linker linker ld B" >/dev/null 2>&1
+then
+    # Native HP-UX Linker
+    echo "-Wl,+h,"
+fi

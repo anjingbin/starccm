@@ -1,0 +1,49 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef PORTABLE_INTERCEPTOR_REQUEST_IDL
+#define PORTABLE_INTERCEPTOR_REQUEST_IDL
+
+#pragma prefix "omg.org"
+
+#include <STAR/IOP.idl>
+#include <STAR/Dynamic.idl>
+#include <STAR/Messaging.idl>
+
+#include <STAR/PICommon.idl>
+
+module PortableInterceptor
+{
+
+local interface RequestInfo
+{
+    readonly attribute unsigned long request_id;
+    readonly attribute string operation;  
+    readonly attribute Dynamic::ParameterList arguments;
+    readonly attribute Dynamic::ExceptionList exceptions;
+    readonly attribute Dynamic::ContextList contexts;
+    readonly attribute Dynamic::RequestContext operation_context;
+    readonly attribute any result;
+    readonly attribute boolean response_expected; 
+    readonly attribute Messaging::SyncScope sync_scope;
+    readonly attribute ReplyStatus reply_status;
+    readonly attribute Object forward_reference;
+
+    any get_slot(in SlotId id)
+        raises (InvalidSlot);
+
+    IOP::ServiceContext get_request_service_context(in IOP::ServiceId id);
+
+    IOP::ServiceContext get_reply_service_context(in IOP::ServiceId id);
+};
+
+}; // End module PortableInterceptor
+
+#endif

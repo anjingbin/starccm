@@ -1,0 +1,33 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+PSS_CPPFLAGS	= @PSS_CPPFLAGS@
+PSS_LDFLAGS	= @PSS_LDFLAGS@
+PSS_IDLDIR	= @PSS_IDLDIR@
+PSS_LIBS	= @PSS_LIBS@
+PSS_LIBVER	= @PSS_LIBVER@
+
+OB_CPPFLAGS     = @OB_CPPFLAGS@
+OB_LDFLAGS      = @OB_LDFLAGS@
+OB_IDLFLAGS     = @OB_IDLFLAGS@
+OB_LIBS         = @OB_LIBS@
+IDL		= @IDL@
+
+
+OTS_CPPFLAGS	= @OTS_CPPFLAGS@
+OTS_LDFLAGS	= @OTS_LDFLAGS@
+OTS_IDLDIR	= @OTS_IDLDIR@
+OTS_LIBS	= @OTS_LIBS@
+
+
+PSQL_CPPFLAGS	= @PSQL_CPPFLAGS@
+PSQL_LDFLAGS	= @PSQL_LDFLAGS@
+PSQL_LIBS	= @PSQL_LIBS@

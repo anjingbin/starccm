@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE corbacomponent PUBLIC "" "corbacomponent.dtd">
+<corbacomponent>
+	<corbaversion>3.0</corbaversion>
+	<componentrepid repid="IDL:Bank/WithdrawComp:1.0"/>
+	<homerepid repid="IDL:Bank/WithdrawCompHome:1.0"/>
+	<componentkind>
+		<service/>
+	</componentkind>
+	<transaction use="supports"/>
+	<threading policy="serialize "/>
+	<configurationcomplete set="true"/>
+	<homefeatures name="WithdrawCompHome" repid="IDL:Bank/WithdrawCompHome:1.0"/>
+	<componentfeatures name="WithdrawComp" repid="IDL:Bank/WithdrawComp:1.0">
+		<ports>
+			<uses usesname="the_account" repid="IDL:Bank/AccountOp:1.0"/>
+			<uses usesname="interest_computer" repid="IDL:Bank/ComputeOp:1.0"/>
+			<provides providesname="WithdrawComp_op" repid="IDL:Bank/WithdrawOp:1.0">
+				<operationpolicies>
+					<operation name="*">
+						<transaction use="supports"/>
+					</operation>
+				</operationpolicies>
+			</provides>
+		</ports>
+	</componentfeatures>
+	<interface name="WithdrawOp" repid="IDL:Bank/WithdrawOp:1.0"/>
+</corbacomponent>

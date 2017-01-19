@@ -1,0 +1,112 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+LIB_BASENAME	= libPSS@LIBEXT@@PSS_LIBVER@
+LIB_NAME		= $(top_srcdir)/lib/$(LIB_BASENAME)
+
+TARGETS		= $(LIB_NAME)
+
+IDLDIR		= $(top_srcdir)/idl
+HDIR		= $(top_srcdir)/include
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA	= @INSTALL_DATA@
+
+LIB_OBJS	= ConnectorRegistry_impl.o \
+		  StorageObject.o \
+		  CosPersistentState.o \
+		  ConnectorBase.o \
+		  DatabaseCatalog.o \
+		  DatabaseConnector.o \
+		  DatabaseSession.o \
+		  PersistentHome.o \
+		  PersistentObject.o \
+		  PostgreSQLConnector.o \
+		  PSSInit.o \
+		  TransactionalDatabaseSession.o \
+		  PostgreSQLSession.o \
+		  PID.o \
+		  Utility.o \
+		  PSS_Error.o \
+		  md5c.o \
+		  sysdep.o \
+		  uuid.o
+
+SRCS		= md5c.c \
+		sysdep.c \
+		utest.c \
+		uuid.c \
+		ConnectorBase.cpp \
+		ConnectorRegistry_impl.cpp \
+		CosPersistentState.cpp \
+		DatabaseCatalog.cpp \
+		DatabaseConnector.cpp \
+		DatabaseSession.cpp \
+		PersistentHome.cpp \
+		PersistentObject.cpp \
+		PID.cpp \
+		PostgreSQLConnector.cpp \
+		PostgreSQLSession.cpp \
+		PSSInit.cpp \
+		PSS_Error.cpp \
+		StorageObject.cpp \
+		TransactionalDatabaseSession.cpp \
+		Utility.cpp 
+
+
+include ../Makefile.orb
+
+$(LIB_NAME): $(LIB_OBJS)
+	rm -f $@
+	$(AR) $(ARFLAGS) $(LIB_BASENAME) `if test -n "$(LIBVERFLAG)"; \
+	 then echo $(LIBVERFLAG)$(LIB_BASENAME); fi` $(LIB_OBJS)
+	mv $(LIB_BASENAME) $@
+	$(RANLIB) $@
+	$(RMLNK_SHLIB) $(top_srcdir)/lib/libPSS@LIBEXT@
+	$(SYMLNK_SHLIB) $(LIB_BASENAME) $(top_srcdir)/lib/libPSS@LIBEXT@
+
+
+CosPersistentState.cpp CosPersistentState_skel.cpp $(HDIR)/CosPersistentState.h $(HDIR)/CosPersistentState_skel.h: \
+		$(IDLDIR)/CosPersistentState.idl
+	if test -x $(IDL); \
+		then \
+		rm -f CosPersistentState.cpp ;\
+		rm -f CosPersistentState_skel.cpp ;\
+		rm -f $(HDIR)/CosPersistentState.h ;\
+		rm -f $(HDIR)/CosPersistentState_skel.h; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/CosPersistentState.idl ;\
+		mv CosPersistentState.h $(HDIR)/CosPersistentState.h ;\
+		mv CosPersistentState_skel.h $(HDIR)/CosPersistentState_skel.h ;\
+	fi
+
+install:: all
+	$(INSTALL_LIBRARY) $(LIB_NAME) $(libdir)
+	$(RMLNK_SHLIB) $(libdir)/libPSS@LIBEXT@
+	$(SYMLNK_SHLIB) $(LIB_BASENAME) $(libdir)/libPSS@LIBEXT@ 
+
+min:: all
+
+install_min:: install
+
+clean::
+	@rm -f $(top_srcdir)/lib/libPSS@LIBEXT@
+	
+include .depend

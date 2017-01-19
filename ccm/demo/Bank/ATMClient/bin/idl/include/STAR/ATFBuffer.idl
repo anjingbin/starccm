@@ -1,0 +1,36 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_BUFFER_IDL
+#define ATF_BUFFER_IDL
+
+#pragma prefix "nis.net"
+
+module ATF
+{
+
+local interface Buffer
+{
+    readonly attribute unsigned long length;
+
+    attribute unsigned long pos;
+
+    void advance(in unsigned long delta);
+
+    unsigned long rest_length();
+
+    boolean is_full();
+};
+
+typedef sequence< Buffer > BufferSeq;
+
+}; // End module ATF
+
+#endif

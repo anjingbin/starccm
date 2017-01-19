@@ -1,0 +1,52 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STARPOA_POLICIES_IDL
+#define STARPOA_POLICIES_IDL
+
+#include <STAR/Policy.idl>
+#include <STAR/Dispatch.idl>
+
+#pragma prefix "nis.net"
+
+module STARPortableServer
+{
+
+const CORBA::PolicyType POA_SYNCHRONIZATION_POLICY_ID = (256 + 1) | 0xfffe0000;
+
+enum POASynchPolicyValue
+{
+    NO_SYNCHRONIZATION,
+    SYNCHRONIZE_ON_POA,
+    SYNCHRONIZE_ON_ORB
+};
+
+local interface POASynchPolicy : CORBA::Policy
+{
+    readonly attribute POASynchPolicyValue value;
+};
+
+const CORBA::PolicyType POA_DISPATCH_STRATEGY_POLICY_ID = (256 + 2) | 0xfffe0000;
+
+local interface POARequestLevelDispatchStrategyPolicy : CORBA::Policy
+{
+    readonly attribute STAR::RequestLevelDispatchStrategy value;
+};
+
+const CORBA::PolicyType POA_PI_CALL_POLICY_ID = (256 + 3) | 0xfffe0000;
+
+local interface POAPiCallPolicy : CORBA::Policy
+{
+    readonly attribute boolean value;
+};
+
+}; // End module STAR
+
+#endif

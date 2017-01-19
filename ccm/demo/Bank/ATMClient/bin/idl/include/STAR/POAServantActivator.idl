@@ -1,0 +1,39 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POA_SERVANT_ACTIVATOR_IDL
+#define POA_SERVANT_ACTIVATOR_IDL
+
+#include <STAR/POAServantManager.idl>
+#include <STAR/POACommon.idl>
+
+#pragma prefix "omg.org"
+
+module PortableServer
+{
+#pragma version PortableServer 2.3
+
+local interface POA;
+
+local interface ServantActivator : ServantManager
+{
+#pragma version ServantActivator 2.3
+
+    Servant incarnate(in ObjectId oid, in POA adapter)
+	raises (ForwardRequest);
+
+    void etherealize(in ObjectId oid, in POA adapter, in Servant serv,
+		     in boolean cleanup_in_progress,
+		     in boolean remaining_activations);
+};
+
+}; // End module PortableServer
+
+#endif

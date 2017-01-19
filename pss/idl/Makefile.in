@@ -1,0 +1,38 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2004
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#  author: BaiXiaoBo        bxbgfkd@tom.com                         
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL         = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA    = @INSTALL_DATA@
+
+install::
+	@if test ! -d $(idldir)/pss ; \
+	then \
+	    echo "Creating $(idldir)/pss..." ; \
+	    mkdir $(idldir)/pss ; \
+	    chmod a+rx $(idldir)/pss ; \
+	fi
+
+	@for i in *.idl ; \
+	do \
+	    echo "Installing $$i" ; \
+	    $(INSTALL_DATA) $$i $(idldir)/pss/$$i ; \
+	done
+
+install_min:: install

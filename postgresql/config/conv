@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FILES="ac_func_accept_argtypes.m4 c-compiler.m4 c-library.m4 config.guess config.sub cxx.m4 docbook.m4 general.m4 install-sh java.m4 libtool.m4 missing mkinstalldirs perl.m4 prep_buildtree programs.m4 python.m4 tcl.m4"
+
+
+for i in $FILES 
+do 
+   if test ! -f ./$i
+   then echo "wrong ,there is no file $i"
+   fi
+   tr -d '\r'<./$i>/usr/$i
+   mv -f /usr/config/$i ./$i
+done
+	

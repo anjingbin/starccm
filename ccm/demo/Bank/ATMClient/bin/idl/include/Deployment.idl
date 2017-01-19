@@ -1,0 +1,174 @@
+#ifndef __CCMDeployment_idl__
+#define __CCMDeployment_idl__
+
+#include <Configurator.idl>
+
+#pragma prefix "omg.org"
+
+module Components
+{
+	// From Chapter 69.9: Component Deployment
+
+	typedef sequence<CCMHome> CCMHomes;
+
+	module Deployment
+	{
+		typedef FailureReason InvalidConfigurationReason;
+
+		const InvalidConfigurationReason UnknownConfigValueName = 0;
+		const InvalidConfigurationReason InvalidConfigValueType = 1;
+		const InvalidConfigurationReason ConfigValueRequired = 2;
+		const InvalidConfigurationReason ConfigValueNotExpected = 3;
+
+		exception InvalidConfiguration
+		{
+			InvalidConfigurationReason reason;
+			FeatureName name;
+		};
+
+		typedef string UUID;
+
+		typedef string Location;
+
+		exception UnknownImplId { };
+
+		exception InvalidLocation { };
+
+		exception InstallationFailure
+		{
+			FailureReason reason;
+		};
+		
+		exception RecoverFailure { };
+		
+
+		interface ComponentInstallation
+		{
+			void install(in UUID implUUID, in Location component_loc)
+				raises (InvalidLocation, InstallationFailure);
+
+			void replace(in UUID implUUID, in Location component_loc)
+				raises (InvalidLocation, InstallationFailure);
+
+			void remove(in UUID implUUID)
+				raises (UnknownImplId, RemoveFailure);
+
+			Location get_implementation(in UUID implUUID)
+				raises(UnknownImplId, InstallationFailure);		
+			
+			void recover()
+				raises(RecoverFailure);
+		};
+
+		interface Assembly;
+
+		exception InvalidAssembly { };
+
+		interface AssemblyFactory
+		{
+			Cookie create(in Location assembly_loc)
+				raises (InvalidLocation, CreateFailure);
+
+			Assembly lookup(in Cookie c)
+				raises (InvalidAssembly);
+
+			void destroy(in Cookie c)
+				raises (InvalidAssembly, RemoveFailure);
+			
+			void recover()
+				raises(RecoverFailure);	
+			
+		};
+
+		enum AssemblyState { INACTIVE,  INSERVICE };
+
+		interface Assembly
+		{
+			void build() raises (CreateFailure);
+
+			void tear_down() raises (RemoveFailure);
+
+			AssemblyState get_state();
+			
+			void recover()
+				raises(RecoverFailure);		
+			
+			void shutdown();				
+			
+		};
+
+		interface ComponentServer;
+		typedef sequence<ComponentServer> ComponentServers;
+
+		interface ServerActivator
+		{
+			ComponentServer create_component_server(in ConfigValues config)
+				raises(CreateFailure, InvalidConfiguration);
+
+			void remove_component_server(in ComponentServer server)
+				raises(RemoveFailure);
+
+			ComponentServers get_component_servers();		
+
+			void recover()
+				raises(RecoverFailure);						
+			
+		};
+
+		interface Container;
+		typedef sequence<Container> Containers;
+
+		interface ComponentServer
+		{
+			readonly attribute ConfigValues configuration;
+
+			ServerActivator get_server_activator();
+
+			Container create_container(in ConfigValues config)
+				raises (CreateFailure, InvalidConfiguration);
+
+			void remove_container(in Container cref) 
+				raises (RemoveFailure);
+
+			Containers get_containers();
+
+	 		void remove() 
+				raises (RemoveFailure);
+
+			void recover()
+				raises(RecoverFailure);					
+			
+		};
+
+		exception ImplEntryPointNotFound { };
+
+		interface Container
+		{
+			readonly attribute ConfigValues configuration;
+
+			ComponentServer get_component_server();
+
+			CCMHome install_home(in UUID id,
+					in string entrypt,
+					in ConfigValues config)
+				raises (UnknownImplId,
+					ImplEntryPointNotFound,
+					InstallationFailure,
+					InvalidConfiguration);
+
+			void remove_home(in CCMHome href) 
+				raises (RemoveFailure);
+
+			CCMHomes get_homes();
+
+			void remove() 
+				raises (RemoveFailure);		
+			
+		};
+		
+	};
+};
+
+
+
+#endif

@@ -1,0 +1,82 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_IMR_TYPES_IDL
+#define STAR_IMR_TYPES_IDL
+
+#pragma prefix "nis.net"
+
+#include <STAR/Types.idl>
+
+module IMR
+{
+
+typedef unsigned long ProcessID;
+
+typedef CORBA::StringSeq POAName;
+
+typedef sequence<POAName> POANameSeq;
+
+typedef CORBA::StringSeq ArgList;
+
+exception NoSuchOHD
+{
+    string name;
+};
+
+exception NoSuchServer
+{
+    string name;
+};
+
+exception OHDNotRunning
+{
+    string host;
+};
+
+exception NoSuchPOA
+{
+    POAName poa;
+};
+
+exception ServerAlreadyRegistered
+{
+    string name;
+};
+
+enum ServerActivationMode
+{
+    SHARED,
+    PERSISTENT
+};
+
+enum ServerStatus
+{
+    FORKED,
+    STARTING,
+    RUNNING,
+    STOPPING,
+    STOPPED
+};
+
+typedef long ServerID;
+
+enum POAStatus
+{
+    INACTIVE,
+    ACTIVE,
+    HOLDING,
+    DISCARDING,
+    NON_EXISTENT
+};
+
+};
+
+#endif

@@ -1,0 +1,25 @@
+// **********************************************************************
+//
+// Copyright (c) 2002
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#pragma prefix "implicit"
+
+interface Account
+{
+    void connect();
+    
+    void close();
+    
+    void sum();
+
+    void deposit();
+
+    void withdraw();
+
+};

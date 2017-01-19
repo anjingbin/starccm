@@ -1,0 +1,527 @@
+# **********************************************************************
+#  Copyright (c) 2003
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#                           
+#  Author: An Jingbin	anjb@sina.com	
+# **********************************************************************
+
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+IDLDIR		= $(top_srcdir)/idl
+HDIR		= $(top_srcdir)/include
+
+BASENAME	= libCCM@LIBEXT@@CCM_LIBVER@
+NAME		= $(top_srcdir)/lib/$(BASENAME)
+
+TARGETS		= $(NAME)
+
+include $(top_srcdir)/config/Make.rules
+
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_LIBRARY = @INSTALL_LIBRARY@
+INSTALL_DATA	= @INSTALL_DATA@
+
+GENERATED	= CCMCommon.cpp \
+		$(HDIR)/CCMCommon.h \
+		$(HDIR)/CCMCommon_skel.h \
+		CCMCommon_skel.cpp \
+		CCMHome.cpp \
+		$(HDIR)/CCMHome.h \
+		$(HDIR)/CCMHome_skel.h \
+		CCMHome_skel.cpp \
+		CCMObject.cpp \
+		$(HDIR)/CCMObject.h \
+		$(HDIR)/CCMObject_skel.h \
+		CCMObject_skel.cpp \
+		Components.cpp \
+		$(HDIR)/Components.h \
+		$(HDIR)/Components_skel.h \
+		Components_skel.cpp \
+		ComponentsClient.cpp \
+		$(HDIR)/ComponentsClient.h \
+		$(HDIR)/ComponentsClient_skel.h \
+		ComponentsClient_skel.cpp \
+		ComponentsPSS.cpp \
+		$(HDIR)/ComponentsPSS.h \
+		$(HDIR)/ComponentsPSS_skel.h \
+		ComponentsPSS_skel.cpp \
+		ComponentsPSS_pss.cpp \
+		$(HDIR)/ComponentsPSS_pss.h \
+		$(HDIR)/ComponentsPSS_psdl.h \
+		ComponentsPSS_psdl.cpp \
+		Configurator.cpp \
+		$(HDIR)/Configurator.h \
+		$(HDIR)/Configurator_skel.h \
+		Configurator_skel.cpp \
+		DeployDomainMgr.cpp \
+		$(HDIR)/DeployDomainMgr.h \
+		$(HDIR)/DeployDomainMgr_skel.h \
+		DeployDomainMgr_skel.cpp \
+		Deployment.cpp \
+		$(HDIR)/Deployment.h \
+		$(HDIR)/Deployment_skel.h \
+		Deployment_skel.cpp \
+		EJBean.cpp \
+		$(HDIR)/EJBean.h \
+		$(HDIR)/EJBean_skel.h \
+		EJBean_skel.cpp \
+		EnterpriseComponent.cpp \
+		$(HDIR)/EnterpriseComponent.h \
+		$(HDIR)/EnterpriseComponent_skel.h \
+		$(HDIR)/ForTAO.h \
+		$(HDIR)/ForTAO_skel.h \
+		EnterpriseComponent_skel.cpp \
+		HomeFinder.cpp \
+		$(HDIR)/HomeFinder.h \
+		$(HDIR)/HomeFinder_skel.h \
+		HomeFinder_skel.cpp \
+		orb.cpp \
+		$(HDIR)/orb.h \
+		$(HDIR)/orb_skel.h \
+		orb_skel.cpp \
+		ResourcePool.cpp \
+		$(HDIR)/ResourcePool.h \
+		$(HDIR)/ResourcePool_skel.h \
+		ResourcePool_skel.cpp \
+		UserTransaction.cpp \
+		$(HDIR)/UserTransaction.h \
+		$(HDIR)/UserTransaction_skel.h \
+		UserTransaction_skel.cpp \
+		FileAccessor.cpp \
+		$(HDIR)/FileAccessor.h \
+		HomeRegistration.cpp \
+		$(HDIR)/HomeRegistration.h \
+		ArchObject.cpp \
+		$(HDIR)/ArchObject.h \
+		$(HDIR)/ArchObject_skel.h \
+		ArchObject_skel.cpp
+
+CCMLIB_OBJS	= CCM.o \
+		CCMCommon.o \
+		CCMCommon_skel.o \
+		CCMCommonType_impl.o \
+		CCMHome.o \
+		CCMHome_impl.o \
+		CCMHome_skel.o \
+		CCMObject.o \
+		CCMObject_skel.o \
+		ComponentComposition.o \
+		Components.o \
+		Components_skel.o \
+		ComponentsClient.o \
+		ComponentsClient_skel.o \
+		ComponentServentBase.o \
+		ComponentsPSS.o \
+		ComponentsPSS_psdl.o \
+		ComponentsPSS_pss.o \
+		ComponentsPSS_skel.o \
+		CompositionManager.o \
+		Configurator.o \
+		Configurator_impl.o \
+		Configurator_skel.o \
+		DeployDomainMgr.o \
+		DeployDomainMgr_skel.o \
+		Deployment.o \
+		Deployment_skel.o \
+		EJBean.o \
+		EJBean_skel.o \
+		EnterpriseComponent.o \
+		EnterpriseComponent_impl.o \
+		EnterpriseComponent_skel.o \
+		ExecutorSegmentBase.o \
+		FileAccessor.o \
+		HomeComposition.o \
+		HomeExecutorBase.o \
+		HomeFinder.o \
+		HomeFinder_skel.o \
+		HomeRegistration.o \
+		orb.o \
+		orb_skel.o \
+		ResourcePool.o \
+		ResourcePool_skel.o \
+		Trace.o \
+		UserTransaction.o \
+		UserTransaction_skel.o \
+		Util.o \
+		UuidGenerator.o \
+		XMLParser.o \
+		ArchObject.o \
+		ArchObject_skel.o\
+		CommonFunc.o
+
+UUID_OBJS	= uuid.o \
+		sysdep.o \
+		md5c.o
+
+SRCS		= $(CCMLIB_OBJS:.o=.cpp) \
+			$(UUID_OBJS:.o=.c)
+
+ALL_CPPFLAGS	= -I. $(CCM_CPPFLAGS) $(OB_CPPFLAGS) $(PSS_CPPFLAGS) $(OTS_CPPFLAGS) $(CPPFLAGS) $(XERCESC_CPPFLAGS)
+
+ALL_IDLFLAGS	= $(OB_IDLFLAGS) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS)
+
+
+ALL_PSDLFLAGS	= -I$(OB_IDLDIR) $(OTS_IDLFLAGS) $(PSS_IDLFLAGS) $(CCM_IDLFLAGS)
+
+ALL_CXXFLAGS	= $(CXXFLAGS) $(PDB_FLAGS)
+
+ALL_CFLAGS	= -I. $(CCM_CPPFLAGS) $(CFLAGS)
+
+
+$(NAME): $(CCMLIB_OBJS) $(UUID_OBJS)
+	rm -f $@
+	$(AR) $(ARFLAGS) $(BASENAME) `if test -n "$(LIBVERFLAG)"; \
+	 then echo $(LIBVERFLAG)$(BASENAME); fi` $(CCMLIB_OBJS) $(UUID_OBJS)
+	mv $(BASENAME) $@
+	$(RANLIB) $@
+#	$(RMLNK_SHLIB) $(top_srcdir)/lib/libOB@LIBEXT@
+#	$(SYMLNK_SHLIB) $(BASENAME) $(top_srcdir)/lib/libOB@LIBEXT@
+
+#-------------------------------------------------
+#modified by baixiaobo 2004.03.19
+#
+#-------------------------------------------------
+
+CCMCommon.cpp $(HDIR)/CCMCommon.h CCMCommon_skel.cpp $(HDIR)/CCMCommon_skel.h: \
+		$(IDLDIR)/CCMCommon.idl
+	if test -x $(IDL) ;\
+	then\
+		rm -f CCMCommon.cpp;\
+		rm -f $(HDIR)/CCMCommon.h ;\
+		rm -f $(HDIR)/CCMCommon_skel.h ; \
+		rm -f CCMCommon_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/CCMCommon.idl ; \
+		mv CCMCommon.h $(HDIR) ;\
+		mv CCMCommon_skel.h $(HDIR);\
+	fi
+
+CCMHome.cpp $(HDIR)/CCMHome.h CCMHome_skel.cpp $(HDIR)/CCMHome_skel.h: \
+		$(IDLDIR)/CCMHome.idl
+	if test -x $(IDL) ;\
+	then\
+		rm -f CCMHome.cpp ; \
+		rm -f $(HDIR)/CCMHome.h ; \
+		rm -f $(HDIR)/CCMHome_skel.h ; \
+		rm -f CCMHome_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/CCMHome.idl ; \
+		mv CCMHome.h $(HDIR) ; \
+		mv CCMHome_skel.h $(HDIR) ;\
+	fi
+
+CCMObject.cpp $(HDIR)/CCMObject.h CCMObject_skel.cpp $(HDIR)/CCMObject_skel.h: \
+		$(IDLDIR)/CCMObject.idl
+	if test -x $(IDL) ;\
+	then\
+		rm -f CCMObject.cpp ;\
+		rm -f $(HDIR)/CCMObject.h ; \
+		rm -f $(HDIR)/CCMObject_skel.h ; \
+		rm -f CCMObject_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/CCMObject.idl ; \
+		mv CCMObject.h $(HDIR) ; \
+		mv CCMObject_skel.h $(HDIR);\
+	fi
+
+ArchObject.cpp $(HDIR)/ArchObject.h ArchObject_skel.cpp $(HDIR)/ArchObject_skel.h: \
+		$(IDLDIR)/ArchObject.idl
+	if test -x $(IDL) ;\
+	then\
+		rm -f ArchObject.cpp ;\
+		rm -f $(HDIR)/ArchObject.h ; \
+		rm -f $(HDIR)/ArchObject_skel.h ; \
+		rm -f ArchObject_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/ArchObject.idl ; \
+		mv ArchObject.h $(HDIR) ; \
+		mv ArchObject_skel.h $(HDIR);\
+	fi
+
+Components.cpp $(HDIR)/Components.h Components_skel.cpp $(HDIR)/Components_skel.h: \
+		$(IDLDIR)/Components.idl
+	if test -x $(IDL) ; \
+	then\
+		rm -f Components.cpp ; \
+		rm -f $(HDIR)/Components.h ; \
+		rm -f $(HDIR)/Components_skel.h ; \
+		rm -f Components_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/Components.idl ; \
+		mv Components.h $(HDIR) ; \
+		mv Components_skel.h $(HDIR);\
+	fi		
+
+ComponentsClient.cpp $(HDIR)/ComponentsClient.h ComponentsClient_skel.cpp $(HDIR)/ComponentsClient_skel.h: \
+		$(IDLDIR)/ComponentsClient.idl
+	if test -x $(IDL) ;\
+	then\
+		rm -f ComponentsClient.cpp ; \
+		rm -f $(HDIR)/ComponentsClient.h ; \
+		rm -f $(HDIR)/ComponentsClient_skel.h ; \
+		rm -f ComponentsClient_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/ComponentsClient.idl ; \
+		mv ComponentsClient.h $(HDIR) ; \
+		mv ComponentsClient_skel.h $(HDIR) ;\
+	fi
+
+ComponentsPSS.cpp $(HDIR)/ComponentsPSS.h ComponentsPSS_skel.cpp $(HDIR)/ComponentsPSS_skel.h: \
+		$(IDLDIR)/ComponentsPSS.idl
+	if test -x $(IDL) ;\
+	then\
+		rm -f ComponentsPSS.cpp ;\
+		rm -f $(HDIR)/ComponentsPSS.h ; \
+		rm -f $(HDIR)/ComponentsPSS_skel.h ; \
+		rm -f ComponentsPSS_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/ComponentsPSS.idl ; \
+		mv ComponentsPSS.h $(HDIR) ; \
+		mv ComponentsPSS_skel.h $(HDIR) ;\
+	fi
+
+ComponentsPSS_psdl.cpp $(HDIR)/ComponentsPSS_psdl.h ComponentsPSS_pss.cpp: \
+		$(IDLDIR)/ComponentsPSS.psdl
+	if test -x $(PSDL) ; \
+	then \
+		rm -f ComponentsPSS_pss.cpp ; \
+		rm -f $(HDIR)/ComponentsPSS_pss.h ; \
+		rm -f $(HDIR)/ComponentsPSS_psdl.h ; \
+		rm -f ComponentsPSS_psdl.cpp ; \
+		$(PSDL) $(ALL_PSDLFLAGS) $(IDLDIR)/ComponentsPSS.psdl ; \
+		mv ComponentsPSS_pss.h $(HDIR) ; \
+		mv ComponentsPSS_psdl.h $(HDIR) ;\
+	fi
+
+Configurator.cpp $(HDIR)/Configurator.h Configurator_skel.cpp $(HDIR)/Configurator_skel.h: \
+		$(IDLDIR)/Configurator.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f Configurator.cpp ; \
+		rm -f $(HDIR)/Configurator.h ; \
+		rm -f $(HDIR)/Configurator_skel.h ; \
+		rm -f Configurator_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/Configurator.idl ; \
+		mv Configurator.h $(HDIR) ; \
+		mv Configurator_skel.h $(HDIR) ;\
+	fi
+
+DeployDomainMgr.cpp $(HDIR)/DeployDomainMgr.h DeployDomainMgr_skel.cpp $(HDIR)/DeployDomainMgr_skel.h: \
+		$(IDLDIR)/DeployDomainMgr.idl
+	if test -x $(IDL) ; \
+	then \
+		rm -f DeployDomainMgr.cpp ; \
+		rm -f $(HDIR)/DeployDomainMgr.h ; \
+		rm -f $(HDIR)/DeployDomainMgr_skel.h ; \
+		rm -f DeployDomainMgr_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/DeployDomainMgr.idl ; \
+		mv DeployDomainMgr.h $(HDIR) ; \
+		mv DeployDomainMgr_skel.h $(HDIR) ;\
+	fi	
+
+Deployment.cpp $(HDIR)/Deployment.h Deployment_skel.cpp $(HDIR)/Deployment_skel.h: \
+		$(IDLDIR)/Deployment.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f Deployment.cpp ; \
+		rm -f $(HDIR)/Deployment.h ; \
+		rm -f $(HDIR)/Deployment_skel.h ; \
+		rm -f Deployment_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/Deployment.idl ; \
+		mv Deployment.h $(HDIR) ; \
+		mv Deployment_skel.h $(HDIR) ;\
+	fi		
+
+EJBean.cpp $(HDIR)/EJBean.h EJBean_skel.cpp $(HDIR)/EJBean_skel.h: \
+		$(IDLDIR)/EJBean.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f EJBean.cpp ;\
+		rm -f $(HDIR)/EJBean.h ;\
+		rm -f $(HDIR)/EJBean_skel.h ; \
+		rm -f EJBean_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/EJBean.idl ; \
+		mv EJBean.h $(HDIR) ; \
+		mv EJBean_skel.h $(HDIR) ;\
+	fi
+
+EnterpriseComponent.cpp $(HDIR)/EnterpriseComponent.h EnterpriseComponent_skel.cpp $(HDIR)/EnterpriseComponent_skel.h: \
+		$(IDLDIR)/EnterpriseComponent.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f EnterpriseComponent.cpp ; \
+		rm -f $(HDIR)/EnterpriseComponent.h ; \
+		rm -f $(HDIR)/EnterpriseComponent_skel.h ; \
+		rm -f EnterpriseComponent_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/EnterpriseComponent.idl ; \
+		mv EnterpriseComponent.h $(HDIR) ; \
+		mv EnterpriseComponent_skel.h $(HDIR) ;\
+	fi
+
+HomeFinder.cpp $(HDIR)/HomeFinder.h HomeFinder_skel.cpp $(HDIR)/HomeFinder_skel.h: \
+		$(IDLDIR)/HomeFinder.idl
+	if test -x $(IDL) ; \
+	then \
+		rm -f HomeFinder.cpp ; \
+		rm -f $(HDIR)/HomeFinder.h ; \
+		rm -f $(HDIR)/HomeFinder_skel.h ; \
+		rm -f HomeFinder_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/HomeFinder.idl ; \
+		mv HomeFinder.h $(HDIR) ; \
+		mv HomeFinder_skel.h $(HDIR) ;\
+	fi
+
+orb.cpp $(HDIR)/orb.h orb_skel.cpp $(HDIR)/orb_skel.h: \
+		$(IDLDIR)/orb.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f orb.cpp ;\
+		rm -f $(HDIR)/orb.h ; \
+		rm -f $(HDIR)/orb_skel.h ; \
+		rm -f orb_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/orb.idl ; \
+		mv orb.h $(HDIR) ; \
+		mv orb_skel.h $(HDIR) ;\
+	fi
+
+ResourcePool.cpp $(HDIR)/ResourcePool.h ResourcePool_skel.cpp $(HDIR)/ResourcePool_skel.h: \
+		$(IDLDIR)/ResourcePool.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f ResourcePool.cpp ;\
+		rm -f $(HDIR)/ResourcePool.h ; \
+		rm -f $(HDIR)/ResourcePool_skel.h ; \
+		rm -f ResourcePool_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/ResourcePool.idl ; \
+		mv ResourcePool.h $(HDIR) ; \
+		mv ResourcePool_skel.h $(HDIR) ;\
+	fi
+
+UserTransaction.cpp $(HDIR)/UserTransaction.h UserTransaction_skel.cpp $(HDIR)/UserTransaction_skel.h: \
+		$(IDLDIR)/UserTransaction.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f UserTransaction.cpp ; \
+		rm -f $(HDIR)/UserTransaction.h ; \
+		rm -f $(HDIR)/UserTransaction_skel.h ; \
+		rm -f UserTransaction_skel.cpp ; \
+		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)/UserTransaction.idl ; \
+		mv UserTransaction.h $(HDIR) ; \
+		mv UserTransaction_skel.h $(HDIR) ;\
+	fi
+
+NO_SKEL=
+
+ifeq ($(ORB_NAME), ORBacus)
+NO_SKEL = --no-skeletons
+endif
+ifeq ($(ORB_NAME), STARBUS)
+NO_SKEL = --no-skel
+endif
+
+FileAccessor.cpp $(HDIR)/FileAccessor.h: \
+		$(IDLDIR)/FileAccessor.idl
+	if test -x $(IDL) ;\
+	then \
+		rm -f FileAccessor.cpp ; \
+		rm -f $(HDIR)/FileAccessor.h ; \
+		$(IDL) $(ALL_IDLFLAGS) $(NO_SKEL) $(IDLDIR)/FileAccessor.idl ; \
+		mv FileAccessor.h $(HDIR) ;\
+	fi 
+
+HomeRegistration.cpp $(HDIR)/HomeRegistration.h: \
+		$(IDLDIR)/HomeRegistration.idl
+	if test -x $(IDL); \
+	then \
+		rm -f HomeRegistration.cpp ; \
+		rm -f $(HDIR)/HomeRegistration.h ; \
+		$(IDL) $(ALL_IDLFLAGS) $(NO_SKEL) $(IDLDIR)/HomeRegistration.idl ; \
+		mv HomeRegistration.h $(HDIR) ;\
+	fi
+
+
+#!if "$(ORB_NAME)" == "star"
+#FileAccessor.cpp $(HDIR)\FileAccessor.h: \
+#		$(IDLDIR)/FileAccessor.idl
+#	if exist $(IDL) \
+#		del FileAccessor.cpp & \
+#		del $(HDIR)\FileAccessor.h & \
+#		$(IDL) $(ALL_IDLFLAGS) --no-skel $(IDLDIR)\FileAccessor.idl & \
+#		move FileAccessor.h $(HDIR) & 
+#
+#HomeRegistration.cpp $(HDIR)\HomeRegistration.h: \
+#		$(IDLDIR)/HomeRegistration.idl
+#	if exist $(IDL) \
+#		del HomeRegistration.cpp & \
+#		del $(HDIR)\HomeRegistration.h & \
+#		$(IDL) $(ALL_IDLFLAGS) --no-skel $(IDLDIR)\HomeRegistration.idl & \
+#		move HomeRegistration.h $(HDIR) &
+#!endif
+#
+#!if "$(ORB_NAME)" == "tao"
+#FileAccessor.cpp $(HDIR)\FileAccessor.h: \
+#		$(IDLDIR)/FileAccessor.idl
+#	if exist $(IDL) \
+#		del FileAccessor.cpp & \
+#		del $(HDIR)\FileAccessor.h & \
+#		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)\FileAccessor.idl & \
+#		del /Q FileAccessor_skel.* &\
+#		move FileAccessor.h $(HDIR) & 
+#
+#HomeRegistration.cpp $(HDIR)\HomeRegistration.h: \
+#		$(IDLDIR)/HomeRegistration.idl
+#	if exist $(IDL) \
+#		del HomeRegistration.cpp & \
+#		del $(HDIR)\HomeRegistration.h & \
+#		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)\HomeRegistration.idl & \
+#		del /Q HomeRegistration_skel.* &\
+#		move HomeRegistration.h $(HDIR) &
+#CosTransactions.cpp $(HDIR)\CosTransactions.h: \
+#		$(IDLDIR)/tao/CosTransactions.idl
+#	if exist $(IDL) \
+#		del CosTransactions.cpp & \
+#		del $(HDIR)\CosTransactions.h & \
+#		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)\tao\CosTransactions.idl & \
+#		del /Q CosTransactions_skel.cpp & \
+#		move CosTransactions.h $(HDIR) & \
+#		move /Y *.i $(HDIR)
+#CosTransactionsOTS.cpp $(HDIR)\CosTransactionsOTS.h: \
+#		$(IDLDIR)/tao/CosTransactionsOTS.idl
+#	if exist $(IDL) \
+#		del CosTransactionsOTS.cpp & \
+#		del $(HDIR)\CosTransactionsOTS.h & \
+#		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)\tao\CosTransactionsOTS.idl & \
+#		del /Q CosTransactionsOTS_skel.cpp &\
+#		move CosTransactionsOTS.h $(HDIR) & \
+#		move /Y *.i $(HDIR)
+#CosTransactionsCurrent.cpp $(HDIR)\CosTransactionsCurrent.h: \
+#		$(IDLDIR)/tao/CosTransactionsCurrent.idl
+#	if exist $(IDL) \
+#		del CosTransactionsCurrent.cpp & \
+#		del $(HDIR)\CosTransactionsCurrent.h & \
+#		$(IDL) $(ALL_IDLFLAGS) $(IDLDIR)\tao\CosTransactionsCurrent.idl & \
+#		del /Q CosTransactionsCurrent_skel.cpp &\
+#		move CosTransactionsCurrent.h $(HDIR) & \
+#		move /Y *.i $(HDIR)
+#!endif
+
+
+
+
+install:: all
+	$(INSTALL_LIBRARY) $(NAME) $(libdir)
+	$(RMLNK_SHLIB) $(libdir)/libOB@LIBEXT@
+	$(SYMLNK_SHLIB) $(BASENAME) $(libdir)/libOB@LIBEXT@ 
+
+all::
+
+min:: all
+
+install_min:: install
+
+clean::
+	@rm -f $(top_srcdir)/lib/libCCM@LIBEXT@
+
+include .depend

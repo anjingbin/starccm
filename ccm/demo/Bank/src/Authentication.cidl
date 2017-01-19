@@ -1,0 +1,15 @@
+#include <Authentication.idl3>
+
+module Bank
+{	
+
+	composition service AuthenticationComposition
+	{
+		home executor CCM_AuthenticationHome_impl
+		{
+			implements AuthenticationHome;
+			manages CCM_Authentication_impl; 
+		}; 
+	};	
+
+};	

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DynReconfig PUBLIC "" "DynReconfig.dtd">
+<DynReconfig>
+	<description>To create two philosopher and two cultery dynamicly</description>
+	<componentassembly idref="5037f430-49ed-11d7-bccb-887617272ac7">
+	  	<namingservice corbaloc="corbaloc:iiop:127.0.0.1:9991/NameService" />
+	  	<homeregistration corbaloc="corbaloc:iiop:127.0.0.1:9992/HomeRegistration" />
+	</componentassembly>
+	<replacement>
+		<passivatecomponents>
+			<passivatecomponent idref="hj" />
+		</passivatecomponents>
+		<create filename="replace.zip" />
+		<disconnections>
+			<connectinterface id="hjleft">
+				<usesport>
+					<usesidentifier>left_hand</usesidentifier>
+					<componentinstantiationref idref="hj"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>the_fork</providesidentifier>
+					<componentinstantiationref idref="c2"/>
+				</providesport>
+			</connectinterface>
+			<connectinterface id="hjright">
+				<usesport>
+					<usesidentifier>right_hand</usesidentifier>
+					<componentinstantiationref idref="hj"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>the_fork</providesidentifier>
+					<componentinstantiationref idref="c1"/>
+				</providesport>
+			</connectinterface>
+			<connectevent id="hjobserver">
+				<consumesport>
+					<consumesidentifier>philosopher_state</consumesidentifier>
+					<componentinstantiationref idref="o"/>
+				</consumesport>
+				<publishesport>
+					<publishesidentifier>philosopher_state</publishesidentifier>
+					<componentinstantiationref idref="hj"/>
+				</publishesport>
+			</connectevent>
+		</disconnections>
+		<delete idref="hj" />
+		<connections>	
+			<connectinterface id="slleft">
+				<usesport>
+					<usesidentifier>left_hand</usesidentifier>
+					<componentinstantiationref idref="sl"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>the_fork</providesidentifier>
+					<componentinstantiationref idref="c2"/>
+				</providesport>
+			</connectinterface>
+			<connectinterface id="slright">
+				<usesport>
+					<usesidentifier>right_hand</usesidentifier>
+					<componentinstantiationref idref="sl"/>
+				</usesport>
+				<providesport>
+					<providesidentifier>the_fork</providesidentifier>
+					<componentinstantiationref idref="c1"/>
+				</providesport>
+			</connectinterface>	
+			<connectevent id="slobserver">
+				<consumesport>
+					<consumesidentifier>philosopher_state</consumesidentifier>
+					<componentinstantiationref idref="o"/>
+				</consumesport>
+				<publishesport>
+					<publishesidentifier>philosopher_state</publishesidentifier>
+					<componentinstantiationref idref="sl"/>
+				</publishesport>
+			</connectevent>
+		</connections>	
+		<configurationcomplete idref="sl" />
+	</replacement>
+</DynReconfig>	

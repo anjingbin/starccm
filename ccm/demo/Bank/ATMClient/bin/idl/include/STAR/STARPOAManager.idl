@@ -1,0 +1,63 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_POA_MANAGER_IDL
+#define STAR_POA_MANAGER_IDL
+
+#include <STAR/POAManager.idl>
+
+#include <STAR/ATF.idl>
+
+#pragma prefix "nis.net"
+
+module STARPortableServer
+{
+local interface POAManager : PortableServer::POAManager
+{
+    readonly attribute string name;
+
+    ATF::AcceptorSeq get_acceptors()
+        raises(AdapterInactive);
+};
+
+typedef sequence< POAManager > POAManagerSeq;
+
+local interface POAManagerFactory
+{  
+    struct AcceptorConfig
+    {
+        ATF::PluginId id;
+        ATF::ParamSeq params;
+    };
+
+    typedef sequence< AcceptorConfig > AcceptorConfigSeq;
+
+    exception POAManagerAlreadyExists
+    {
+    };
+
+    POAManager create_poa_manager(in string name)
+        raises(POAManagerAlreadyExists,
+               ATF::InvalidParam);
+
+    POAManager create_poa_manager_with_config(in string name,
+                                              in AcceptorConfigSeq config)
+        raises(POAManagerAlreadyExists,
+               ATF::NoSuchFactory,
+               ATF::InvalidParam);
+
+    POAManagerSeq get_poa_managers();
+
+    void destroy();
+};
+
+}; // End module STARPortableServer
+
+#endif

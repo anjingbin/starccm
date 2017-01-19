@@ -1,0 +1,149 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ATF_IDL
+#define ATF_IDL
+
+
+#ifndef STARE
+#  include <STAR/ATFClient.idl>
+#  include <STAR/Current.idl>
+#else // STARE
+#  include <STARE/ATFClient.idl>
+#endif // STARE
+
+#pragma prefix "nis.net"
+
+module ATF
+{
+
+#ifndef STARE
+
+local interface AcceptorInfo;
+local interface AccFactoryInfo;
+
+#endif // STARE
+ 
+local interface Acceptor
+{
+    readonly attribute PluginId id;
+  
+    readonly attribute ProfileId tag;
+
+    readonly attribute ATF::Handle handle;
+
+    void close();
+
+    void shutdown();
+
+    void listen();
+
+    Transport accept(in boolean block);
+
+    Transport try_connect();
+
+    void add_profiles(in ProfileInfo profile_info, inout IOR ref);
+
+    ProfileInfoSeq get_local_profiles(in IOR ref);
+
+#ifndef STARE
+    AcceptorInfo get_info();
+#endif // STARE
+};
+
+typedef sequence< Acceptor > AcceptorSeq;
+
+#ifndef STARE
+
+local interface AccCallback;
+
+local interface AcceptorInfo
+{
+    readonly attribute PluginId id;
+   
+    readonly attribute ProfileId tag;
+
+    string describe();
+
+    void add_acc_callback(in AccCallback cb);
+
+    void remove_acc_callback(in AccCallback cb);
+};
+
+local interface AccCallback
+{
+    void acc_callback(in TransportInfo transport_info);
+};
+
+typedef sequence< AccCallback > AccCallbackSeq;
+
+#endif // STARE
+
+exception InvalidParam
+{
+    string reason;
+};
+
+local interface AccFactory
+{
+    readonly attribute PluginId id;
+ 
+    readonly attribute ProfileId tag;
+
+    Acceptor create_acceptor(in ParamSeq params)
+        raises(InvalidParam);
+
+    void change_key(inout IOP::IOR ior, in ObjectKey key);
+
+#ifndef STARE
+    AccFactoryInfo get_info();
+#endif // STARE
+};
+
+typedef sequence< AccFactory > AccFactorySeq;
+
+#ifndef STARE
+
+local interface AccFactoryInfo
+{
+    readonly attribute PluginId id;
+
+    readonly attribute ProfileId tag;
+    
+    string describe();
+};
+
+#endif // STARE
+
+local interface AccFactoryReg
+{
+    void add_factory(in AccFactory _factory)
+        raises(FactoryAlreadyExists);
+
+    AccFactory get_factory(in PluginId id)
+        raises(NoSuchFactory);
+
+    AccFactorySeq get_factories();
+};
+
+#ifndef STARE
+
+local interface Current : CORBA::Current
+{ 
+    TransportInfo get_transportInfo();
+ 
+    AcceptorInfo get_acceptorInfo();
+};
+
+#endif // STARE
+
+}; // End module ATF
+
+#endif

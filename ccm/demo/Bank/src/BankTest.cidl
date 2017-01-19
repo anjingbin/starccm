@@ -1,0 +1,14 @@
+#include <BankTest.idl3>
+
+
+module Bank
+{
+	composition session BankTestImpl
+	{
+		home executor CCM_BankTestHome_impl
+		{
+			implements BankTestHome;
+			manages CCM_BankTest_impl;	
+		};
+	};
+};

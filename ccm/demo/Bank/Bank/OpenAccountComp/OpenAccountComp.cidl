@@ -1,0 +1,13 @@
+#include <OpenAccountComp.idl3>
+
+module Bank
+{	
+	composition service OpenAccountCompComposition
+	{		
+		home executor CCM_OpenAccountCompHome_Impl
+		{
+			implements OpenAccountCompHome;
+			manages CCM_OpenAccountComp_Impl;
+		};
+	};
+};	

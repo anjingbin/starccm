@@ -1,0 +1,19 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef IFR_IDL
+#define IFR_IDL
+
+#include <STAR/IFR1.idl>
+#include <STAR/IFR2.idl>
+#include <STAR/IFR3.idl>
+#include <STAR/IFR4.idl>
+
+#endif

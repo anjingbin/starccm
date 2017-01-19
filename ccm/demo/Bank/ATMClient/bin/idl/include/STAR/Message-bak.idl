@@ -1,0 +1,21 @@
+//
+//wyh
+//
+#pragma prefix "omg.org"
+module Messaging {
+	//
+	//Basic interface for the Callback model
+	//
+	interface ReplyHandler {};
+
+	//
+	// Exception Delivery in the Callback Model
+	//
+	typedef sequence<octet> octet_seq; 
+	valuetype ExceptionHolder {
+		public boolean is_system_exception;  
+		public boolean byte_order;    
+		public octet_seq marshaled_exception;
+	};
+
+};

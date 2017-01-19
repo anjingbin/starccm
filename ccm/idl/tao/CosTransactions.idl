@@ -1,0 +1,23 @@
+// **********************************************************************
+//
+// Copyright (c) 2002-2003 
+// StarMiddleware.net	
+// www.StarMiddleware.net
+// 
+// All Rights Reserved
+//
+// Author: Ren Yi	starots@sohu.com	
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef STAR_COS_TRANSACTIONS_IDL
+#define STAR_COS_TRANSACTIONS_IDL
+
+#include "CosTransactionsOTS.idl"
+#include "CosTransactionsCurrent.idl"
+//#include "PostgreSQLResource.idl"
+//#include "CosTransactionsUser.idl"
+//#include "CosTransactionsPolicy.idl"
+
+#endif

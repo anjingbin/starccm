@@ -1,0 +1,33 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef ORB_IDL
+#define ORB_IDL
+
+#ifndef STARE
+#  include <STAR/TCKind.idl>
+#  include <STAR/CompletionStatus.idl>
+#  include <STAR/Types.idl>
+#  include <STAR/Bounds.idl>
+#  include <STAR/WrongTransaction.idl>
+#  include <STAR/Current.idl>
+#  include <STAR/Policy.idl>
+#  include <STAR/StringValue.idl>
+#  include <STAR/Custom.idl>
+#  include <STAR/IFR.idl>
+#  include <STAR/ServiceInfo.idl>
+#else // STARE
+#  include <STARE/CompletionStatus.idl>
+#  include <STARE/Types.idl>
+#  include <STARE/Current.idl>
+#  include <STARE/Policy.idl>
+#endif // STARE
+
+#endif

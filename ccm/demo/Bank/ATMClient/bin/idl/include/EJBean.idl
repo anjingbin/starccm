@@ -1,0 +1,26 @@
+#ifndef __CCMEJBean_idl__
+#define __CCMEJBean_idl__
+
+#include <CCMObject.idl>
+
+#pragma prefix "omg.org"
+
+module Components
+{	
+	// From Chapter 64: Integrating with Enterprise JavaBeans
+	abstract valuetype Enumeration
+	{
+       		boolean has_more_elements();
+
+		CCMObject next_element();
+	};
+
+	typedef sequence<CCMObject> CCMObjectSeq;
+
+	valuetype DefaultEnumeration : Enumeration
+	{
+		private CCMObjectSeq objects;
+	};
+};
+
+#endif

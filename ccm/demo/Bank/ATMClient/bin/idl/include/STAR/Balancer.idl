@@ -1,0 +1,175 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_BALANCER_IDL
+#define STAR_BALANCER_IDL
+
+#include <STAR/BalancerTypes.idl>
+
+#pragma prefix "nis.net"
+
+/**
+ *
+ * The definitions in this module provide the interface of the InterBus
+ * Balancer.
+ *
+ **/
+module LoadBalancing
+{
+
+//
+// Forward declarations
+//
+interface LoadAlert;
+
+/**
+ *
+ * The member data.
+ *
+ **/
+struct MemberData
+{
+    MemberId member_id;
+    LoadAlert alert;
+};
+
+/** A sequence of member data. */
+typedef sequence<MemberData> MemberDataSeq;
+
+/**
+ *
+ * Implemented by a server that wishes to receive load alerts (a signal
+ * to redirect requests back to the Balancer).
+ *
+ **/
+interface LoadAlert
+{
+    /** Redirect the next request back to the Balancer. */
+    void alert();
+};
+
+/**
+ *
+ * Used to choose the next member to service a new client connection.
+ * The Balancer provides several implementations of the Strategy
+ * interface.
+ *
+ **/
+interface Strategy
+{
+    /** Retrieve the name of the strategy. */
+    string get_name();
+
+    /** Get the property set of the strategy. */
+    PropertySeq get_properties();
+
+    /** Update the members. */
+    void adjust(in MemberDataSeq members);
+
+    /** Get an un-loaded member. */
+    MemberId get_next()
+	raises(MemberNotFound);
+
+    /** Update the load of a member. */
+    void push_load(in MemberId member_id,
+		   in unsigned long load)
+	raises(MemberNotFound, StrategyNotAdaptive);
+
+    /** Destroy the strategy. */
+    void destroy();
+};
+
+/**
+ *
+ * Acts as a proxy for the load balancing strategy.
+ *
+ **/
+interface StrategyProxy
+{
+    /** Retrieve the name of the strategy. */
+    string get_name();
+
+    /** Get the property set of the strategy. */
+    PropertySeq get_properties();
+
+    /** Update the load of a member. */
+    void push_load(in MemberId member_id,
+		   in unsigned long load)
+	raises(MemberNotFound, StrategyNotAdaptive);
+};
+
+/**
+ *
+ * Represents a load balanced group.
+ *
+ **/
+interface Group
+{
+    /** Get the id of the load balanced group. */
+    GroupId get_id();
+
+    /** Get an IOR for use by a client of this load balanced group. */
+    Object get_ior(in string repository_id, in ObjectId oid);
+
+    /** Get the strategy proxy of the load balanced group. */
+    StrategyProxy get_strategy_proxy();
+
+    /** Use the specified built-in load balancing strategy. */
+    void set_strategy(in string name, in PropertySeq properties)
+	raises(StrategyNotFound, InvalidProperties);
+
+    /** Use the given custom load balancing strategy. */
+    void set_custom_strategy(in Strategy the_strategy);
+
+    /** Add a member to the load balanced group. */
+    void add_member(in MemberId member_id)
+	raises(MemberExists);
+
+    /** Remove a member of the load balanced group. */
+    void remove_member(in MemberId member_id)
+	raises(MemberNotFound);
+
+    /** Set the LoadAlert object for a member. */
+    void set_load_alert(in MemberId member_id,
+			in LoadAlert alert)
+	raises(MemberNotFound);
+
+    /** Enumerate the members. */
+    MemberIdSeq list_members();
+
+    /** Destroy the load balanced group. */
+    void destroy();
+};
+
+/**
+ *
+ * Used to create, destroy and retrieve load balanced groups.
+ *
+ **/
+interface GroupFactory
+{
+    /** Create a new load balanced group with the given id. */
+    Group create(in GroupId group_id)
+	raises(GroupExists);
+
+    /** Get the load balanced group with the given id. */
+    Group get(in GroupId group_id)
+	raises(GroupNotFound);
+    
+    /** List the set of existing load balanced groups. */
+    GroupIdSeq list();
+
+    /** Shutdown the Balancer. */
+    void shutdown();
+};
+
+}; // End module LoadBalancing
+
+#endif

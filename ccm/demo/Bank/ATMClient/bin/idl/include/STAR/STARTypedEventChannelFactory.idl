@@ -1,0 +1,40 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STARTypedEventChannelFactory_idl
+#define STARTypedEventChannelFactory_idl
+
+#include <STAR/CosTypedEventChannelAdmin.idl>
+#include <STAR/STAREventChannelFactory.idl>
+
+#pragma prefix "nis.net"
+
+module STARTypedEventChannelFactory
+{ 
+
+interface TypedEventChannelFactory
+{ 
+
+    CosTypedEventChannelAdmin::TypedEventChannel create_channel(
+        in STAREventChannelFactory::ChannelId id)
+	raises(STAREventChannelFactory::ChannelAlreadyExists);
+
+    CosTypedEventChannelAdmin::TypedEventChannel get_channel_by_id(
+	in STAREventChannelFactory::ChannelId id)
+        raises(STAREventChannelFactory::ChannelNotAvailable);
+
+    STAREventChannelFactory::ChannelIdSeq get_channels();
+
+    void shutdown();
+};
+
+};
+
+#endif

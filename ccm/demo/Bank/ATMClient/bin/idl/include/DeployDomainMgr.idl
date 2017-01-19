@@ -1,0 +1,203 @@
+#ifndef __CCMDeployment_idl__
+#define __CCMDeployment_idl__
+
+#include <Configurator.idl>
+
+module NUDTCCM 
+{
+	module Deployment
+	{			
+	
+		exception UnknownObjectType {};
+		
+		exception ObjectIDExist {};
+		
+		exception ObjectNotExist {};
+		
+		exception InfoMissed {};
+		
+		exception XMLParserError{};
+		
+	
+				
+		enum ObjectType 
+		{ 
+			DOMAINNAME,
+			DEPLOYDOMAINMANAGER,
+			COMPONENTINSTALLATION,
+			ASSEMBLYFACTORY,
+			FILEACCESSORFACTORY,
+			ASSEMBLY,		
+			IMPLEMENTATION,	
+			SERVERACTIVATOR,
+			COMPONENTSERVER,
+			CONTAINER,			
+			CONSOLEFILEACCESSORFACTORY,
+			TIMEOUT,
+			ROOTDIR,
+			VERBOSE
+		};
+	
+		typedef string ObjId;
+		typedef sequence<ObjId> ObjIds;
+		typedef string ObjLoc;
+		typedef sequence<ObjLoc> ObjLocs;
+		
+		struct ConnectInfo
+		{
+			string id;
+			string cookie;
+		};
+		
+		typedef sequence<ConnectInfo> ConnectInfos;
+		
+		struct HomeInfo
+		{
+			string id;
+			string ref;
+			string serveractivatorid;
+			string componentserverid;
+			string containerid;
+		};
+		
+		typedef sequence<HomeInfo> HomeInfos;
+			
+		interface DeployDomainMgr {
+			
+			
+			//
+			//the common operation
+			//
+			void registerObject( in ObjectType type,					
+					in ObjId id,
+					in ObjLoc loc)
+				raises(UnknownObjectType,ObjectIDExist,InfoMissed,XMLParserError);
+	
+			void removeObject(in ObjectType type,
+					in ObjId id)
+				raises(UnknownObjectType,ObjectNotExist,InfoMissed,XMLParserError);
+	
+			ObjLoc getObject (in ObjectType type,
+					in ObjId id)
+				raises(UnknownObjectType,ObjectNotExist,InfoMissed,XMLParserError);		
+						
+			string getObjectValue(in ObjectType type)
+				raises(UnknownObjectType,ObjectNotExist,InfoMissed,XMLParserError);
+				
+			ObjIds getObjectUUIDs(in ObjectType type) 
+				raises(UnknownObjectType,InfoMissed);	
+	
+	
+			//
+			//the operation for assembly
+			//
+			void registerAssembly(in ObjId id,					
+					in ObjLoc loc,
+					in ObjIds implids)
+				raises(ObjectIDExist,InfoMissed,XMLParserError);	
+			
+			void registerAssemblyInfo(in ObjId id,
+					  in HomeInfos homeInformations,
+					  in ConnectInfos connectInformations)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);				
+
+			ObjIds getAssemblyImplIds(in ObjId id)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+				
+			void getAssemblyInfo(in ObjId id,
+					  out ObjLoc loc ,
+					  out HomeInfos homeInformations,
+					  out ConnectInfos connectInformations)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);					  
+			
+			void tearDownAssembly(in ObjId id)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+
+			
+			
+			//
+			//the operation for implementation
+			//
+			void registerImpl(in ObjId id,
+					  in string source,
+					  in string locallocation)
+				raises(ObjectIDExist,InfoMissed,XMLParserError);							  
+
+			void getImplInfo(in ObjId id,
+					  out string source ,
+					  out string locallocation,
+					  out ObjIds assemblyids)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);					  
+
+
+			//
+			//the operation for ServerActivator
+			//
+			void getServerActivatorInfo(in ObjId id,
+					  out ObjLoc loc,
+					  out ObjIds componentserverids,
+					  out ObjIds assemblyids)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+
+
+
+			//
+			//the operation for ComponentServer
+			//
+			
+			void registerComponentServer(in ObjId id,
+					in ObjId fatherid,
+					in ObjLoc loc,
+					in Components::ConfigValues config)
+				raises(ObjectIDExist,InfoMissed,XMLParserError);			
+			
+			ObjIds getComponentServerAssemlbyIds(in ObjId id) 
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+				
+			void getComponentServerInfo(in ObjId id,
+					  out ObjLoc loc,
+					  out ObjId serveractivatorid,
+					  out ObjIds containerids,
+					  out ObjIds assemblyids)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);					  
+
+			Components::ConfigValues getComponentServerConf(in ObjId id)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+
+
+			//
+			//the operation for Container
+			//
+			void registerContainer(in ObjId id,
+					in ObjId fatherid,
+					in ObjLoc loc,
+					in Components::ConfigValues config)
+				raises(ObjectIDExist,InfoMissed,XMLParserError);							  
+
+			void registerInstallHome(in ObjId containerId,
+					in ObjId id,					
+					in Components::ConfigValues config)
+				raises(ObjectIDExist,InfoMissed,XMLParserError);
+
+			void removeInstallHome(in ObjId containerId, in ObjId id)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+	
+			ObjIds getContainerAssemlbyIds(in ObjId id) 
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+			
+			void getContainerInfo(in ObjId id,
+					  out ObjLoc loc,
+					  out ObjId componentserverid,
+					  out ObjIds assemblyids)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);				
+
+			Components::ConfigValues getContainerConf(in ObjId id)
+				raises(ObjectNotExist,InfoMissed,XMLParserError);
+			
+		};
+	};
+
+};
+
+
+#endif

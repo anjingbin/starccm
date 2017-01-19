@@ -1,0 +1,181 @@
+From ronz@ravensfield.com Tue May 22 17:35:37 2001
+Return-path: <ronz@ravensfield.com>
+Received: from carp.ravensfield.com ([209.41.227.126])
+	by candle.pha.pa.us (8.10.1/8.10.1) with ESMTP id f4MLZaQ17913
+	for <pgman@candle.pha.pa.us>; Tue, 22 May 2001 17:35:37 -0400 (EDT)
+Received: from coho.ravensfield.com (coho [209.41.227.117])
+	by carp.ravensfield.com (Postfix) with SMTP
+	id 5C2A9800D; Tue, 22 May 2001 16:46:38 -0500 (EST)
+Content-Type: text/plain;
+  charset="iso-8859-1"
+From: Andrew Rawnsley <ronz@ravensfield.com>
+Organization: Ravensfield Geographic
+To: Bruce Momjian <pgman@candle.pha.pa.us>
+Subject: Re: [GENERAL] Queries across multiple databases (was: SELECT from a table in another database).
+Date: Tue, 22 May 2001 17:37:25 -0400
+X-Mailer: KMail [version 1.2]
+cc: Tom Lane <tgl@sss.pgh.pa.us>
+References: <200105220437.f4M4bUA00539@candle.pha.pa.us>
+In-Reply-To: <200105220437.f4M4bUA00539@candle.pha.pa.us>
+MIME-Version: 1.0
+Message-ID: <01052217372504.01367@coho.ravensfield.com>
+Content-Transfer-Encoding: 8bit
+Status: ORr
+
+On Tuesday 22 May 2001 12:37am, Bruce Momjian wrote:
+> Can you send me a little sample of SCHEMA use?   
+
+Pardon if this is more long-winded or tangental than you are looking for...
+
+What may beconfusing many people (not excluding myself from time to time) is 
+that cross-schema queries may have nothing to do with cross-database queries, 
+which is an entirely different kettle of trout.... SCHEMAs as used by at 
+least by Oracle and Sybase are nothing more than users/object owners (I have 
+no experience with DB2 or Informix, or anything more exotic than that).
+
+Just off the top of my head, what would satisfy most people would be to be 
+able to refer to objects as OWNER.OBJECT, with owner being 'within' the 
+database (i.e. DATABASE.OWNER.OBJECT, which is how Sybase does it. Oracle has 
+no 'database' parallel like that).  Whether you do it Oracle-fashion and use 
+the term SCHEMA for owner pretty universally or Sybase fashion and just pay 
+lip service to the word doesn't really matter (unless there is a standards 
+compliance issue). 
+
+As to creating schemas...In Oracle you have to execute the CREATE SCHEMA 
+AUTHORIZATION <user> while logged in as that user before you can add objects 
+under that user's ownership. While it seems trivial, if you have a situation 
+where you do not want to grant a user session rights, you have to grant them 
+session rights, log in as them, execute CREATE SCHEMA..., then revoke the 
+session rights. Bah. A table created by user X in schema Y is also owned by 
+user Y, and its user Y that has to have many of the object rights to create 
+that table.
+
+In Sybase, its essentially the same except the only real use for the CREATE 
+SCHEMA command is for compliance and to group some DDL commands together. 
+Other than that, Sybase always refers to schemas as owners. You don't have to 
+execute CREATE SCHEMA... to create objects - you just need the rights. I've 
+never used it at least - the only thing I see in it is eliminating the need 
+to type 'go' after every DDL command.
+
+As for examples from Oracle space -
+
+Here is a foreign key reference with delete triggers from a table in 
+schema/user PROJECT to tables in schemas/users SERVICES and WEBCAL:
+
+CREATE TABLE PROJECT.tasks_users (
+   event_id INTEGER REFERENCES WEBCAL.tasks(event_id) ON DELETE CASCADE,
+   user_id VARCHAR2(25) REFERENCES SERVICES.users(user_id) ON DELETE CASCADE,
+   confirmed CHAR(1),
+   PRIMARY KEY (event_id,user_id)
+);
+
+A join between tables in  would be 
+SELECT   A.SAMPLE_ID, 
+                 A.CONCENTRATION, 
+                 A.CASNO, 
+                 B.PARAMETER,
+                 C.DESCRIPTION AS STYPE 
+         FROM HAI.RESULTS A, SAMPLETRACK.PARAMETERS B, 
+SAMPLETRACK.SAMPLE_TYPE C
+                 WHERE A.CASNO = B.CASNO AND A.SAMPLE_TYPE = B.SAMPLE_TYPE
+
+In both Oracle and Sybase, all the objects are in the same 'database' 
+(instance in Oracle), as I assume they would be in Postgres.  There is I 
+assume a name space issue - one should be able to create a FOO.BAR and a 
+BAR.BAR in the same database.
+
+> I may be adding it to
+> 7.2 inside the same code that maps temp table names to real tables.
+>
+
+Excellent!  I see light at the end of the tunnel (I will say the Postgres 
+maintainers are among the most solidly competent around - one never has any 
+real doubts about the system's progress).
+
+-- 
+Regards,
+
+Andrew Rawnsley
+Ravensfield Digital Resource Group, Ltd.
+(740) 587-0114
+www.ravensfield.com
+
+From reedstrm@rice.edu Wed May 23 10:59:42 2001
+Return-path: <reedstrm@rice.edu>
+Received: from ece.rice.edu (ece.rice.edu [128.42.4.34])
+	by candle.pha.pa.us (8.10.1/8.10.1) with ESMTP id f4NExgQ05774
+	for <pgman@candle.pha.pa.us>; Wed, 23 May 2001 10:59:42 -0400 (EDT)
+Received: from wallace.ece.rice.edu (wallace.ece.rice.edu [128.42.12.154])
+	by ece.rice.edu (Postfix) with ESMTP id A419F68A0E
+	for <pgman@candle.pha.pa.us>; Wed, 23 May 2001 09:59:36 -0500 (CDT)
+Received: from reedstrm by wallace.ece.rice.edu with local (Exim 3.22 #1 (Debian))
+	id 152a41-0006E5-00
+	for <pgman@candle.pha.pa.us>; Wed, 23 May 2001 09:56:41 -0500
+Date: Wed, 23 May 2001 09:56:41 -0500
+From: "Ross J. Reedstrom" <reedstrm@rice.edu>
+To: Bruce Momjian <pgman@candle.pha.pa.us>
+Subject: Re: [HACKERS] Re: [GENERAL] Re: [GENERAL] Queries across multiple databases ?(was: SELECT from a table in another database).
+Message-ID: <20010523095641.D23741@rice.edu>
+References: <004c01c0e214$ce6c4800$1001a8c0@archonet.com> <200105221131.f4MBVIc28574@candle.pha.pa.us>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.3.17i
+In-Reply-To: <200105221131.f4MBVIc28574@candle.pha.pa.us>; from pgman@candle.pha.pa.us on Tue, May 22, 2001 at 07:31:18AM -0400
+Status: ORr
+
+Bruce - 
+Around the first of the year, I started playing around with a schema
+implementation. As you may recall, my first crack at changing file storage
+names about a year ago was motivated by the need to avoid collisions
+once schema were available.
+
+Anyway, now that Vadim has removed a lot of the internal dependence
+on relname for keeping track of relations, using the new relfinenode
+many places relname used to be used, it seems to me that adding a
+parallel schemaname to all the data structures that use relname isn't
+as cumbersome as Peter might think. I hadn't tackled the relcache yet:
+perhaps concatenating the schemaname and relname to use as the hash key
+is the way to go for that.
+
+Unfortunately, all that code is now 4 months old, and on my machine
+at home.  I has started with the rangetable entries, because hacked the
+parser to allow 'SELECT * FROM schemaname.tablename' was easier than
+'select schemaname.tablename.fieldname FROM', since the dot function
+calling convention isn't allowed in the range list, while it is in the
+target list. 
+
+I seem to recall tripping up on the query plan printer, of all things,
+before other, paying work pushed it aside. I'll see if I can update that
+code to the current tree, and send you something, if you'd like.
+
+Ross
+
+
+
+On Tue, May 22, 2001 at 07:31:18AM -0400, Bruce Momjian wrote:
+> > > I'm not sure whether it is quite the way to do it, but I'd have a better
+> > > time with things if I could span databases in a single request. Are
+> > > there theoretical problems with spanning databases in a single query? Is
+> > > it a feature of bad database design & implementation?
+> > 
+> > I think the developers are planning full schema support for the relatively
+> > near future (possibly even 7.2, but check the archives and see what's been
+> > said). Although it looks easy to access a table from another database,
+> > things can rapidly become more complicated as you start having to deal with
+> > transactions, triggers, rules, constraints...
+> 
+> Schema is on my radar screen for 7.2.  I am waiting to do some research
+> in what needs to be done, but my initial idea is to use the system cache
+> to do namespace mapping, just like is done now for temp tables.
+> 
+> -- 
+>   Bruce Momjian                        |  http://candle.pha.pa.us
+>   pgman@candle.pha.pa.us               |  (610) 853-3000
+>   +  If your life is a hard drive,     |  830 Blythe Avenue
+>   +  Christ can be your backup.        |  Drexel Hill, Pennsylvania 19026
+> 
+> ---------------------------(end of broadcast)---------------------------
+> TIP 2: you can get off all lists at once with the unregister command
+>     (send "unregister YourEmailAddressHere" to majordomo@postgresql.org)
+

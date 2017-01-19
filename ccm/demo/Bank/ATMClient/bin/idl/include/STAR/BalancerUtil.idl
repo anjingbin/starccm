@@ -1,0 +1,101 @@
+// ********************************************************************** //
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_BALANCER_UTIL_IDL
+#define STAR_BALANCER_UTIL_IDL
+
+#include <STAR/BalancerTypes.idl>
+
+#pragma prefix "nis.net"
+
+module LoadBalancing
+{
+
+/**
+ *
+ * The definitions in this module provide the interface for the InterBus
+ * Balancer utility objects that are provided by the Balancer.  These
+ * utility objects can be used to implement the features required by
+ * load balanced servers that use adaptive load balancing.
+ *
+ **/
+module Util
+{
+
+/**
+ *
+ * Interface to manage load alerts sent by the Balancer.
+ *
+ **/
+local interface LoadAlert
+{
+    /** Forward the next request to the Balancer. */
+    void alert();
+
+    /** Retrieve the alert expire time. */
+    unsigned long get_alert_expire();
+
+    /** Set the alert expire time. */
+    void set_alert_expire(in unsigned long millis);
+};
+
+/**
+ *
+ * Interface for the calculation of the server load.<P>
+ *
+ * The LoadCalculator is used by the LoadUpdater to calculate the
+ * current load of the server (which will be used as the load of each
+ * member registered with the LoadUpdater).  The implementation provided
+ * by the Balancer calculates the load based on the number of active
+ * requests since the last invocation of <code>calculate_load()</code>.
+ *
+ * @see LoadUpdater
+ *
+ **/
+local interface LoadCalculator
+{
+    /** Calculate the load. */
+    unsigned long calculate_load();
+};
+
+/**
+ *
+ * Interface to manage load updates sent to the Balancer.<P>
+ *
+ * At regular intervals (set by the update frequency) the LoadUpdater
+ * gets the load from the LoadCalculator and pushes it to the load
+ * balanced group of each registered member.
+ *
+ * @see LoadCalculator
+ *
+ **/
+local interface LoadUpdater
+{
+    /** Retrieve the load push frequency. */
+    unsigned long get_update_frequency();
+
+    /** Set the load push frequency. */
+    void set_update_frequency(in unsigned long millis);
+
+    /** Set the load calculator. */
+    void set_load_calculator(in LoadCalculator calc);
+
+    /** Register a load balanced group member. */
+    void register_member(in MemberId member_id, in GroupId group_id)
+	raises(LoadBalancing::GroupNotFound);
+
+    /** Unregister a load balanced group member. */
+    void unregister_member(in MemberId member_id, in GroupId group_id);
+};
+
+}; // End module Util
+
+}; // End module LoadBalancing
+
+#endif

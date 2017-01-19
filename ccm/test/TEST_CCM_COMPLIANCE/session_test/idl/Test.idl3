@@ -1,0 +1,21 @@
+#include <ComponentsClient.idl>
+
+module Test 
+{       
+   interface Hello
+   {     
+      string sayHello();      
+   };  
+    
+ 
+   component Person supports Hello
+   {
+        attribute string name;         
+   };
+
+   home PersonHome manages  Person
+   {
+   };
+
+};
+

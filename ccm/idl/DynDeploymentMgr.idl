@@ -1,0 +1,41 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Wang Shufeng    icestar_wang@163.com
+//
+// **********************************************************************
+// Version: 1.0.0
+
+#ifndef __CCMDynDeployment_idl__
+#define __CCMDynDeployment_idl__
+
+#pragma prefix "omg.org"
+
+module STARCCM
+{
+	// From Chapter 69.9: Component Deployment
+	
+	module DynDeployment
+	{
+		exception InvalidDrdFile {};
+		exception InvalidAddFile {};
+		exception DynDeployFailure {};
+		
+		interface DynDeploymentMgr
+		{
+			void start();
+			void stop();
+			
+			void dynDeploy(in string drdfile)
+				raises(InvalidDrdFile, InvalidAddFile, DynDeployFailure);
+		};
+	};
+	
+};
+
+#endif

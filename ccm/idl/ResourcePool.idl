@@ -1,0 +1,42 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __ResourcePool_idl__
+#define __ResourcePool_idl__
+
+//Modified by WangKeBo for compilation on TAO
+#ifdef LITE_VERSION
+#include "CosTransactions.idl"
+#else
+#include <Resource.idl>
+#endif
+
+module STARCCM
+{	
+	exception NoResource{ };
+	exception RemoveResFailed{ };
+	exception CurrentNoTransaction{ };
+	local interface ResourcePool
+	{
+		Resource getResource()
+			raises ( NoResource,CurrentNoTransaction );
+			
+		void removeResource( in Resource res)
+			raises ( RemoveResFailed );
+	};
+};
+
+#endif

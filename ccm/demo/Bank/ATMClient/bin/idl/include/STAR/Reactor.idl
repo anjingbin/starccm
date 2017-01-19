@@ -1,0 +1,139 @@
+// **********************************************************************
+//
+// Copyright (c) 2000
+// Network Information Security Institute,Computer College,NUDT.
+// ChangSha,Hunan,PRC
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_REACTOR_IDL
+#define STAR_REACTOR_IDL
+
+#pragma prefix "nis.net"
+
+module STAR
+{
+
+/** An event handler is a native type. */
+native EventHandler;
+
+/** An event handler's handle. */
+typedef long Handle;
+
+/**
+ *
+ * An event handler's mask. The mask determines which events the event
+ * handler is interested in.
+ *
+ **/
+typedef long Mask;
+
+/** The mask for read events. */
+const Mask EventRead = 0x1;
+
+/** The mask for write events. */
+const Mask EventWrite = 0x2;
+
+/**
+ *
+ * An event handler's type mask. The type mask determines which
+ * category the event handler belongs to. A value of zero means no
+ * specific category.
+ *
+ **/
+typedef long TypeMask;
+
+/** The type mask for client event handers. */
+const TypeMask TypeClient = 0x1;
+
+/** The type mask for server event handers. */
+const TypeMask TypeServer = 0x2;
+
+/**
+ *
+ * A generic Reactor interface.
+ *
+ **/
+interface Reactor
+{
+    /**
+     *
+     * Register an event handler with the Reactor, or change the
+     * registration of an already registered event handler.
+     *
+     * @param handler The event handler to register.
+     *
+     * @param mask The type of events the event handler is interested in.
+     *
+     * @param type_mask The category the event handler belongs to.
+     *
+     * @param h The event handler's handle.
+     *
+     **/
+    void register_handler(in EventHandler handler, in Mask handler_mask,
+			  in TypeMask type_mask, in Handle h);
+
+    /**
+     *
+     * Remove an event handler from the Reactor.
+     *
+     * @param handler The event handler to remove.
+     *
+     **/
+    void unregister_handler(in EventHandler handler);
+
+    /**
+     *
+     * Dispatch events.
+     *
+     * @param type_mask If not zero, this operation will return once
+     * all registered event handlers that match the type mask have
+     * unregistered.
+     *
+     * @return <code>TRUE</code> if all event handlers that match the
+     * type mask have unregistered, or <code>FALSE</code> if event
+     * dispatching has been interrupted.
+     *
+     **/
+    boolean dispatch(in TypeMask type_mask);
+
+    /**
+     *
+     * Interrupt event dispatching. After calling this operation,
+     * <code>interrupt()</code> will return with <code>FALSE</code>.
+     *
+     **/
+    void interrupt_dispatch();
+
+    /**
+     *
+     * Dispatch at least one event.
+     *
+     * @param timeout The timeout in milliseconds. A negative value
+     * means no timeout, i.e., the operation will not return before at
+     * least one event has been dispatched. A zero timeout means that
+     * the operation will return immediately if there is no event to
+     * dispatch.
+     *
+     * @return <code>TRUE</code> if at least one event has been
+     * dispatched, or <code>FALSE</code> otherwise.
+     *
+     **/
+    boolean dispatch_one_event(in long timeout);
+
+    /**
+     *
+     * Check whether an event is available.
+     *
+     * @return <code>TRUE</code> if an event is ready, or
+     * <code>FALSE</code> otherwise.
+     *
+     **/
+    boolean event_ready();
+};
+
+}; // End module STAR
+
+#endif

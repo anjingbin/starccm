@@ -1,0 +1,43 @@
+#-------------------------------------------------------------------------
+#
+# Makefile for src
+#
+# Copyright (c) 1994, Regents of the University of California
+#
+# $Header: /home/hjcvs/OB-CCM-1.0/postgresql/src/GNUmakefile.in,v 1.1 2003/12/30 00:05:09 AnJingBin Exp $
+#
+#-------------------------------------------------------------------------
+
+subdir = src
+top_builddir = ..
+include Makefile.global
+
+
+all install installdirs uninstall dep depend distprep:
+	$(MAKE) -C backend $@
+	$(MAKE) -C include $@
+	$(MAKE) -C interfaces $@
+	$(MAKE) -C bin $@
+	$(MAKE) -C pl $@
+
+install-all-headers:
+	$(MAKE) -C include $@
+
+clean:
+	$(MAKE) -C backend $@
+	$(MAKE) -C include $@
+	$(MAKE) -C interfaces $@
+	$(MAKE) -C bin $@
+	$(MAKE) -C pl $@
+	$(MAKE) -C utils $@
+	$(MAKE) -C test $@
+
+distclean maintainer-clean:
+	-$(MAKE) -C utils $@
+	-$(MAKE) -C backend $@
+	-$(MAKE) -C include $@
+	-$(MAKE) -C interfaces $@
+	-$(MAKE) -C bin $@
+	-$(MAKE) -C pl $@
+	-$(MAKE) -C test $@
+	rm -f Makefile.port Makefile.global GNUmakefile

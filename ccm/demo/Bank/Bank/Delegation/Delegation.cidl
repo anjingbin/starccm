@@ -1,0 +1,13 @@
+#include <Delegation.idl3>
+
+module Bank
+{
+	composition service DelegationComposition
+	{		
+		home executor CCM_DelegationHome_Impl
+		{
+			implements DelegationHome;
+			manages CCM_Delegation_Impl;
+		};
+	};
+};	

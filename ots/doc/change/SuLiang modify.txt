@@ -1,0 +1,20 @@
+OTS_impl.cpp
+line 760
+line 745
+CosTransactionsOTS.h
+line 838
+CosTransactionsOTS.cpp
+3154
+
+错误原因：
+1。remove方法中参数传递有问题。（var类型传给var 类型时有两份不同的内存拷贝。内存空间不同）。
+2。对sequence 的length()函数传回来的是其长度。而在引用该sequence中的某个特定的成员时是从0开始记数的.
+3。不能在编译器生成的文件中去作修改。添加remove方法。
+
+
+PostgreSQLResource.idl该文件在2003.8.26修改过,但是该IDL文件没有重新编译过。
+修改如下：
+#ifndef _PostgreSQLResource_idl_
+#define _PostgreSQLResource_idl_
+........
+#endif _PostgreSQLResource_idl_

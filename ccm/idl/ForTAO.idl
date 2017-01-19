@@ -1,0 +1,11 @@
+#ifndef __ForTAO_idl__
+#define __ForTAO_idl__
+
+//This file is to resolve stub files name problem
+//This file won't be compiled by idl compiler
+//Just for including
+#include <tao/orb.idl>
+#include <tao/IFR_Client/IFR_Base.pidl>
+#include <tao/Current.pidl>
+
+#endif

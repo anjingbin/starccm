@@ -1,0 +1,36 @@
+#include <ComponentsClient.idl>
+
+#include <Account.idl3>
+#include <InterestComputer.idl3>
+
+#ifndef __WithdrawComp_IDL_
+#define __WithdrawComp_IDL_
+
+
+module Bank
+{	
+
+	//
+	//component WithdrawComp
+	//
+	
+	interface WithdrawOp
+	{
+		unsigned long withdraw(in string id, in unsigned long amount);
+	};
+
+	component WithdrawComp
+	{
+		provides WithdrawOp withdraw_op;
+		
+		uses AccountOp the_account;
+		uses ComputeOp interest_computer;
+	};
+
+	home WithdrawCompHome manages WithdrawComp
+	{
+	};	
+
+};
+
+#endif

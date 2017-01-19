@@ -1,0 +1,257 @@
+<!-- DTD for Assembly Architecture Descriptor. The root element
+     is <Assembly>. 
+  -->
+  
+<!ELEMENT assembly
+	( homes
+	, components
+	, connections
+	) >
+<!ATTLIST assembly
+     idref ID #REQUIRED>	
+     
+<!ELEMENT homes
+	( home*
+	) >
+
+<!ELEMENT home
+	( uuid
+	, homeref
+	, type
+	, homerepositoryid
+	, componentrepositoryid
+	, serveractivator
+	, componentserver
+	, container
+	, componentinstantiations
+	, links
+	, boundable
+	, componentboundaryports
+	, crypticconnections
+	, initialrequestports
+	, homeinitiative
+	, componentinitiative
+	, runcomplete
+	, configurationcomplete
+	, homefinder
+	, withhomefinder
+	, nameservice
+	, withnaming
+	) >
+<!ATTLIST home
+     id ID #REQUIRED >
+
+<!ELEMENT uuid ( #PCDATA ) >
+
+<!ELEMENT homeref ( #PCDATA ) >
+
+<!ELEMENT type ( #PCDATA ) >
+
+<!ELEMENT homerepositoryid ( #PCDATA ) >
+
+<!ELEMENT componentrepositoryid ( #PCDATA ) >
+
+<!ELEMENT serveractivator EMPTY >
+<!ATTLIST serveractivator
+     idref CDATA #REQUIRED
+     ref CDATA #REQUIRED > 
+
+<!ELEMENT componentserver EMPTY >
+<!ATTLIST componentserver
+     idref CDATA #REQUIRED
+     ref CDATA #REQUIRED > 
+
+<!ELEMENT container EMPTY >
+<!ATTLIST container
+     idref CDATA #REQUIRED
+     ref CDATA #REQUIRED > 
+
+<!ELEMENT componentinstantiations
+	(componentinstantiation*
+	) >
+
+<!ELEMENT componentinstantiation EMPTY >
+<!ATTLIST componentinstantiation
+     idref CDATA #REQUIRED 
+     ref CDATA #REQUIRED >
+
+<!ELEMENT links
+	( astarget*
+	, assender*
+	) >
+
+<!ELEMENT astarget
+	( connecttype
+	, srccomref
+	, srcport
+	) >
+<!ATTLIST astarget
+     idref CDATA #REQUIRED 
+     cookie CDATA #REQUIRED >
+
+<!ELEMENT connecttype ( #PCDATA ) >
+
+<!ELEMENT srccomref ( #PCDATA ) >
+
+<!ELEMENT srcport ( #PCDATA ) >
+
+<!ELEMENT assender
+	( connecttype
+	, targetref
+	, targetport
+	) >
+<!ATTLIST assender
+     idref CDATA #REQUIRED 
+     cookie CDATA #REQUIRED>
+
+<!ELEMENT targetref ( #PCDATA ) >
+
+<!ELEMENT targetport ( #PCDATA ) >
+
+<!ELEMENT boundable EMPTY >
+<!ATTLIST boundable
+     set ( true | false ) #REQUIRED >
+
+<!ELEMENT componentboundaryports
+	( port*
+	) >
+
+<!ELEMENT port EMPTY >
+<!ATTLIST port
+     name CDATA #REQUIRED >
+
+<!ELEMENT crypticconnections
+	( crypticconnection*
+	) >	
+	
+<!ELEMENT crypticconnection
+	( port
+	, targetports
+	) >
+
+<!ELEMENT targetports
+	( port+
+	) >
+	
+<!ELEMENT initialrequestports
+	( port*
+	) >
+	
+<!ELEMENT homeinitiative EMPTY >
+<!ATTLIST homeinitiative
+     set ( true | false ) #REQUIRED >
+     
+<!ELEMENT componentinitiative EMPTY >
+<!ATTLIST componentinitiative
+     set ( true | false ) #REQUIRED >
+     
+<!ELEMENT runcomplete
+	( usesports?
+	) >
+<!ATTLIST runcomplete
+     set ( true | false ) #REQUIRED >   
+
+<!ELEMENT usesports
+	( port*
+	) >
+
+<!ELEMENT configurationcomplete
+	( usesports?
+	) >
+<!ATTLIST configurationcomplete
+     set ( true | false ) #REQUIRED > 
+     
+<!ELEMENT homefinder EMPTY >
+<!ATTLIST homefinder
+     ref CDATA #REQUIRED >
+     
+<!ELEMENT withhomefinder
+	( registername*
+	) >
+     
+<!ELEMENT registername ( #PCDATA ) >
+     
+<!ELEMENT nameservice EMPTY >
+<!ATTLIST nameservice
+     ref CDATA #REQUIRED >
+     
+<!ELEMENT withnaming
+	( registername*
+	) >
+
+<!ELEMENT components
+	( component*
+	) >
+     
+<!ELEMENT component
+	( uuid
+	, comref
+	, homeplacement
+	, ports
+	, links
+    , boundable
+	, boundaryports
+	, nameservice
+	, withnaming
+	, portwithnamings
+     ) >
+<!ATTLIST component
+     id ID #REQUIRED >
+     
+<!ELEMENT comref ( #PCDATA ) >
+    
+<!ELEMENT homeplacement EMPTY >
+<!ATTLIST homeplacement
+    idref CDATA #REQUIRED
+    homeref CDATA #REQUIRED >
+    
+<!ELEMENT ports
+	( providesport*
+	, consumesport*
+	) >    
+	
+<!ELEMENT providesport EMPTY >
+<!ATTLIST providesport
+    name CDATA #REQUIRED
+    facetref CDATA #REQUIRED >
+    
+<!ELEMENT consumesport EMPTY >
+<!ATTLIST consumesport
+    name CDATA #REQUIRED
+    consumerref CDATA #REQUIRED >
+    
+<!ELEMENT boundaryports
+	( port*
+	) >
+	
+<!ELEMENT portwithnamings
+	( portwithnaming*
+	) >
+
+<!ELEMENT portwithnaming
+	( port
+	, registername*
+	) >
+
+<!ELEMENT connections
+	( connection*
+	) >
+	
+<!ELEMENT connection
+	( cookie
+	, connecttype
+	, strcomid
+	, srccomref
+	, srcport
+	, targetid
+	, targetref
+	, targetport
+	) >
+<!ATTLIST connection
+     id CDATA #REQUIRED >
+     
+<!ELEMENT cookie ( #PCDATA ) >
+
+<!ELEMENT strcomid ( #PCDATA ) >
+
+<!ELEMENT targetid ( #PCDATA ) >

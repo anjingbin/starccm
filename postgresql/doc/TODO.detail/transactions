@@ -1,0 +1,169 @@
+From pgsql-hackers-owner+M11649@postgresql.org Wed Aug  1 15:22:46 2001
+Return-path: <pgsql-hackers-owner+M11649@postgresql.org>
+Received: from postgresql.org (webmail.postgresql.org [216.126.85.28])
+	by candle.pha.pa.us (8.10.1/8.10.1) with ESMTP id f71JMjN09768
+	for <pgman@candle.pha.pa.us>; Wed, 1 Aug 2001 15:22:45 -0400 (EDT)
+Received: from postgresql.org.org (webmail.postgresql.org [216.126.85.28])
+	by postgresql.org (8.11.3/8.11.1) with SMTP id f71JMUf62338;
+	Wed, 1 Aug 2001 15:22:30 -0400 (EDT)
+	(envelope-from pgsql-hackers-owner+M11649@postgresql.org)
+Received: from sectorbase2.sectorbase.com (sectorbase2.sectorbase.com [63.88.121.62] (may be forged))
+	by postgresql.org (8.11.3/8.11.1) with SMTP id f71J4df57086
+	for <pgsql-hackers@postgresql.org>; Wed, 1 Aug 2001 15:04:40 -0400 (EDT)
+	(envelope-from vmikheev@SECTORBASE.COM)
+Received: by sectorbase2.sectorbase.com with Internet Mail Service (5.5.2653.19)
+	id <PG1LSSPZ>; Wed, 1 Aug 2001 12:04:31 -0700
+Message-ID: <3705826352029646A3E91C53F7189E32016705@sectorbase2.sectorbase.com>
+From: "Mikheev, Vadim" <vmikheev@SECTORBASE.COM>
+To: "'pgsql-hackers@postgresql.org'" <pgsql-hackers@postgresql.org>
+Subject: [HACKERS] Using POSIX mutex-es
+Date: Wed, 1 Aug 2001 12:04:24 -0700 
+MIME-Version: 1.0
+X-Mailer: Internet Mail Service (5.5.2653.19)
+Content-Type: text/plain;
+	charset="koi8-r"
+Precedence: bulk
+Sender: pgsql-hackers-owner@postgresql.org
+Status: RO
+
+1. Just changed
+	TAS(lock) to pthread_mutex_trylock(lock)
+	S_LOCK(lock) to pthread_mutex_lock(lock)
+	S_UNLOCK(lock) to pthread_mutex_unlock(lock)
+(and S_INIT_LOCK to share mutex-es between processes).
+
+2. pgbench was initialized with scale 10.
+   SUN WS 10 (512Mb), Solaris 2.6 (I'm unable to test on E4500 -:()
+   -B 16384, wal_files 8, wal_buffers 256,
+   checkpoint_segments 64, checkpoint_timeout 3600
+   50 clients x 100 transactions
+   (after initialization DB dir was saved and before each test
+    copyed back and vacuum-ed).
+
+3. No difference.
+   Mutex version maybe 0.5-1 % faster (eg: 37.264238 tps vs 37.083339 tps).
+
+So - no gain, but no performance loss "from using pthread library"
+(I've also run tests with 1 client), at least on Solaris.
+
+And so - looks like we can use POSIX mutex-es and conditional variables
+(not semaphores; man pthread_cond_wait) and should implement light lmgr,
+probably with priority locking.
+
+Vadim
+
+---------------------------(end of broadcast)---------------------------
+TIP 2: you can get off all lists at once with the unregister command
+    (send "unregister YourEmailAddressHere" to majordomo@postgresql.org)
+
+From pgsql-hackers-owner+M18052=candle.pha.pa.us=pgman@postgresql.org Wed Jan 23 13:39:19 2002
+Return-path: <pgsql-hackers-owner+M18052=candle.pha.pa.us=pgman@postgresql.org>
+Received: from server1.pgsql.org (www.postgresql.org [64.49.215.9])
+	by candle.pha.pa.us (8.11.6/8.10.1) with SMTP id g0NIdIU26480
+	for <pgman@candle.pha.pa.us>; Wed, 23 Jan 2002 13:39:18 -0500 (EST)
+Received: (qmail 59371 invoked by alias); 23 Jan 2002 18:39:18 -0000
+Received: from unknown (HELO postgresql.org) (64.49.215.8)
+  by www.postgresql.org with SMTP; 23 Jan 2002 18:39:18 -0000
+Received: from candle.pha.pa.us (216-55-132-35.dsl.san-diego.abac.net [216.55.132.35])
+	by postgresql.org (8.11.3/8.11.4) with ESMTP id g0NIJ8l47400
+	for <pgsql-hackers@postgreSQL.org>; Wed, 23 Jan 2002 13:19:08 -0500 (EST)
+	(envelope-from pgman@candle.pha.pa.us)
+Received: (from pgman@localhost)
+	by candle.pha.pa.us (8.11.6/8.10.1) id g0NIJ5i24508
+	for pgsql-hackers@postgreSQL.org; Wed, 23 Jan 2002 13:19:05 -0500 (EST)
+From: Bruce Momjian <pgman@candle.pha.pa.us>
+Message-ID: <200201231819.g0NIJ5i24508@candle.pha.pa.us>
+Subject: [HACKERS] Savepoints
+To: PostgreSQL-development <pgsql-hackers@postgresql.org>
+Date: Wed, 23 Jan 2002 13:19:05 -0500 (EST)
+X-Mailer: ELM [version 2.4ME+ PL96 (25)]
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+Precedence: bulk
+Sender: pgsql-hackers-owner@postgresql.org
+Status: RO
+
+I have talked in the past about a possible implementation of
+savepoints/nested transactions.  I would like to more formally outline
+my ideas below.
+
+We have talked about using WAL for such a purpose, but that requires WAL
+files to remain for the life of a transaction, which seems unacceptable.
+Other database systems do that, and it is a pain for administrators.  I
+realized we could do some sort of WAL compaction, but that seems quite
+complex too.
+
+Basically, under my plan, WAL would be unchanged.  WAL's function is
+crash recovery, and it would retain that.  There would also be no
+on-disk changes.  I would use the command counter in certain cases to
+identify savepoints.
+
+My idea is to keep savepoint undo information in a private area per
+backend, either in memory or on disk.  We can either save the
+relid/tids of modified rows, or if there are too many, discard the
+saved ones and just remember the modified relids.  On rollback to save
+point, either clear up the modified relid/tids, or sequential scan
+through the relid and clear up all the tuples that have our transaction
+id and have command counters that are part of the undo savepoint.
+
+It seems marking undo savepoint rows with a fixed aborted transaction id
+would be the easiest solution.
+
+Of course, we only remember modified rows when we are in savepoints, and
+only undo them when we rollback to a savepoint.  Transaction processing
+remains the same.
+
+There is no reason for other backend to be able to see savepoint undo
+information, and keeping it private greatly simplifies the
+implementation.
+
+-- 
+  Bruce Momjian                        |  http://candle.pha.pa.us
+  pgman@candle.pha.pa.us               |  (610) 853-3000
+  +  If your life is a hard drive,     |  830 Blythe Avenue
+  +  Christ can be your backup.        |  Drexel Hill, Pennsylvania 19026
+
+---------------------------(end of broadcast)---------------------------
+TIP 6: Have you searched our list archives?
+
+http://archives.postgresql.org
+
+From hstenger@adinet.com.uy Wed Jan 23 14:13:33 2002
+Return-path: <hstenger@adinet.com.uy>
+Received: from correo.adinet.com.uy (fecorreo01.adinet.com.uy [206.99.44.217])
+	by candle.pha.pa.us (8.11.6/8.10.1) with ESMTP id g0NJDWU29832
+	for <pgman@candle.pha.pa.us>; Wed, 23 Jan 2002 14:13:33 -0500 (EST)
+Received: from adinet.com.uy (200.61.76.155) by correo.adinet.com.uy (5.5.052) (authenticated as hstenger@adinet.com.uy)
+        id 3C4DBC5C00017E9F; Wed, 23 Jan 2002 16:13:25 -0300
+Message-ID: <3C4F0BC0.5CFBB919@adinet.com.uy>
+Date: Wed, 23 Jan 2002 16:15:12 -0300
+From: Haroldo Stenger <hstenger@adinet.com.uy>
+X-Mailer: Mozilla 4.78 [en] (Win98; U)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: Bruce Momjian <pgman@candle.pha.pa.us>
+cc: PostgreSQL-development <pgsql-hackers@postgreSQL.org>
+Subject: Re: [HACKERS] Savepoints
+References: <200201231819.g0NIJ5i24508@candle.pha.pa.us>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Status: OR
+
+Bruce Momjian wrote:
+> 
+> Basically, under my plan, WAL would be unchanged.  WAL's function is
+> crash recovery, and it would retain that.  There would also be no
+> on-disk changes.  I would use the command counter in certain cases to
+> identify savepoints.
+
+This is a pointer to the previous August thread, where your original proposal
+was posted, and some WAL/not WAL discussion took place. Just not to repeat the
+already mentioned points. Oh, it's google archive just for fun, and to not
+overload hub.org ;-)
+
+http://groups.google.com/groups?hl=en&threadm=200108050432.f754Wdo11696%40candle.pha.pa.us&rnum=1&prev=/groups%3Fhl%3Den%26selm%3D200108050432.f754Wdo11696%2540candle.pha.pa.us
+
+Regards,
+Haroldo.
+

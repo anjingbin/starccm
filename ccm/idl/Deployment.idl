@@ -1,0 +1,245 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+// Author: Su Liang     centuryfree@yahoo.com.cn
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#ifndef __CCMDeployment_idl__
+#define __CCMDeployment_idl__
+
+#include <Configurator.idl>
+//add by wsf
+#include <ArchObject.idl>
+//end by wsf
+
+#pragma prefix "omg.org"
+
+module Components
+{
+	// From Chapter 69.9: Component Deployment
+
+	typedef sequence<CCMHome> CCMHomes;
+
+	module Deployment
+	{
+		typedef FailureReason InvalidConfigurationReason;
+
+		const InvalidConfigurationReason UnknownConfigValueName = 0;
+		const InvalidConfigurationReason InvalidConfigValueType = 1;
+		const InvalidConfigurationReason ConfigValueRequired = 2;
+		const InvalidConfigurationReason ConfigValueNotExpected = 3;
+
+		exception InvalidConfiguration
+		{
+			InvalidConfigurationReason reason;
+			FeatureName name;
+		};
+
+		typedef string UUID;
+
+		typedef string Location;
+
+		exception UnknownImplId { };
+
+		exception InvalidLocation { };
+
+		exception InstallationFailure
+		{
+			FailureReason reason;
+		};
+		
+		exception RecoverFailure { };
+
+		interface ComponentInstallation
+		{
+			void install(in UUID implUUID, in Location component_loc)
+				raises (InvalidLocation, InstallationFailure);
+
+			void replace(in UUID implUUID, in Location component_loc)
+				raises (InvalidLocation, InstallationFailure);
+
+			void remove(in UUID implUUID)
+				raises (UnknownImplId, RemoveFailure);
+
+			Location get_implementation(in UUID implUUID)
+				raises(UnknownImplId, InstallationFailure);		
+			
+			void recover()
+				raises(RecoverFailure);
+		};
+
+		interface Assembly;
+
+		exception InvalidAssembly { };
+
+		interface AssemblyFactory
+		{
+			Cookie create(in Location assembly_loc)
+				raises (InvalidLocation, CreateFailure);
+
+			//add by wsf
+			Cookie dynCreate(in Location dyncreate_loc)
+				raises (InvalidLocation, CreateFailure);
+			//add by wsf
+
+			Assembly lookup(in Cookie c)
+				raises (InvalidAssembly);
+
+			void destroy(in Cookie c)
+				raises (InvalidAssembly, RemoveFailure);
+			
+			void recover()
+				raises(RecoverFailure);	
+			
+		};
+
+		enum AssemblyState { INACTIVE,  INSERVICE };
+		
+		exception SetPropertiesFailure { };
+
+		interface Assembly
+		{
+			void build() raises (CreateFailure);
+
+			//add by wsf
+			void dynBuild() raises (CreateFailure);
+
+			void dynLink(in string fatherNodeName) raises (CreateFailure);
+
+			void dynUnLink(in string fatherNodeName) raises (RemoveFailure);			
+			
+			void updateArchitecture();
+			
+			void setComponentPropertis(in string comid, in string cpfname) raises (SetPropertiesFailure);
+			//end by wsf
+			
+			void tear_down() raises (RemoveFailure);
+
+			AssemblyState get_state();
+			
+			void recover()
+				raises(RecoverFailure);		
+			
+			void shutdown() raises (RemoveFailure);				
+			
+		};
+
+		interface ComponentServer;
+		typedef sequence<ComponentServer> ComponentServers;
+
+		interface ServerActivator
+		{
+			ComponentServer create_component_server(in ConfigValues config)
+				raises(CreateFailure, InvalidConfiguration);
+
+			void remove_component_server(in ComponentServer server)
+				raises(RemoveFailure);
+
+			ComponentServers get_component_servers();		
+
+			void recover()
+				raises(RecoverFailure);						
+			
+		};
+	
+		interface Container;
+		typedef sequence<Container> Containers;
+
+		interface ComponentServer
+		{
+			readonly attribute ConfigValues configuration;
+
+			ServerActivator get_server_activator();
+
+			Container create_container(in ConfigValues config)
+				raises (CreateFailure, InvalidConfiguration);
+
+			void remove_container(in Container cref) 
+				raises (RemoveFailure);
+
+			Containers get_containers();
+
+	 		void remove() 
+				raises (RemoveFailure);
+
+			void recover()
+				raises(RecoverFailure);					
+			
+		};
+
+		exception ImplEntryPointNotFound { };
+		exception ObjectNotFound { };
+
+		//add by wsf 2004.7.2
+		enum PassivateClientType{
+			REJECTREQUEST, HOLDREQUEST
+		};
+		typedef sequence<PassivateClientType> PassivateClientTypeSeq;
+		//end by wsf 2004.7.2
+
+		interface Container
+		{
+			readonly attribute ConfigValues configuration;
+
+			ComponentServer get_component_server();
+
+			CCMHome install_home(in UUID id,
+					in string entrypt,
+					in ConfigValues config)
+				raises (UnknownImplId,
+					ImplEntryPointNotFound,
+					InstallationFailure,
+					InvalidConfiguration);
+
+			void remove_home(in CCMHome href) 
+				raises (RemoveFailure);
+
+			CCMHomes get_homes();
+
+			void remove() 
+				raises (RemoveFailure);		
+
+			//add by wsf
+			STARCCM::ArchHome getArchHome();
+			STARCCM::ArchComponent getArchCom();
+			STARCCM::ArchConnection getArchConn();
+
+			void updateArchitecture(in STARCCM::UUIDs homeUUIDs, 
+								out STARCCM::ArchComponents addedcoms,
+								out STARCCM::DeletedComs dcomslist, 
+								out STARCCM::ArchConnections addedconns,
+								out STARCCM::ArchConnections dconslist);
+			void cleanArchObjects(in STARCCM::UUIDs homeUUIDs);
+			//end by wsf
+
+			//add by wsf 2004.6.29
+			void setRedirectReqInfo(in UUID homeUUID,
+						in CORBA::StringSeq oidList, 
+						in ObjectSeq newObjList, 
+						in long timeout);
+							
+			void passivateClient(in UUID homeUUID,
+					in CORBA::StringSeq oidList, 
+					in PassivateClientTypeSeq typeList);
+					
+			void activateClient(in UUID homeUUID,
+					in CORBA::StringSeq oidList);
+			//end by wsf 2004.6.29						
+		};
+		
+	};
+};
+
+
+
+#endif

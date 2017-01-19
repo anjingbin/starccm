@@ -1,0 +1,29 @@
+#ifndef __ComponentsPSS_psdl__
+#define __ComponentsPSS_psdl__
+
+#include <ComponentsPSS.idl>
+
+module ContainerPSS
+{
+	abstract storagetype ASComponent
+	{
+		state string uuid;
+		state ComponentPSS comp;
+		state long status;
+	};
+
+	abstract storagehome ASComponentHome of ASComponent
+	{
+		key uuid;
+		factory create(uuid);
+	};
+
+	storagetype SComponent implements ASComponent
+	{
+	};
+
+	storagehome SComponentHome of SComponent implements ASComponentHome
+	{
+	};
+};
+#endif

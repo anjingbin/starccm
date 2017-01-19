@@ -1,0 +1,45 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef STAR_BALANCER_POLICY_TYPES_IDL
+#define STAR_BALANCER_POLICY_TYPES_IDL
+
+#include <STAR/Policy.idl>
+#include <STAR/Balancer.idl>
+
+#pragma prefix "nis.net"
+
+/**
+ *
+ * The definitions in this module provide the interface of the InterBus
+ * Balancer.
+ *
+ **/
+module LoadBalancing
+{
+
+/** This policy type identifies the member policy. */
+const CORBA::PolicyType MEMBER_POLICY_ID = 1000; // TODO: temporary value
+
+/**
+ *
+ * The member policy value.
+ *
+ **/
+struct MemberPolicyValue
+{
+     GroupId group_id;
+     MemberId member_id;
+};
+
+
+}; // End module LoadBalancing
+
+#endif

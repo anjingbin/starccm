@@ -1,0 +1,300 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef IFR2_IDL
+#define IFR2_IDL
+
+#include <STAR/IFR1.idl>
+
+#pragma prefix "omg.org"
+
+module CORBA
+{
+
+interface Repository;
+interface Container;
+
+interface Contained : IRObject
+{
+    attribute RepositoryId id;
+    attribute Identifier name;
+    attribute VersionSpec version;
+    
+    readonly attribute Container defined_in;
+    readonly attribute ScopedName absolute_name;
+    readonly attribute Repository containing_repository;
+
+    struct Description
+    {
+	DefinitionKind kind;
+	any value;
+    };
+
+    Description describe();
+    
+    void move(in Container new_container,
+	      in Identifier new_name,
+	      in VersionSpec new_version);
+};
+
+interface ModuleDef;
+interface ConstantDef;
+interface StructDef;
+interface UnionDef;
+interface EnumDef;
+interface AliasDef;
+interface InterfaceDef;
+interface AbstractInterfaceDef;
+interface LocalInterfaceDef;
+interface ExceptionDef;
+interface NativeDef;
+interface ValueDef;
+interface ValueBoxDef;
+
+typedef sequence<InterfaceDef> InterfaceDefSeq;
+typedef sequence<AbstractInterfaceDef> AbstractInterfaceDefSeq;
+typedef sequence <LocalInterfaceDef> LocalInterfaceDefSeq;
+typedef sequence<ValueDef> ValueDefSeq;
+typedef sequence<Contained> ContainedSeq;
+
+interface Container : IRObject
+{
+    Contained lookup(in ScopedName search_name);
+    
+    ContainedSeq contents(in DefinitionKind limit_type,
+			  in boolean exclude_inherited);
+    
+    ContainedSeq lookup_name(in Identifier search_name,
+			     in long levels_to_search,
+			     in DefinitionKind limit_type,
+			     in boolean exclude_inherited);
+    
+    struct Description
+    {
+	Contained contained_object;
+	DefinitionKind kind;
+	any value;
+    };
+
+    typedef sequence<Description> DescriptionSeq;
+    
+    DescriptionSeq describe_contents(in DefinitionKind limit_type,
+				     in boolean exclude_inherited,
+				     in long max_returned_objs);
+    
+    ModuleDef create_module(in RepositoryId id,
+			    in Identifier name,
+			    in VersionSpec version);
+    
+    ConstantDef create_constant(in RepositoryId id,
+				in Identifier name,
+				in VersionSpec version,
+				in IDLType type,
+				in any value);
+    
+    StructDef create_struct(in RepositoryId id,
+			    in Identifier name,
+			    in VersionSpec version,
+			    in StructMemberSeq members);
+
+    UnionDef create_union(in RepositoryId id,
+			  in Identifier name,
+			  in VersionSpec version,
+			  in IDLType discriminator_type,
+			  in UnionMemberSeq members);
+    
+    EnumDef create_enum(in RepositoryId id,
+			in Identifier name,
+			in VersionSpec version,
+			in EnumMemberSeq members);
+    
+    AliasDef create_alias(in RepositoryId id,
+			  in Identifier name,
+			  in VersionSpec version,
+			  in IDLType original_type);
+    
+    InterfaceDef create_interface(in RepositoryId id,
+				  in Identifier name,
+				  in VersionSpec version,
+				  in InterfaceDefSeq base_interfaces);
+
+    AbstractInterfaceDef
+    create_abstract_interface(in RepositoryId id,
+                              in Identifier name,
+                              in VersionSpec version,
+                              in AbstractInterfaceDefSeq base_interfaces);
+
+    LocalInterfaceDef
+    create_local_interface(in RepositoryId id,
+			   in Identifier name,
+			   in VersionSpec version,
+			   in InterfaceDefSeq base_interfaces);
+
+    ExceptionDef create_exception(in RepositoryId id,
+				  in Identifier name,
+				  in VersionSpec version,
+				  in StructMemberSeq members);
+
+    ValueDef create_value(in RepositoryId id,
+			  in Identifier name,
+			  in VersionSpec version,
+			  in boolean is_custom,
+			  in boolean is_abstract,
+			  in ValueDef base_value,
+			  in boolean is_truncatable,
+			  in ValueDefSeq abstract_base_values,
+			  in InterfaceDefSeq supported_interfaces,
+			  in InitializerSeq initializers);
+
+    ValueBoxDef create_value_box(in RepositoryId id,
+				 in Identifier name,
+				 in VersionSpec version,
+				 in IDLType original_type_def);
+
+    NativeDef create_native(in RepositoryId id,
+			    in Identifier name,
+			    in VersionSpec version);
+
+};
+
+enum AttributeMode
+{
+    ATTR_NORMAL,
+    ATTR_READONLY
+};
+
+interface AttributeDef : Contained
+{
+    readonly attribute TypeCode type;
+    attribute IDLType type_def;
+    attribute AttributeMode mode;
+};
+
+struct AttributeDescription
+{
+    Identifier name;
+    RepositoryId id;
+    RepositoryId defined_in;
+    VersionSpec version;
+    TypeCode type;
+    AttributeMode mode;
+};
+
+enum OperationMode
+{
+    OP_NORMAL,
+    OP_ONEWAY
+};
+
+struct ParameterDescription
+{
+    Identifier name;
+    TypeCode type;
+    IDLType type_def;
+    ParameterMode mode;
+};
+typedef sequence<ParameterDescription> ParDescriptionSeq;
+
+typedef Identifier ContextIdentifier;
+typedef sequence<ContextIdentifier> ContextIdSeq;
+
+interface ExceptionDef : Contained, Container
+{
+    readonly attribute TypeCode type;
+    attribute StructMemberSeq members;
+};
+
+struct ExceptionDescription
+{
+    Identifier name;
+    RepositoryId id;
+    RepositoryId defined_in;
+    VersionSpec version;
+    TypeCode type;
+};
+
+typedef sequence<ExceptionDef> ExceptionDefSeq;
+typedef sequence<ExceptionDescription> ExcDescriptionSeq;
+
+interface OperationDef : Contained
+{
+    readonly attribute TypeCode result;
+    attribute IDLType result_def;
+    attribute ParDescriptionSeq params;
+    attribute OperationMode mode;
+    attribute ContextIdSeq contexts;
+    attribute ExceptionDefSeq exceptions;
+};
+
+struct OperationDescription
+{
+    Identifier name;
+    RepositoryId id;
+    RepositoryId defined_in;
+    VersionSpec version;
+    TypeCode result;
+    OperationMode mode;
+    ContextIdSeq contexts;
+    ParDescriptionSeq parameters;
+    ExcDescriptionSeq exceptions;
+};
+
+typedef sequence<RepositoryId> RepositoryIdSeq;
+typedef sequence<OperationDescription> OpDescriptionSeq;
+typedef sequence<AttributeDescription> AttrDescriptionSeq;
+
+interface InterfaceDef : Container, Contained, IDLType
+{
+    attribute InterfaceDefSeq base_interfaces;
+
+    boolean is_a(in RepositoryId interface_id);
+    
+    struct FullInterfaceDescription
+    {
+	Identifier name;
+	RepositoryId id;
+	RepositoryId defined_in;
+	VersionSpec version;
+	OpDescriptionSeq operations;
+	AttrDescriptionSeq attributes;
+	RepositoryIdSeq base_interfaces;
+	TypeCode type;
+    };
+    
+    FullInterfaceDescription describe_interface();
+    
+    AttributeDef create_attribute(in RepositoryId id,
+				  in Identifier name,
+				  in VersionSpec version,
+				  in IDLType type,
+				  in AttributeMode mode);
+    
+    OperationDef create_operation(in RepositoryId id,
+				  in Identifier name,
+				  in VersionSpec version,
+				  in IDLType result,
+				  in OperationMode mode,
+				  in ParDescriptionSeq params,
+				  in ExceptionDefSeq exceptions,
+				  in ContextIdSeq contexts);
+};
+
+struct InterfaceDescription
+{
+    Identifier name;
+    RepositoryId id;
+    RepositoryId defined_in;
+    VersionSpec version;
+    RepositoryIdSeq base_interfaces;
+};
+
+}; // End module CORBA
+
+#endif

@@ -1,0 +1,145 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef UDPIOP_IDL
+#define UDPIOP_IDL
+
+#include <STAR/Types.idl>
+#include <STAR/IOP.idl>
+
+#pragma prefix "nis.net"
+
+module UDPIOP
+{
+
+/** The profile ID for UDPIOP. */
+const IOP::ProfileId TAG_UDP_IOP = 101;
+
+/**
+ *
+ * The UDPIOP protocol version. This struct is analogous to
+ * <code>IIOP::Version</code>.
+ *
+ * @member major The major version number.
+ *
+ * @member minor The minor version number.
+ *
+ **/
+ 
+struct Version
+{
+    octet major;
+    octet minor;
+};
+
+/**
+ *
+ * The UDPIOP profile body. This struct is analogous to
+ * <code>IIOP::ProfileBody_1_1</code>.
+ *
+ * @member udpiop_version The supported protocol version.
+ *
+ * @member giop_version The GIOP version.
+ *
+ * @member host The host address.
+ *
+ * @member port The host port number.
+ *
+ * @member object_key The object key.
+ *
+ * @member components A sequence of tagged components
+ *
+ **/
+
+struct ProfileBody
+{
+    Version udpiop_version;
+    Version giop_version;
+    string host;
+    unsigned short port;
+    sequence<octet> object_key;
+    sequence<IOP::TaggedComponent> components;
+};
+
+/** The profile extension ID. */
+typedef unsigned long ExtensionId;
+
+/**
+ *
+ * Struct containing a profile extension.
+ *
+ * @member tag The extension ID.
+ *
+ * @member extension_data The encapsulated extension data.
+ *
+ **/
+
+struct Extension
+{
+    ExtensionId tag;
+    sequence<octet> extension_data;
+};
+
+/** Sequence of protocol extensions. */
+typedef sequence<Extension> ExtensionSeq;
+
+/**
+ *
+ * The fixed part of the UDPIOP packet header. The contents of this
+ * header is the same for all packets of a message.
+ *
+ * @member flags If <code>flags & 0x01 == 0</code>, the byte order of
+ * the UDPIOP header is big endian, otherwise little endian. All
+ * other bits in <code>flags</code> are reserved.
+ *
+ * @member reserved Reserved for future use.
+ *
+ * @member client_id The client ID. The server uses the client ID
+ * together with the client's address and port to associate UDPIOP
+ * packets with clients. It must be ensured that if a client uses an
+ * address and a port that has been used by other clients before, this
+ * new client does not reuse client IDs of such other clients.
+ *
+ * @member message_id The message ID. Each UDPIOP message sent by a
+ * client must have a unique message ID.
+ *
+ * @member message_size The overall message size, excluding headers.
+ *
+ * @member extensions A sequence of protocol extensions.
+ *
+ **/
+
+struct FixedPacketHeader
+{
+    octet flags;
+    octet reserved[3];
+    unsigned long client_id;
+    unsigned long message_id;
+    unsigned long message_size;
+    ExtensionSeq extensions;
+};
+
+/**
+ *
+ * The variable part of the UDPIOP packet header. The contents of
+ * this header differ for different packets of a message.
+ *
+ * @member packet_num The packet number.
+ *
+ **/
+
+struct VariablePacketHeader
+{
+    unsigned long packet_num;
+};
+
+}; // End module UDPIOP
+
+#endif /* UDPIOP_IDL */

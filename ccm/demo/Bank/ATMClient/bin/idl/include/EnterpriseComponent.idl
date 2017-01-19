@@ -1,0 +1,309 @@
+#ifndef __CCMEnterpriseComponent_idl__
+#define __CCMEnterpriseComponent_idl__
+
+#include <CCMObject.idl>
+#include <UserTransaction.idl>
+#include <CosPersistentState.idl>
+
+#pragma prefix "omg.org"
+
+module SecurityLevel2
+{
+	// Not complete but enough to compile this file.
+	interface Credentials {};
+};
+
+//module CosPersistentState
+//{
+	// Not complete but enough to compile this file.
+//	interface CatalogBase {};
+//	typedef string TypeId;
+//	typedef long Pid;
+//};
+
+module Components
+{	
+	// From Chapter 615: CCM Implementation Framework
+
+	// Explicitly defined in Chapter 615
+
+	local interface EnterpriseComponent 
+	{
+		CORBA::OctetSeq get_pid();
+	};
+
+	local interface ExecutorLocator : EnterpriseComponent
+	{
+		Object obtain_executor (in string name)
+			raises (CCMException);
+
+		void release_executor (in Object exc)
+			raises (CCMException);
+
+		void configuration_complete()
+			raises (InvalidConfiguration);
+	};
+
+    local interface CCM2Context;
+    
+	local interface HomeExecutorBase 
+	{
+		CORBA::OctetSeq get_pid();
+		void set_context(in CCM2Context ctx);
+	};
+
+   	typedef SecurityLevel2::Credentials Principal;
+
+	exception IllegalState { };
+    
+    local interface Context2
+    {
+        Object resolve_object(in string name);
+    };
+    
+	local interface CCMContext : Context2
+	{
+		Principal get_caller_principal();
+
+		CCMHome get_CCM_home();
+
+		boolean get_rollback_only() 
+			raises (IllegalState);
+
+		Transaction::UserTransaction get_user_transaction()
+			raises (IllegalState);
+
+		boolean is_caller_in_role (in string role);
+
+		void set_rollback_only() 
+			raises (IllegalState);
+	};
+
+	local interface SessionContext : CCMContext
+	{
+		Object get_CCM_object() 
+			raises (IllegalState);
+	};
+
+	local interface SessionComponent : EnterpriseComponent
+	{
+		void set_session_context ( in SessionContext ctx)
+			raises (CCMException);
+
+		void ccm_activate() 
+			raises (CCMException);
+
+		void ccm_passivate() 
+			raises (CCMException);
+
+		void ccm_remove () 
+			raises (CCMException);
+	};
+
+	local interface SessionSynchronization
+	{
+		void after_begin () 
+			raises (CCMException);
+
+		void before_completion () 
+			raises (CCMException);
+
+		void after_completion (in boolean committed) 
+			raises (CCMException);
+	};
+
+	local interface EntityContext : CCMContext
+	{
+		Object get_CCM_object () 
+			raises (IllegalState);
+
+		PrimaryKeyBase get_primary_key () 
+			raises (IllegalState);
+	};
+
+	local interface EntityComponent : EnterpriseComponent
+	{
+		void set_entity_context (in EntityContext ctx)
+			raises (CCMException);
+
+		void unset_entity_context ()
+			raises (CCMException);
+
+		void ccm_activate () 
+			raises (CCMException);
+
+		void ccm_load ()
+			raises (CCMException);
+
+		void ccm_store ()
+			raises (CCMException);
+
+		void ccm_passivate ()
+			raises (CCMException);
+
+		void ccm_remove ()
+			raises (CCMException);
+	};
+
+	typedef CosPersistentState::CatalogBase CatalogBase;
+
+	typedef CosPersistentState::TypeId TypeId;
+
+	exception PolicyMismatch { };
+
+	exception PersistenceNotAvailable { };
+
+	local interface HomeRegistration;
+
+	local interface CCM2Context : CCMContext
+	{
+		HomeRegistration get_home_registration ();
+
+		void req_passivate () 
+			raises (PolicyMismatch);
+
+		CatalogBase get_persistence (in TypeId catalog_type_id)
+			raises (PersistenceNotAvailable);
+	};
+
+	local interface HomeRegistration
+	{
+		void register_home (in CCMHome home_ref,in string home_name);
+
+		void unregister_home (in CCMHome home_ref);
+	};
+
+	exception UnknownActualHome { };
+
+	exception ProxyHomeNotSupported { };
+
+	local interface ProxyHomeRegistration : HomeRegistration
+	{
+		void register_proxy_home (
+				in CCMHome rhome,
+				in CCMHome ahome)
+			raises (UnknownActualHome, ProxyHomeNotSupported);
+	};
+
+	enum BadComponentReferenceReason
+	{
+		NON_LOCAL_REFERENCE,
+		NON_COMPONENT_REFERENCE,
+		WRONG_CONTAINER
+	};
+
+	exception BadComponentReference
+	{
+		BadComponentReferenceReason reason;
+	};
+
+	local interface Session2Context : SessionContext, CCM2Context
+	{
+		Object create_ref (in CORBA::RepositoryId repid);
+
+		Object create_ref_from_oid (
+				in CORBA::OctetSeq oid,
+				in CORBA::RepositoryId repid);
+
+		CORBA::OctetSeq get_oid_from_ref (in Object objref)
+			raises (IllegalState, BadComponentReference);
+	};
+
+	typedef short SegmentId;
+	const SegmentId COMPONENT_SEGMENT = 0;
+
+	typedef short FacetId;
+	const FacetId COMPONENT_FACET = 0;
+
+	typedef sequence<octet> IdData;
+	typedef CosPersistentState::Pid PersistentId;
+
+	exception InvalidStateIdData {};
+
+	typedef short StateIdType;
+	const StateIdType PERSISTENT_ID = 0;
+
+	abstract valuetype StateIdValue
+	{
+		StateIdType get_sid_type();
+
+		IdData get_sid_data();
+	};
+
+	local interface StateIdFactory
+	{
+		StateIdValue create (in IdData data) 
+			raises (InvalidStateIdData);
+	};
+
+	valuetype PersistentIdValue : StateIdValue
+	{
+		private PersistentId pid;
+
+		PersistentId get_pid();
+
+		factory init (in PersistentId pid);
+	};
+
+	valuetype SegmentDescr
+	{
+		private StateIdValue sid;
+
+		private SegmentId seg;
+
+		StateIdValue get_sid();
+
+		SegmentId get_seg_id();
+
+		factory init (in StateIdValue sid, in SegmentId seg);
+	};
+	typedef sequence<SegmentDescr> SegmentDescrSeq;
+
+	local interface ComponentId
+	{
+		FacetId get_target_facet();
+
+		SegmentId get_target_segment();
+
+		StateIdValue get_target_state_id (in StateIdFactory sid_factory)
+			raises (InvalidStateIdData);
+
+		StateIdValue get_segment_state_id (
+				in SegmentId seg,
+				in StateIdFactory sid_factory)
+			raises (InvalidStateIdData);
+
+		ComponentId create_with_new_target (
+				in FacetId new_target_facet,
+				in SegmentId new_target_segment);
+
+		SegmentDescrSeq get_segment_descrs (
+				in StateIdFactory sid_factory)
+			raises (InvalidStateIdData);
+	};
+
+	local interface Entity2Context : EntityContext, CCM2Context
+	{
+		ComponentId get_component_id ()
+			raises (IllegalState);
+
+		ComponentId create_component_id (
+				in FacetId target_facet,
+				in SegmentId target_segment,
+				in SegmentDescrSeq seq_descrs);
+
+		ComponentId create_monolithic_component_id (
+				in FacetId target_facet,
+				in StateIdValue sid);
+
+		Object create_ref_from_cid (
+				in CORBA::RepositoryId repid,
+				in ComponentId cid);
+
+		ComponentId get_cid_from_ref (
+				in Object objref) 
+			raises (BadComponentReference);
+	};
+};
+
+#endif

@@ -1,0 +1,33 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2004
+#  StarMiddleware.net	 
+#  www.StarMiddleware.net
+#                        
+#  All Rights Reserved   
+#  author: BaiXiaoBo        bxbgfkd@tom.com                         
+# **********************************************************************
+
+SHELL		= /bin/sh
+
+@SET_MAKE@
+
+top_srcdir	= @top_srcdir@
+
+include $(top_srcdir)/config/Make.rules
+
+install::
+	@if test ! -d $(idldir)/ccm ; \
+	then \
+	    echo "Creating $(idldir)/ccm..." ; \
+	    mkdir $(idldir)/ccm ; \
+	    chmod a+rx $(idldir)/ccm ; \
+	fi
+
+	@for i in *.idl ; \
+	do \
+	    echo "Installing $$i" ; \
+	    $(INSTALL_DATA) $$i $(idldir)/ccm/$$i ; \
+	done
+
+install_min:: install

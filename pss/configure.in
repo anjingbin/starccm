@@ -1,0 +1,58 @@
+dnl **********************************************************************
+dnl
+dnl Copyright (c) 2003
+dnl StarMiddleware.net	 
+dnl www.StarMiddleware.net
+dnl                       
+dnl All Rights Reserved   
+dnl 
+dnl Author: An Jingbin	anjb@sina.com                         
+dnl **********************************************************************
+
+
+dnl ----------------------------------------------------------------------
+dnl Process this file with autoconf to produce a configure script
+dnl ----------------------------------------------------------------------
+
+AC_INIT(include/PSS.h)
+AC_CONFIG_AUX_DIR(../config)
+
+builtin(include,../config/macros.m4)
+builtin(include,../config/basic.m4)
+builtin(include,../config/x11.m4)
+builtin(include,../config/motif.m4)
+builtin(include,../config/cplusplus.m4)
+builtin(include,../config/network.m4)
+builtin(include,../config/orb.m4)
+builtin(include,../config/ots.m4)
+builtin(include,../config/postgresql.m4)
+builtin(include,../config/pss.m4)
+
+if test -e Makefile.orb
+then
+	rm -f Makefile.orb
+fi
+	
+if test -n "$ORB_NAME" -a "$ORB_NAME" = "OB"
+then 
+	ln -s ./src/Makefile.ob Makefile.orb
+fi
+
+if test -n "$ORB_NAME" -a "$ORB_NAME" = "STARBUS"
+then 
+	ln -s ./src/Makefile.star Makefile.orb
+fi
+
+	
+dnl ----------------------------------------------------------------------
+dnl Write files
+dnl ----------------------------------------------------------------------
+
+AC_CONFIG_HEADER(include/Config.h)
+
+AC_OUTPUT(config/Make.rules:config/Make.rules.in:../config/Make.rules.in \
+	  Makefile \
+          src/Makefile \
+          idl/Makefile \
+          include/Makefile \
+          bin/Makefile)

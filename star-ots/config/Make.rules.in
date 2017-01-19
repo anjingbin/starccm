@@ -1,0 +1,21 @@
+#  **********************************************************************
+#
+#  Copyright (c) 2001-2003 CCM Group
+#
+#  School of Computer Science,NUDT
+#  Changsha,Hunan,China
+#
+#  All Rights Reserved
+#
+# **********************************************************************
+
+STAR_CPPFLAGS     = @OB_CPPFLAGS@
+STAR_LDFLAGS      = @OB_LDFLAGS@
+STAR_IDLFLAGS     = @OB_IDLFLAGS@
+STAR_LIBS         = @OB_LIBS@
+IDL		  = @IDL@
+
+
+PSQL_CPPFLAGS	= @PSQL_CPPFLAGS@
+PSQL_LDFLAGS	= @PSQL_LDFLAGS@
+PSQL_LIBS	= @PSQL_LIBS@

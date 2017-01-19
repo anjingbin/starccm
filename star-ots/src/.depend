@@ -1,0 +1,18 @@
+Resource_skel.o: Resource_skel.cpp ../include/Resource_skel.h ../include/Resource.h ../include/PostgreSQLResource.h ../include/CosTransactionsOTS.h ../include/PostgreSQLResource_skel.h ../include/CosTransactionsOTS_skel.h
+CosTransactionsCurrent.o: CosTransactionsCurrent.cpp ../include/CosTransactionsCurrent.h ../include/CosTransactionsOTS.h ../include/CosTransactionsPolicy.h ../include/CosTransactionsPolicyType.h
+PostgreSQLResource.o: PostgreSQLResource.cpp ../include/PostgreSQLResource.h ../include/CosTransactionsOTS.h
+OTSPolicyFactory_impl.o: OTSPolicyFactory_impl.cpp OTSPolicyFactory_impl.h ../include/CosTransactionsPolicy.h ../include/CosTransactionsPolicyType.h
+CosTransactionsOTS_skel.o: CosTransactionsOTS_skel.cpp ../include/CosTransactionsOTS_skel.h ../include/CosTransactionsOTS.h
+CosTransactionsUser.o: CosTransactionsUser.cpp ../include/CosTransactionsUser.h ../include/CosTransactionsOTS.h
+CosTransactionsOTS.o: CosTransactionsOTS.cpp ../include/CosTransactionsOTS.h
+PostgreSQLResource_skel.o: PostgreSQLResource_skel.cpp ../include/PostgreSQLResource_skel.h ../include/PostgreSQLResource.h ../include/CosTransactionsOTS.h ../include/CosTransactionsOTS_skel.h
+CosTransactionsPolicy.o: CosTransactionsPolicy.cpp ../include/CosTransactionsPolicy.h ../include/CosTransactionsPolicyType.h
+OTSServerInterceptor_impl.o: OTSServerInterceptor_impl.cpp ../include/CosTransactionsOTS.h OTSServerInterceptor_impl.h ../include/CosTransactionsPolicy.h ../include/CosTransactionsPolicyType.h
+CosTransactions_skel.o: CosTransactions_skel.cpp ../include/CosTransactions_skel.h ../include/CosTransactions.h ../include/CosTransactionsOTS.h ../include/CosTransactionsCurrent.h ../include/CosTransactionsPolicy.h ../include/CosTransactionsPolicyType.h ../include/PostgreSQLResource.h ../include/CosTransactionsUser.h ../include/CosTransactionsOTS_skel.h ../include/PostgreSQLResource_skel.h ../include/CosTransactionsUser_skel.h
+CosTransactionsUser_skel.o: CosTransactionsUser_skel.cpp ../include/CosTransactionsUser_skel.h ../include/CosTransactionsUser.h ../include/CosTransactionsOTS.h ../include/CosTransactionsOTS_skel.h
+CosTransactionsPolicyType.o: CosTransactionsPolicyType.cpp ../include/CosTransactionsPolicyType.h
+CosTransactions.o: CosTransactions.cpp ../include/CosTransactions.h ../include/CosTransactionsOTS.h ../include/CosTransactionsCurrent.h ../include/CosTransactionsPolicy.h ../include/CosTransactionsPolicyType.h ../include/PostgreSQLResource.h ../include/CosTransactionsUser.h
+ReourceFactoryServer.o: ReourceFactoryServer.cpp ../include/CosTransactionsOTS.h Resource_impl.h ../include/Resource_skel.h ../include/Resource.h ../include/PostgreSQLResource.h ../include/PostgreSQLResource_skel.h ../include/CosTransactionsOTS_skel.h CosTransactionsOTS_impl.h ../include/CosTransactionsUser_skel.h ../include/CosTransactionsUser.h ../include/OTSHeader.h PostgreSQLResource_impl.h ../include/OTSPostgreSQL.h
+Resource_impl.o: Resource_impl.cpp Resource_impl.h ../include/Resource_skel.h ../include/Resource.h ../include/PostgreSQLResource.h ../include/CosTransactionsOTS.h ../include/PostgreSQLResource_skel.h ../include/CosTransactionsOTS_skel.h CosTransactionsOTS_impl.h ../include/CosTransactionsUser_skel.h ../include/CosTransactionsUser.h ../include/OTSHeader.h PostgreSQLResource_impl.h ../include/OTSPostgreSQL.h
+CosTransactionsCurrent_impl.o: CosTransactionsCurrent_impl.cpp CosTransactionsCurrent_impl.h ../include/CosTransactionsOTS.h ../include/CosTransactionsCurrent.h ../include/CosTransactionsPolicy.h ../include/CosTransactionsPolicyType.h
+Resource.o: Resource.cpp ../include/Resource.h ../include/PostgreSQLResource.h ../include/CosTransactionsOTS.h

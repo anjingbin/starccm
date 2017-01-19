@@ -1,0 +1,294 @@
+// **********************************************************************
+//
+// Copyright (c) 2001-2004
+// StarMiddleware.net
+// www.StarMiddleware.net
+//
+// All Rights Reserved
+//
+// Author: Su Liang     centuryfree@sina.com
+// Author: Dong Fuqiang longlives@163.net
+// Author: Huang Jie    huangjie@email.com
+// Author: Wang Kebo    mep@263.net
+//
+// **********************************************************************
+
+// Version: 1.0.0
+
+#include <ComponentsClient.idl>
+
+module PetStore
+{	
+	//
+	//component pricer
+	//
+	struct OrderIndexInfo
+	{
+		string order_id;
+		unsigned long sub_total;	
+	};
+	
+	typedef sequence<OrderIndexInfo> OrderIndexInfoList;
+
+	typedef sequence<unsigned long> ItemPriceList;
+
+	interface Calculate
+	{
+		unsigned long multiply(in unsigned long unitPrice, in unsigned long quantity);
+		unsigned long add(in ItemPriceList itemList);
+	};
+
+	component Pricer supports Calculate
+	{
+	};
+
+	home PricerHome manages Pricer
+	{
+	};
+    
+	//
+	//component product
+	//
+	
+	valuetype KeyID:Components::PrimaryKeyBase
+	{
+		public string id;
+	};
+	
+	enum ProductCategory
+	{
+		DOG,CAT,FISH,BIRD
+	};
+    
+	component Product
+	{
+		readonly attribute PetStore::KeyID product_id;
+		attribute string product_name;
+		attribute string product_picture;
+		attribute string product_category;
+		attribute unsigned long product_price;
+		attribute unsigned long product_qty;
+		attribute string product_description;
+	};
+    
+	typedef sequence<Product> ProductList;
+
+	struct ProductIndexInfo
+	{
+		string product_id;
+		string product_name;
+		string product_category;
+	};
+
+	typedef sequence<ProductIndexInfo> ProductIndexInfoList;
+
+	home ProductHome manages Product primarykey KeyID
+	{
+		ProductIndexInfoList findByProductCategory(in ProductCategory category);
+		ProductIndexInfoList findAllProducts();
+	};
+
+	//
+	//component OrderItem
+	//
+
+	component OrderItem
+	{
+		readonly attribute PetStore::KeyID orderItem_id;
+		attribute string product_id;
+		attribute string product_name;
+		attribute unsigned long quantity;
+		attribute unsigned long unit_price;
+		attribute unsigned long sub_total;
+		attribute PetStore::KeyID order_id;
+	};
+
+	struct OrderItemInfo
+	{
+		string orderItem_id;
+		string product_id;
+		string product_name;
+		unsigned long quantity;
+		unsigned long unit_price;
+		unsigned long sub_total;
+		string order_id;
+	};
+	
+	typedef sequence<OrderItemInfo> OrderItemInfoList;
+	home OrderItemHome manages OrderItem primarykey KeyID
+	{
+		OrderItemInfoList findAllOrderItems();
+	};
+
+	//
+	//component Order
+	//
+
+	typedef sequence<PetStore::KeyID> IDSeq;
+
+	interface OrderOp
+	{
+		PetStore::KeyID addItem(in string product_id,
+					in string product_name,
+					in unsigned long quantity,
+					in unsigned long unit_price,
+					in unsigned long sub_total);
+		void delItem(in PetStore::KeyID ID);
+	};
+
+	component Order supports OrderOp
+	{
+		readonly attribute PetStore::KeyID order_id;
+		attribute string user_name;
+		attribute string user_address;
+		attribute OrderItemInfoList order_items;
+		attribute string order_time;
+		attribute unsigned long sub_total;
+		
+		uses OrderItemHome the_OrderItemHome;
+	};
+	
+	typedef sequence<Order> OrderList;
+
+	home OrderHome manages Order primarykey KeyID
+	{
+		OrderIndexInfoList findAllOrders();
+	};
+
+    
+	//
+	//component Cart
+	//
+
+	struct SalesRecordInfo
+	{
+		string product_id;
+		string product_name;
+		unsigned long quantity;
+		unsigned long unit_price;
+		unsigned long sub_total;
+	};
+    
+	typedef sequence<SalesRecordInfo> SalesRecordInfoList;
+
+	struct SalesRecord
+	{
+		SalesRecordInfoList sales_record_list;
+		unsigned long sub_total;
+	};
+
+	interface ShoppingCart
+	{
+		SalesRecord list();
+		void addProduct(in SalesRecordInfo productWanted);
+		void updateProductQty(in string productID,in unsigned long newQty); 
+		void deleteProduct(in string productID);
+		void clear();
+	};
+
+	component Cart supports ShoppingCart
+	{
+	};
+
+	home CartHome manages Cart
+	{
+	};
+
+	//
+	//component Sales
+	//
+
+	struct ProductInfo
+	{
+		string product_id;
+		string product_name;
+		string product_picture; 
+		string product_category;
+		unsigned long product_price;
+		unsigned long product_qty;
+		string product_description;
+	};
+
+	
+	struct OrderInfo
+	{
+		string order_id;
+		string user_name;
+		string user_address;
+		string order_time;
+		OrderItemInfoList order_items;
+		unsigned long sub_total;	
+	};
+	
+	typedef sequence<OrderInfo> OrderInfoList;
+
+	eventtype SalesReport
+	{
+		public unsigned long sub_total;
+		factory create(in unsigned long sub_total);
+	};
+	typedef sequence<ProductInfo> ProductInfoList;
+
+	interface BusinessOp
+	{
+		ProductIndexInfoList listAllProducts();
+		ProductIndexInfoList listProductByCategory(in ProductCategory category);
+		ProductInfo listProduct(in string productID);
+		
+		string placeOrder(in string userName, in string userAddress,in Cart myCart);
+		void cancelOrder(in string orderID);
+		OrderInfo listOrder(in string orderID);
+	};
+	
+	interface AdvancedOp
+	{
+		OrderInfoList listAllOrders();
+		void addProduct(in ProductInfo newProduct);
+	};
+	
+	component Sales
+	{
+		provides BusinessOp for_client;
+		provides AdvancedOp for_mgr;
+
+		uses Calculate the_calculate;
+		//uses Pricer the_pricer;
+		uses ProductHome product_home;
+		uses OrderHome order_home;
+
+		emits SalesReport report;
+	}; 
+
+	home SalesHome manages Sales
+	{
+	};
+		
+	//
+	//component Manger
+	//
+
+	struct OrderRecord
+	{
+		OrderIndexInfoList order_index_list;
+		unsigned long sub_total;
+	};	
+
+	interface Manage
+	{		
+		void addProduct(in ProductInfo newProduct);
+		OrderInfoList listAllOrders();
+		OrderRecord account();
+	};
+    
+	component Manager supports Manage
+	{				
+		uses AdvancedOp manage_op;
+		uses Calculate price_calculater; 
+		
+		consumes SalesReport analyse;		
+	};
+
+	home ManagerHome manages Manager
+	{
+	};
+};

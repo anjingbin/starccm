@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DynReconfig PUBLIC "" "DynReconfig.dtd">
+<DynReconfig>
+	<description>To create two philosopher and two cultery dynamicly</description>
+	<componentassembly idref="5037f430-49ed-11d7-bccb-887617272ac7">
+	  	<namingservice corbaloc="corbaloc:iiop:127.0.0.1:9991/NameService" />
+	  	<homeregistration corbaloc="corbaloc:iiop:127.0.0.1:9992/HomeRegistration" />
+	</componentassembly>
+	<changeproperty>
+		<passivatecomponents>
+			<passivatecomponent idref="ry" />
+		</passivatecomponents>
+		<componentsproperties>
+			<componentproperties idref="ry" filename="ry.cpf" />
+		</componentsproperties>
+		<activatecomponents>
+			<activatecomponent idref="ry" />
+		</activatecomponents>
+	</changeproperty>
+</DynReconfig>

@@ -1,0 +1,42 @@
+// **********************************************************************
+//
+// Copyright (c) 2003
+// Intervision Software Co., Ltd.
+// Haidian District, Beijing.
+//
+// All Rights Reserved
+//
+// **********************************************************************
+
+#ifndef POA_CURRENT_IDL
+#define POA_CURRENT_IDL
+
+#include <STAR/Current.idl>
+#include <STAR/POACommon.idl>
+
+#pragma prefix "omg.org"
+
+module PortableServer
+{
+#pragma version PortableServer 2.3
+
+local interface POA;
+
+local interface Current : CORBA::Current
+{
+#pragma version Current 2.3
+
+    exception NoContext
+    {
+    };
+
+    POA get_POA()
+	raises (NoContext);
+
+    ObjectId get_object_id()
+	raises (NoContext);
+};
+
+}; // End module PortableServer
+
+#endif

@@ -1,0 +1,10 @@
+telnet 172.26.13.88
+postgres
+postgres
+
+psql -p 5678 pss
+
+drop table __p_s_d_l___test_record___product_home_impl__1__0;
+
+\q
+exit

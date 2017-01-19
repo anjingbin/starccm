@@ -1,0 +1,16 @@
+#include <test.idl3>
+#include <test.psdl>
+
+module Test
+{	
+	composition entity ProductComposition
+	{		
+		home executor CCM_ProductHome_Impl
+		{
+			implements ProductHome;
+			bindsTo TestRecord::ProductHome;
+			manages CCM_Product_Impl;
+		};
+	};	
+
+};	

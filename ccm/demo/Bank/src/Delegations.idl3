@@ -1,0 +1,34 @@
+#include <ComponentsClient.idl>
+
+#include <WithdrawComp.idl3>
+#include <DepositComp.idl3>
+
+#ifndef __Delegation_IDL_
+#define __Delegation_IDL_
+
+
+module Bank
+{
+	//
+	//component Delegation
+	//
+	
+	interface DelegationOp
+	{
+		void payForPhone(in string id, in unsigned long amount);
+	};
+	
+	component Delegation
+	{
+		provides DelegationOp delegation_Op;
+		
+		uses DepositOp deposit;
+		uses WithdrawOp withdraw;
+	};
+
+	home DelegationHome manages Delegation
+	{
+	};
+};
+
+#endif

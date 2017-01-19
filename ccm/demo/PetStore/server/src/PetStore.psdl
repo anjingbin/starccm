@@ -1,0 +1,81 @@
+module PetStoreRecord
+{
+	abstract storagetype Order;
+	
+	abstract storagetype Product
+	{
+		state string product_id;
+		state string product_name;
+		state string product_pic;
+		state string product_category;
+		state unsigned long product_price;
+		state unsigned long product_qty;
+		state string product_description;      
+	};
+	
+	abstract storagehome ProductHome of Product
+	{
+		key product_id;
+		factory create(product_id);
+	};
+
+	abstract storagetype OrderItem
+	{		
+		state string orderItem_id;
+		state string product_id;
+		state string product_name;
+		state unsigned long quantity;
+		state unsigned long unit_price;	
+		state unsigned long sub_total;
+		state string order_id;
+	};
+	
+	abstract storagehome OrderItemHome of OrderItem
+	{
+		key orderItem_id;
+		factory create(orderItem_id);
+	};
+	
+	
+	abstract storagetype Order
+	{
+		state string order_id;
+		state string user_name;
+		state string user_address;
+		state string order_time;
+		state unsigned long sub_total; 		
+	};
+	
+	abstract storagehome OrderHome of Order
+	{
+		key order_id;
+		factory create(order_id);
+	};
+	
+	
+	storagetype OrderItemImpl implements OrderItem
+	{
+	
+	};
+	
+	storagetype OrderImpl implements Order
+	{
+	};
+	
+	storagetype ProductImpl implements Product
+	{
+	};
+	
+	storagehome OrderItemHomeImpl of OrderItemImpl implements OrderItemHome
+	{
+	};
+	
+	storagehome OrderHomeImpl of OrderImpl implements OrderHome
+	{
+	};
+	
+	storagehome ProductHomeImpl of ProductImpl implements ProductHome
+	{
+	};
+};	//end of module PetStore
+

@@ -1,0 +1,17 @@
+#include <ATM.idl3>
+#include <Manager.idl3>
+
+module Bank
+{	
+
+	composition service ManagerComposition
+	{
+		home executor CCM_ManagerHome_impl
+		{
+			implements ManagerHome;
+			manages CCM_Manager_impl; 
+		}; 
+	};	
+
+
+};	
