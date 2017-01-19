@@ -1,0 +1,3 @@
+This release (version 2.0) of StarCCM(include StarPSS,StarOTS and PostgreSQL with XA interfaces)
+are all compiled successfully and tested on Windows 2000,Windows XP and Microsoft
+Visual C++ 6.0.

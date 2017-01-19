@@ -1,0 +1,61 @@
+Dec. 2003
+
+1. Introduction
+  StarCCM 1.0 is an OMG's CORBA Component Model(CCM) implementation in
+c++ language. This software is developed by StarCCM Group of StarMiddleware.net 
+(www.StarMiddleware.net).
+
+  This version provides service bean, session bean, entity bean, 
+corresponding containers and deployment tools. All codes are compiled 
+for OB-4.1.0 and JTC-2.0.0 successfully. This version also includes an 
+idl3 compiler and a cidl compiler, which resident in ccm\bin directory.
+You can use idl3 compiler to generate CIF(Component Implementation 
+Framework) files. It also can generate an idl version 2.4 mapping which 
+will be used to generate ORB specific stubs and skeletons.
+  We have integrated OTS (Object Transaction Service) and PSS(Persistant
+Service) in CCM application server. OTS and PSS implementations are in 
+individual subdirectory of current one. There is a PSDL language compiler 
+in pss\bin directory. The OTS is only for postgres. We have modified postgres
+implmentation to supports XA interface which is needed by two phase commit 
+protocol. Enhanced postgres' implementation is shipped in corresponding 
+subdirectory.
+
+2. What license does StarCCM have?
+  Please refer to LICENSE in same directory.
+
+3. How to install?
+  Please refer to INSTALL in same directory.
+
+4. What will we do?
+  We are planing to develop more advanced assembling, packing and deploying
+tools, which will facilitate developing and using CCM components.
+
+5. How to contact us?
+  You can find authors' email addresses in StarCCM's source files.
+You are welcome.
+
+6. Acknowledgment.
+	Prof. Jia Yan     jiayanjy@vip.sina.com 
+	Ph.D. Han Weihong zzhuang@public.cs.hn.cn
+	
+	Doctor candidates
+	Huang Jie       huangjie@email.com
+	Wang Kebo       mep@263.net
+	An Jingbin      anjb@sina.com
+	Dou Lei         fancydou@sina.com
+	Ren Yi          starots@sohu.com
+	Chang Junsheng  cjs7908@163.com
+	Zheng Di        sonofwind0109@sina.com
+	Su Liang		centuryfree@yahoo.com.cn
+	Deng Bo         myhspace@163.com   
+
+	Others who had been working and are working in our CCM Team.
+	Zheng Xianrong
+	Dong Fuqiang    longlives@163.net
+	Hu Dongmin      minnie_ying@163.com
+	Sun Xiguo       
+	Zhu Xueling     xueling.z@eyou.com
+	Wang Shufeng    icestar_wang@163.com 
+	Jian Xinhong    21youme@163.com
+	Xiao Heping     
+	
